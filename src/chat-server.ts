@@ -38,15 +38,37 @@ export class ChatServer {
         });
 
         this.io.on('connection', (socket) => {
-            console.log(socket.id)
+            /*
+                Here, I'm emitting a list of users back to the socket that made the connection - this is what is being used to click a socket.
+                When the socket connects, we send this back before anything else
+                Instead of this, track the list of connected users using a DB, and return only one user -> the one that must be connected to.
+                We can treat this as a queue - those that have been waiting the longest, get a connection first.
+                It's worth noting that this returns only one user too - but it just returns every user that the client adds - which we don't want
+
+                When two users connect, the client will send a request asking for user information - this will be unconnected from the backend process used to pair devices based on socket
+
+                NOTE: socket.broadcast.emit sends to ALL connections EXCEPT the sender. This makes sense - the sender shouldn't be able to connect with themselves.
+
+                It's worth noting that IDs are unique (https://stackoverflow.com/questions/20962970/how-unique-is-socket-id)
+            */
             socket.broadcast.emit('add-users', {
                 users: [socket.id]
             });
 
             socket.on('disconnect', () => {
+                /*
+                    Here, remove the socket ID from the table/whatever we're using to track those users that are waiting for a connection.
+                */
                 this.socketsArray.splice(this.socketsArray.indexOf(socket.id), 1);
+
+                // NOTE: this.io.emit sends to ALL connections, INCLUDING the sender
+                
                 this.io.emit('remove-user', socket.id);
             });
+            
+            /*
+                If I understand sockets right, we can leave the below two functions untouched. However, I could be very, very wrong. We'll find out.
+            */
 
             socket.on('make-offer', (data) => {
                 socket.to(data.to).emit('offer-made', {
