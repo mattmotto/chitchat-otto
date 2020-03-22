@@ -51,18 +51,23 @@ export class ChatServer {
 
                 It's worth noting that IDs are unique (https://stackoverflow.com/questions/20962970/how-unique-is-socket-id)
             */
+
+            console.log("Recieving connection from: "+socket.id)
+            /*
             socket.broadcast.emit('add-users', {
                 users: [socket.id]
             });
+            */
+            // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
 
             socket.on('disconnect', () => {
-                /*
-                    Here, remove the socket ID from the table/whatever we're using to track those users that are waiting for a connection.
-                */
+
+                //Here, remove the socket ID from the table/whatever we're using to track those users that are waiting for a connection.
+
                 this.socketsArray.splice(this.socketsArray.indexOf(socket.id), 1);
 
                 // NOTE: this.io.emit sends to ALL connections, INCLUDING the sender
-                
+                // This is important because if SOMEONE is connected to this socket, we need to disconnect them
                 this.io.emit('remove-user', socket.id);
             });
             

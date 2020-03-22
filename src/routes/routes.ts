@@ -49,6 +49,11 @@ export class Routes {
             console.log("You've hit a sample POST route, data: "+JSON.stringify(data));
         });
 
+        this.app.post('/getavailiblesocket', (request, response) => {
+            let data = request.body;
+            console.log("Getting the next availible socket, and sending it back here");
+        })
+
         /*
             Route to get information for an existing user, just as they're being matched to someone else for a video call
         */
