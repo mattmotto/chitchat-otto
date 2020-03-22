@@ -10,3 +10,5 @@ NodeJS and TypeScript based server for a video chat application. This app uses h
 3. Visit the same page on another tab - you should see a socket ID pop up on the second tab
 4. Click the socket ID on the second tab, to establish the connection with the socket in question (which is the one on the first page)
 5. Talk to yourself during this time of social isolation :)))
+## ER Diagram
+Er Diagram is found at: https://www.lucidchart.com/invitations/accept/4f21c83f-639b-484d-92c6-62be76797a7d
