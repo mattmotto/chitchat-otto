@@ -15,7 +15,7 @@ export class Pairs {
 
 	private findMatch(): Promise<Object> {
 		return new Promise((resolve, reject) => {
-			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2=NULL", (err, results, fields) => {
+			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2 IS NULL", (err, results, fields) => {
 				resolve(results.length==0 ? {} : results[0])
 			});
 		});
@@ -28,17 +28,15 @@ export class Pairs {
 		})
 	}
 
-	private removeEntry(socket1, socket2) {
-		this.sqlClient.query("DELETE FROM CURRENT_PAIRS WHERE WHERE (socket_id_1=\""+socket1+"\" AND socket_id_2=\""+socket2+"\") OR , (socket_id_1=\""+socket2+"\" AND socket_id_2=\""+socket1+"\"", (err, results, fields) => {
+	private removeEntry(socket) {
+		this.sqlClient.query("DELETE FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket+"\" OR socket_id_2=\""+socket+"\"", (err, results, fields) => {
 			if (err) throw err;
 			console.log("Removed pair!");
 		})
 	}
 
 	private addLoneSocket(socket) {
-		const q = "INSERT INTO CURRENT_PAIRS (socket_id_1) VALUES (\""+socket+"\")"
-		console.log(q)
-		this.sqlClient.query(q, (err, results, fields) => {
+		this.sqlClient.query("INSERT INTO CURRENT_PAIRS (socket_id_1) VALUES (\""+socket+"\")", (err, results, fields) => {
 			if (err) throw err;
 			console.log("Inserted lone pair!");
 		})
