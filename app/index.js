@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Home from "./components/Home"
+import App from "./App"
 
 const Index = () => {
-  return <Home />
+  return <App />;
 };
 
 ReactDOM.render(<Index />, document.getElementById('root'));

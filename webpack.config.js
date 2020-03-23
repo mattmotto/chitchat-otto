@@ -7,10 +7,10 @@ const htmlPlugin = new HtmlWebPackPlugin({
 });
 module.exports = {
   entry: "./app/index.js",
-  output: { // NEW
+  output: {
     path: path.join(__dirname, 'dist'),
     filename: "[name].js"
-  }, // NEW Ends
+  },
   plugins: [htmlPlugin],
   module: {
     rules: [
@@ -26,7 +26,7 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|svg|jpg|gif|eot|woff|ttf|webp)$/,
+        test: /\.(png|svg|jpeg|jpg|gif|eot|woff|ttf|webp)$/,
         loader: "file-loader",
         options: { name: '/static/[name].[ext]' }
       }
