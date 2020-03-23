@@ -81,7 +81,7 @@ export class ChatServer {
 
                 // NOTE: this.io.emit sends to ALL connections, INCLUDING the sender
                 // This is important because if SOMEONE is connected to this socket, we need to disconnect them
-                this.io.emit('remove-user', socket.id);
+                this.io.emit('abrupt-remove', socket.id);
             });
             
             /*

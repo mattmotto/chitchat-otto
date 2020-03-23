@@ -6,6 +6,9 @@ import * as express from 'express';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 
+const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
+const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
+
 export class Routes {
 
     private app: express.Application;
@@ -21,7 +24,7 @@ export class Routes {
     }
     
     private setStaticDir(): void {
-        this.app.use(express.static(path.join(__dirname, '../views')));
+        this.app.use(express.static(DIST_DIR));
     }
 
     public getRoutes(): void {
@@ -30,7 +33,7 @@ export class Routes {
             Serve the index page
         */
         this.app.get('/', (request, response) => {
-            response.sendFile('index.html');
+            response.sendFile(HTML_FILE);
         });
 
         /*
