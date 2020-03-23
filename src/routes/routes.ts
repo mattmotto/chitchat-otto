@@ -36,6 +36,7 @@ export class Routes {
         /*
             Route to login existing user
         */
+
         this.app.post('/loginuser', (request, response) => {
             let data = request.body;
             console.log("You've hit a sample POST route, data: "+JSON.stringify(data));
@@ -51,6 +52,7 @@ export class Routes {
 
         this.app.post('/getavailiblesocket', (request, response) => {
             let data = request.body;
+            let { sourceSocket } = data
             console.log("Getting the next availible socket, and sending it back here");
         })
 

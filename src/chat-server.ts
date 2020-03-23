@@ -1,10 +1,12 @@
 /*
     Server configuration file to handle online video chat functionality
 */
-
 import * as express from 'express';
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
+
+import { Queue } from "./models/queue"
+import { Pairs } from "./models/Pairs"
 
 export class ChatServer {
 
@@ -14,6 +16,7 @@ export class ChatServer {
     private server: Server;
     private io: SocketIO.Server;
     private socketsArray = [];
+    private pairClient: any = new Pairs();
 
     constructor() {
         this.createApp();
@@ -37,7 +40,7 @@ export class ChatServer {
             console.log('Running server on port %s', this.port);
         });
 
-        this.io.on('connection', (socket) => {
+        this.io.on('connection', async (socket) => {
             /*
                 Here, I'm emitting a list of users back to the socket that made the connection - this is what is being used to click a socket.
                 When the socket connects, we send this back before anything else
@@ -53,11 +56,24 @@ export class ChatServer {
             */
 
             console.log("Recieving connection from: "+socket.id)
-            /*
+
+            const matchable = await this.pairClient.findMatch(socket.id);
+
+            if (Object.keys(matchable).length != 0) {
+                console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
+                const target_socket = matchable["socket_id_1"];
+                this.pairClient.makeMatch(target_socket, socket.id);
+                socket.emit('create-chat', target_socket);
+            } else {
+                console.log("No match found, adding as a lone socket");
+                this.pairClient.addLoneSocket(socket.id);
+                socket.emit('create-chat', 'N/A');
+            }
+
             socket.broadcast.emit('add-users', {
                 users: [socket.id]
             });
-            */
+
             // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
 
             socket.on('disconnect', () => {
