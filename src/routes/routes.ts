@@ -5,6 +5,7 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
+import {Users} from '../models/users';
 
 export class Routes {
 
@@ -17,7 +18,8 @@ export class Routes {
     }
 
     private setupBodyParser(): void {
-        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: true }));
     }
     
     private setStaticDir(): void {
@@ -44,10 +46,30 @@ export class Routes {
 
         /*
             Route to sign up existing user
+
+            request is a json object of format:
+            {
+                "name":"name",
+                "email":"email",
+                "password":"password",
+                "university":"university",
+                "photo_url":"photo_url",
+                "instagram_id":"instagram_id",
+                "snapchat_id":"snapchat_id"
+            }
+
+            response is a json object of format:
+            {
+                "response":0
+            }
+            0: success
+            1: failure
         */
         this.app.post('/signupuser', (request, response) => {
-            let data = request.body;
-            console.log("You've hit a sample POST route, data: "+JSON.stringify(data));
+            console.log(JSON.stringify(request.body));
+            let {name, email, password, university, photo_url, instagram_id, snapchat_id} = request.body;
+            new Users().makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id);
+            response.json({"status":0})
         });
 
         /*
