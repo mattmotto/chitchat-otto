@@ -1,4 +1,9 @@
-var socket = io.connect('http://localhost:5000'); 
+var socket = io.connect('http://localhost:5000', {
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax : 5000,
+    reconnectionAttempts: Infinity
+}); 
 
 var answersFrom = {}, offer;
 var peerConnection = window.RTCPeerConnection ||
@@ -39,6 +44,10 @@ navigator.getUserMedia({video: true, audio: true}, function (stream) {
     pc.addStream(stream);
 }, error);
 
+socket.on('message', function(data){
+    console.log("TRIGGERED - creating chat with: "+data);
+    createOffer(data);
+})
 
 socket.on('add-users', function (data) {
     for (var i = 0; i < data.users.length; i++) {
@@ -47,6 +56,7 @@ socket.on('add-users', function (data) {
 
         el.setAttribute('id', id);
         el.innerHTML = id;
+        console.log("ID: "+id);
         el.addEventListener('click', function () {
             createOffer(id);
         });
