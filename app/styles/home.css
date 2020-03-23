@@ -46,3 +46,17 @@ body {
     background-color: #5CABB4;
     border-color: #FFFFFF;
 }
+
+.homeButton:active {
+    color: #FFFFFF !important;
+    background-color: #5CABB4 !important;
+    border-color: #FFFFFF !important;
+}
+
+.centerSubtext {
+    color: #5CABB4;
+    position: fixed;
+    bottom: 0;
+    margin-left: 1vw;
+    font-size: 0.8rem;
+}

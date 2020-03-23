@@ -16,6 +16,7 @@ export default class Home extends Component {
 		<div>
 			<div className="left">
 				<img src={"https://cdn.dribbble.com/users/423861/screenshots/4985430/scene1.gif"} className="homeImage" />
+				<span className="centerSubtext">By Matthew Otto, David Carratu, and Raghav Mecheri</span>
 			</div>
 			<div className="right">
 				<div className="centerContent">
