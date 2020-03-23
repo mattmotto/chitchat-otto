@@ -63,20 +63,13 @@ export class ChatServer {
                 const target_socket = matchable["socket_id_1"];
                 this.pairClient.makeMatch(target_socket, socket.id);
                 // Send a create-chat message to the second socket with the data about the first socket
-                socket.send(target_socket)
-                /*
-                socket.emit('create-chat', {
-                    target: target_socket
+                socket.broadcast.emit('add-users', {
+                    users: [{"to": socket.id, "from": target_socket}]
                 });
-                */
             } else {
                 console.log("No match found, adding as a lone socket");
                 this.pairClient.addLoneSocket(socket.id);
             }
-          
-            socket.broadcast.emit('add-users', {
-                users: [socket.id]
-            });
 
             // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
 

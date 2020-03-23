@@ -44,24 +44,17 @@ navigator.getUserMedia({video: true, audio: true}, function (stream) {
     pc.addStream(stream);
 }, error);
 
-socket.on('message', function(data){
-    console.log("TRIGGERED - creating chat with: "+data);
-    createOffer(data);
-})
-
 socket.on('add-users', function (data) {
-    for (var i = 0; i < data.users.length; i++) {
-        var el = document.createElement('div'),
-            id = data.users[i];
-
-        el.setAttribute('id', id);
-        el.innerHTML = id;
-        console.log("ID: "+id);
-        el.addEventListener('click', function () {
-            createOffer(id);
-        });
-        document.getElementById('users').appendChild(el);
-    }
+    id = data.users[0];
+    if(id.from == socket.id) {
+        console.log("GOT: "+JSON.stringify(id));
+        let target = id.to;
+        var el = document.getElementById("client");
+        el.innerHTML = 'Connect to paired client';
+        el.addEventListener('click', function() {
+            createOffer(target);
+        })
+    }       
 });
 
 socket.on('remove-user', function (id) {
@@ -88,7 +81,7 @@ socket.on('offer-made', function (data) {
 
 socket.on('answer-made', function (data) {
     pc.setRemoteDescription(new sessionDescription(data.answer), function () {
-        document.getElementById(data.socket).setAttribute('class', 'active');
+        document.getElementById("client").setAttribute('class', 'active');
         if (!answersFrom[data.socket]) {
             createOffer(data.socket);
             answersFrom[data.socket] = true;
