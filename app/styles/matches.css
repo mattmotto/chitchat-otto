@@ -12,6 +12,11 @@
 .matchCell {
     height: 6vh;
     padding-top: 0.5vh;
+    cursor: pointer;
+}
+
+.matchCell:hover {
+    transform: scale(1.05);
 }
 
 .matchProfilePicture {

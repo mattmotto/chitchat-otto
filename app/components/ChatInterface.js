@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Button } from 'react-bootstrap';
 import io from 'socket.io-client';
 import { SocketHandler } from './SocketHandler';
 import MatchesView from "./MatchesView"

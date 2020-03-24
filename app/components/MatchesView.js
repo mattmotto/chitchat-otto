@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Popup from "reactjs-popup";
+import MatchDetailPopup from "./MatchDetailPopup"
 
 import "../styles/matches.css"
 
@@ -18,6 +20,7 @@ export default class MatchesView extends Component {
                 {
                     MockMatches.map((match) => (
                         <React.Fragment>
+                        <Popup  trigger={
                             <div className="matchCell">
                                 <img src={match.profile} className="matchProfilePicture" />
                                 <div className="matchContent">
@@ -25,8 +28,13 @@ export default class MatchesView extends Component {
                                     <p className="matchUniversity">{match.university}</p>
                                 </div>
                             </div>
-                            <hr className="cellLine"/>
-                        </React.Fragment>
+                            } modal closeOnDocumentClick position="top center">
+                                {close => (
+                                    <MatchDetailPopup data={match} close={close}/>
+                                )}
+                            </Popup>
+                        <hr className="cellLine"/>
+                    </React.Fragment>
                     ))
                 }
                 </div>
