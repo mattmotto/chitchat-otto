@@ -24,25 +24,25 @@ export class Users {
 		});
 	}
 
-	loginUser(email, password): Promise<Number[]>{
+	loginUser(email, password): Promise<Object>{
 		return new Promise((resolve, reject) => {
 			let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 			this.sqlClient.query("SELECT email, password_hash, auto_id FROM USERS WHERE email='" +email+"';", (err, results, fields) => {
 				if (results.length==0){
-					resolve([1]);
+					resolve({"status":1});
 				}
 				else if (hashedPassword != results[0]['password_hash']){
-					resolve([2]);
+					resolve({"status":2});
 				}
 				else{
-					resolve([0, results[0]['auto_id']]);
+					resolve({"status":0, "auto_id":results[0]['auto_id']});
 				}
 			});
 		});
 	}
 
 	updateLoginTime(user): void {
-		let sqlquery = "UPDATE USERS SET last_login=CURRENT_TIMESTAMP WHERE email='" + user + "';";
+		let sqlquery = "UPDATE USERS SET last_login=CURRENT_TIMESTAMP WHERE auto_id=" + user + ";";
 		this.sqlClient.query(sqlquery, (err, results, fields) => {
 			if (err) throw err;
 		})

@@ -59,9 +59,9 @@ export class Routes {
         this.app.post('/loginuser', async (request, response) => {
             let {email, password} = request.body;
             let ans = await new Users().loginUser(email, password);
-            if (ans[0] == 0){
-                new Users().updateLoginTime(email);
-                new Logins().addLogin(ans[1]);
+            if (ans['status'] == 0){
+                new Users().updateLoginTime(ans['auto_id']);
+                new Logins().addLogin(ans['auto_id']);
             }
             response.json({"status":ans});
         });
