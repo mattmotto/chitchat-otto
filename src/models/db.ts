@@ -4,7 +4,7 @@ import * as mysql from 'mysql';
 
 const connection = mysql.createConnection({
   host: '127.0.0.1',
-  user: 'root',
+  user: 'dbuser',
   password: 'dbuserdbuser',
   database: 'window_db'
 });
@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 // open the MySQL connection
 connection.connect(error => {
   if (error) throw error;
-  console.log("Successfully connected to the database.");
+  console.log("Successfully connected to the database");
 });
 
 module.exports = connection;

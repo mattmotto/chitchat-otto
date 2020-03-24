@@ -54,8 +54,6 @@ export class ChatServer {
                 It's worth noting that IDs are unique (https://stackoverflow.com/questions/20962970/how-unique-is-socket-id)
             */
 
-            console.log("Recieving connection from: "+socket.id)
-
             const matchable = await this.pairClient.findMatch(socket.id);
             
             if (Object.keys(matchable).length != 0) {
@@ -67,21 +65,23 @@ export class ChatServer {
                     users: [{"to": socket.id, "from": target_socket}]
                 });
             } else {
-                console.log("No match found, adding as a lone socket");
                 this.pairClient.addLoneSocket(socket.id);
             }
 
             // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
 
-            socket.on('disconnect', () => {
+            socket.on('disconnect', async () => {
 
                 //Here, remove the socket ID from the table/whatever we're using to track those users that are waiting for a connection.
                 this.socketsArray.splice(this.socketsArray.indexOf(socket.id), 1);
-                this.pairClient.removeEntry(socket.id);
-
+                const target = await this.pairClient.removeEntry(socket.id);
+                const payload = {
+                    removed: socket.id,
+                    client: target
+                }
                 // NOTE: this.io.emit sends to ALL connections, INCLUDING the sender
                 // This is important because if SOMEONE is connected to this socket, we need to disconnect them
-                this.io.emit('abrupt-remove', socket.id);
+                this.io.emit('abrupt-remove', payload);
             });
             
             /*

@@ -1,4 +1,4 @@
-export const SocketHandler = (socket, toggleConnection) => {
+export const SocketHandler = (socket, connectedHandler, disconnectedHandler) => {
     var target_socket = null;
     var answersFrom = {}, offer;
     var peerConnection = window.RTCPeerConnection ||
@@ -25,12 +25,15 @@ export const SocketHandler = (socket, toggleConnection) => {
     });
 
     pc.onaddstream = function (obj) {
-        var vid = document.getElementById("clientVideo");
-        vid.srcObject = obj.stream;
+        console.log("Stream added!")
+        connectedHandler(() => {
+            var vid = document.getElementById("clientVideo");
+            vid.srcObject = obj.stream;
+        })
     }
 
     navigator.getUserMedia({video: true, audio: true}, function (stream) {
-        var video = document.querySelector('video');
+        var video = document.getElementById('myVideo');
         video.srcObject = stream;
         pc.addStream(stream);
     }, error);
@@ -46,18 +49,15 @@ export const SocketHandler = (socket, toggleConnection) => {
         }       
     });
 
-    socket.on('abrupt-remove', function(id) {
-        if(id == socket.id || id == target_socket) {
-            target_socket = null;
-            document.getElementById("clientVideo").srcObject = null;
-            toggleConnection();
+    socket.on('abrupt-remove', function(data) {
+        const {removed, client} = data;
+        if(socket.id.trim() == removed.trim() || socket.id.trim() == client.trim()) {
+            disconnectedHandler(()=>{
+                target_socket = null;
+                document.getElementById("clientVideo").srcObject = null;
+            });
         }
     })
-
-    socket.on('remove-user', function (id) {
-        console.log("Graceful remove");
-    });
-
 
     socket.on('offer-made', function (data) {
         offer = data.offer;
@@ -75,7 +75,7 @@ export const SocketHandler = (socket, toggleConnection) => {
     });
 
     socket.on('answer-made', function (data) {
-        toggleConnection(() => {
+        connectedHandler(() => {
             pc.setRemoteDescription(new sessionDescription(data.answer), function () {
                 if (!answersFrom[data.socket]) {
                     createOffer(data.socket);

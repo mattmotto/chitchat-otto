@@ -22,7 +22,6 @@
     "mysql": "^2.18.1",
     "node-sass": "^4.13.1",
     "nodemon": "^1.19.1",
-<<<<<<< HEAD
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-bootstrap-typeahead": "^5.0.0-alpha.1",

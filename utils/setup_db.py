@@ -12,13 +12,12 @@ if __name__ == '__main__':
 		queue_db = '''CREATE TABLE CURRENT_PAIRS (
 		auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		socket_id_1 VARCHAR(100) NOT NULL,
+		id_1 BIGINT,
 		socket_id_2 VARCHAR(100),
+		id_2 BIGINT,
 		PRIMARY KEY(auto_id)
 		);'''
 
-		# TODO: Create the rest of the tables, and execute the SQL for them
-
-		# Can you finish the rest @Otto? I would fucking love to -Otto
 		# cursor.execute("DROP TABLE IF EXISTS USERS;")
 		user_db = '''CREATE TABLE USERS (
 		  auto_id BIGINT NOT NULL AUTO_INCREMENT,
