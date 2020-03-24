@@ -17,7 +17,7 @@ export default class Header extends Component {
                 <Navbar bg="light" variant="light">
                     <Navbar.Brand>Window</Navbar.Brand>
                     <Nav className="mr-auto">
-                    <Nav.Link>Home</Nav.Link>
+                    <Nav.Link>About Us</Nav.Link>
                     </Nav>
                     {
                         this.props.loggedIn ? (
