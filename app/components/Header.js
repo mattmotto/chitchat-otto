@@ -24,7 +24,6 @@ export default class Header extends Component {
                     {
                         this.props.loggedIn ? (
                             <NavDropdown title={<img src={PLACEHOLDER} style={{height: "5vh", width: "auto", borderRadius: "50%"}} />} style={{marginRight: "2vw"}} id="basic-nav-dropdown">
-                                <NavDropdown.Item onClick={()=>{console.log("My profile")}}>My Profile</NavDropdown.Item>
                                 <NavDropdown.Item onClick={()=>console.log("Account settings")}>Account Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={this.props.onLogOut}>Logout</NavDropdown.Item>
