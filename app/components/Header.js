@@ -15,8 +15,8 @@ export default class Header extends Component {
 
     render() {
         return (
-            <div style={{paddingTop: "1vh", paddingBottom: "1vh", paddingRight: "0.5vw", paddingLeft: "0.5vw"}}>
-                <Navbar bg="light" variant="light">
+            <div>
+                <Navbar bg="light" variant="light" style={{paddingTop: "1vh", paddingBottom: "1vh", paddingRight: "0.5vw", paddingLeft: "0.5vw", height: "8vh"}}>
                     <Navbar.Brand>Window</Navbar.Brand>
                     <Nav className="mr-auto">
                     <Nav.Link>About Us</Nav.Link>

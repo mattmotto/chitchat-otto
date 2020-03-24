@@ -52,10 +52,9 @@ export const SocketHandler = (socket, connectedHandler, disconnectedHandler) => 
     socket.on('abrupt-remove', function(data) {
         const {removed, client} = data;
         if(socket.id.trim() == removed.trim() || socket.id.trim() == client.trim()) {
-            disconnectedHandler(()=>{
-                target_socket = null;
-                document.getElementById("clientVideo").srcObject = null;
-            });
+            target_socket = null;
+            document.getElementById("clientVideo").srcObject = null;
+            disconnectedHandler();
         }
     })
 

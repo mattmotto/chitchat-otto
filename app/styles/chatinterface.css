@@ -1,4 +1,46 @@
 #myVideo {
-    height: 100%;
-    width: 100vw;
+    height: 15vh;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 15vh;
+    right: 60%;
+    border: 0.5px solid;
+}
+
+#clientVideo {
+    width: 100%;
+}
+
+.clientWaiting {
+    text-align: center;
+    width: 100%;
+}
+
+.waitingGraphic {
+    width: 50%;
+}
+
+.infoDiv {
+    padding-top: 9%;
+    height: 15vh;
+    text-align: center;
+    background-color: rgb(194, 193, 193);;
+}
+
+.waitingPrompt {
+    margin-top: 4vh;
+    color: #676767;
+}
+
+.infoImage {
+    float: left;
+    height: 7vh;
+    width: auto;
+    margin-left: 13%;
+    border-radius: 50%;
+}
+
+.infoContent {
+    float: left;
+    margin-left: 1vw;
 }
