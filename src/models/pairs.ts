@@ -8,6 +8,7 @@ export class Pairs {
 	private getMatch(socket_id): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket_id+"\" OR socket_id_2=\""+socket_id+"\" LIMIT 1;", (err, results, fields) => {
+				if (err) throw err;
 				resolve(results.length==0 ? {} : results[0])
 			});
 		});
@@ -16,6 +17,7 @@ export class Pairs {
 	private findMatch(): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2 IS NULL", (err, results, fields) => {
+				if (err) throw err;
 				resolve(results.length==0 ? {} : results[0])
 			});
 		});
