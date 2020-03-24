@@ -91,11 +91,11 @@ if __name__ == '__main__':
 		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
-		# cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
+		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 
 		cursor.execute(queue_db)
-		# cursor.execute(universities_db)
+		cursor.execute(universities_db)
 		cursor.execute(user_db)
 		cursor.execute(matches_db)
 		cursor.execute(logins_db)
