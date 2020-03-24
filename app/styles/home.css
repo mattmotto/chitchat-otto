@@ -30,7 +30,7 @@ body {
 
 .centerContent {
     color: black;
-    margin-top: 25vh;
+    margin-top: 5vh;
     text-align: center;
 }
 
@@ -59,4 +59,9 @@ body {
     bottom: 0;
     margin-left: 1vw;
     font-size: 0.8rem;
+}
+
+.signUpContent {
+    padding-left: 8vw;
+    padding-right: 8vw;
 }
