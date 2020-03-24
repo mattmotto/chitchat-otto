@@ -48,6 +48,7 @@ if __name__ == '__main__':
 						  `auto_id` INT NOT NULL AUTO_INCREMENT,
 						  `user_1` INT NOT NULL,
 						  `user_2` INT NOT NULL,
+						  `deleted` BINARY(1) NOT NULL DEFAULT 0,
 						  PRIMARY KEY (`auto_id`, `user_1`),
 						  INDEX `user_1_idx` (`user_1` ASC) VISIBLE,
 						  INDEX `user_2_idx` (`user_2` ASC) VISIBLE,
