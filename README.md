@@ -1,4 +1,4 @@
-# videoserver
+# window
 NodeJS and TypeScript based server for a video chat application. This app uses https://socket.io/ to handle data transmission and socket management
 ## Execution
 1. Please ensure that you have npm installed
