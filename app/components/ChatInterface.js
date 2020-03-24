@@ -36,12 +36,12 @@ export default class ChatInterface extends Component {
 		<div>
             {this.state.connected ? (
                 <React.Fragment>
-                    <video class="video-large" id="myVideo" autoPlay></video>
+                    <video className="video-large" id="myVideo" autoPlay></video>
                 </React.Fragment>
             ): (
                 <React.Fragment>
-                    <video class="video-large" autoPlay></video>
-                    <video class="video-large" id="clientVideo" autoPlay></video>
+                    <video className="video-large" autoPlay></video>
+                    <video className="video-large" id="clientVideo" autoPlay></video>
                 </React.Fragment>
             )}
 		</div>
