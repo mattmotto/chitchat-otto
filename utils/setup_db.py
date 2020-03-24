@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
 		# cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 		queue_db = '''CREATE TABLE CURRENT_PAIRS (
-		auto_id INT NOT NULL AUTO_INCREMENT,
+		auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		socket_id_1 VARCHAR(100) NOT NULL,
 		socket_id_2 VARCHAR(100),
 		PRIMARY KEY(auto_id)
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 		# Can you finish the rest @Otto? I would fucking love to -Otto
 		# cursor.execute("DROP TABLE IF EXISTS USERS;")
 		user_db = '''CREATE TABLE USERS (
-		  auto_id INT NOT NULL AUTO_INCREMENT,
+		  auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		  name VARCHAR(100) NOT NULL,
 		  email VARCHAR(100) NOT NULL,
 		  password_hash VARCHAR(100) NOT NULL,
@@ -29,6 +29,8 @@ if __name__ == '__main__':
 		  photo_url VARCHAR(300) NOT NULL,
 		  instagram_id VARCHAR(100) NOT NULL,
 		  snapchat_id VARCHAR(100) NOT NULL,
+		  signed_up TIMESTAMP NOT NULL,
+		  last_login TIMESTAMP NOT NULL,
 		  is_banned BINARY(1) NOT NULL DEFAULT 0,
 		  PRIMARY KEY(auto_id),
 		  CONSTRAINT `USERS_ibfk_1` FOREIGN KEY (university) REFERENCES UNIVERSITIES (auto_id)
@@ -45,9 +47,9 @@ if __name__ == '__main__':
 		# 	);'''
 
 		matches_db = '''CREATE TABLE `window_db`.`MATCHES` (
-						  `auto_id` INT NOT NULL AUTO_INCREMENT,
-						  `user_1` INT NOT NULL,
-						  `user_2` INT NOT NULL,
+						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
+						  `user_1` BIGINT NOT NULL,
+						  `user_2` BIGINT NOT NULL,
 						  `deleted` BINARY(1) NOT NULL DEFAULT 0,
 						  PRIMARY KEY (`auto_id`, `user_1`),
 						  INDEX `user_1_idx` (`user_1` ASC) VISIBLE,
@@ -73,15 +75,31 @@ if __name__ == '__main__':
 			);
 		'''
 
+		logins_db = '''CREATE TABLE LOGINS (
+		auto_id BIGINT NOT NULL AUTO_INCREMENT,
+		user_id BIGINT NOT NULL,
+		login_time TIMESTAMP NOT NULL,
+		PRIMARY KEY(auto_id, user_id),
+		INDEX user_id_idx (user_id ASC) VISIBLE,
+		CONSTRAINT user_id
+			FOREIGN KEY (user_id)
+			REFERENCES window_db.USERS (auto_id)
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION
+		);
+		'''
+
+		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
-		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
+		# cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 
 		cursor.execute(queue_db)
-		cursor.execute(universities_db)
+		# cursor.execute(universities_db)
 		cursor.execute(user_db)
 		cursor.execute(matches_db)
+		cursor.execute(logins_db)
 
 		connectionInstance.commit()
 		print("Done! Closing DB connection")

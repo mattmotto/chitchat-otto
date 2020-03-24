@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import {Users} from '../models/users';
 import {Matches} from '../models/matches';
+import {Logins} from '../models/logins';
 
 export class Routes {
 
@@ -55,9 +56,13 @@ export class Routes {
             2: wrong password
         */
 
-        this.app.post('/loginuser', (request, response) => {
+        this.app.post('/loginuser', async (request, response) => {
             let {email, password} = request.body;
-            let ans = new Users.loginUser(email, password);
+            let ans = await new Users().loginUser(email, password);
+            if (ans[0] == 0){
+                new Users().updateLoginTime(email);
+                new Logins().addLogin(ans[1]);
+            }
             response.json({"status":ans});
         });
 
@@ -98,18 +103,22 @@ export class Routes {
 
             Response is a json object of the format:
             {
-                "name":"name",
-                "email":"email",
-                "university":"university",
-                "photo_url":"photo_url",
-                "instagram_id":"instagram_id",
-                "snapchat_id":"snapchat_id"
+                "status":0,
+                "data":
+                    {
+                        "name":"name",
+                        "email":"email",
+                        "university":"university",
+                        "photo_url":"photo_url",
+                        "instagram_id":"instagram_id",
+                        "snapchat_id":"snapchat_id"
+                    }
             }
         */
-        this.app.post('/getuserinfo', (request, response) => {
+        this.app.post('/getuserinfo', async (request, response) => {
             let {auto_id} = request.body;
-            let user = new Users().getUser(auto_id);
-            response.json({"status":0});
+            let user = await new Users().getUser(auto_id);
+            response.json({"status":0, 'data':user});
         });
 
         /*
@@ -144,20 +153,23 @@ export class Routes {
 
             response is a json object of the format:
             {
-                "matches":[
-                    {
-                        "auto_id",
-                        "user_1",
-                        "user_2"
-                    }
-                    ...
-                ]
+                "status":0,
+                "matches":
+                    [
+                        {
+                            "auto_id",
+                            "user_1",
+                            "user_2"
+                        },
+                        ...
+                    ]
             }
 
         */
-        this.app.post('/getusermatches', (request, response) => {
+        this.app.post('/getusermatches', async (request, response) => {
             let {user} = request.body;
-            let matches = new Matches().getMatches(user);
+            let matches = await new Matches().getMatches(user);
+            response.json({'status':0, 'matches':matches});
         });
 
         /*
