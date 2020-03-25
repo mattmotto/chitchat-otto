@@ -9,6 +9,7 @@ import {Users} from '../models/users';
 import {Matches} from '../models/matches';
 import {Logins} from '../models/logins';
 import {Universities} from '../models/universities';
+import {Reports} from '../models/reports';
 
 const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
@@ -257,6 +258,13 @@ export class Routes {
             new Users().banUser(user);
             console.log("banned user " + user);
             response.json({'status':0});
-        })
+        });
+
+        this.app.post('/reportuser', (request, response) => {
+            let {user, report_description} = request.body;
+            new Reports().reportUser(user, report_description);
+            console.log("reported user " + user + " for " + report_description);
+            response.json({'status':0});
+        });
     }
 }
