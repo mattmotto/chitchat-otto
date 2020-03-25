@@ -8,6 +8,7 @@ import * as bodyParser from 'body-parser';
 import {Users} from '../models/users';
 import {Matches} from '../models/matches';
 import {Logins} from '../models/logins';
+import {Universities} from '../models/universities';
 
 const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
@@ -156,23 +157,31 @@ export class Routes {
 
             response is a json object of the format:
             {
-                "status":0,
-                "matches":
-                    [
-                        {
-                            "auto_id",
-                            "user_1",
-                            "user_2"
-                        },
-                        ...
-                    ]
+                "matches": [
+                    {
+                        "auto_id": 2,
+                        "name": "name2",
+                        "email": "me2@me.com",
+                        "university": "Columbia University",
+                        "photo_url": "photo_url",
+                        "instagram_id": "instagram_id",
+                        "snapchat_id": "snapchat_id"
+                    },
+                    ...
+                ]
             }
 
         */
         this.app.post('/getusermatches', async (request, response) => {
             let {user} = request.body;
             let matches = await new Matches().getMatches(user);
-            response.json({'status':0, 'matches':matches});
+            let JSONString = '{"matches":[]}';
+            let obj = JSON.parse(JSONString);
+            for (let i = 0; i < matches["length"]; i++){
+                obj['matches'].push(await new Users().getUser(matches["data"][i]["user_2"]));
+            }
+            let ans = JSON.stringify(obj);
+            response.json(obj);
         });
 
         /*
@@ -197,6 +206,30 @@ export class Routes {
             console.log("deleted user match for users " + user_1 + " and " + user_2);
             response.json({"status":0});
         });
-    }
 
+        /*
+        Route to get a list of university names.
+
+        Request is nothing
+
+        Response is json object of format:
+        [
+            {
+                "name": "Abilene Christian University"
+            },
+            {
+                "name": "Academy Of Art University"
+            },
+            {
+                "name": "Acadia University"
+            },
+            ...
+        ]
+        */
+        this.app.post('/getuniversities', async (request, response) => {
+            let data = await new Universities().getUniversityNames();
+
+            response.json(data);
+        });
+    }
 }

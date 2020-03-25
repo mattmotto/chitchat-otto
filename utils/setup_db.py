@@ -12,27 +12,32 @@ if __name__ == '__main__':
 		queue_db = '''CREATE TABLE CURRENT_PAIRS (
 		auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		socket_id_1 VARCHAR(100) NOT NULL,
-		id_1 BIGINT,
 		socket_id_2 VARCHAR(100),
-		id_2 BIGINT,
 		PRIMARY KEY(auto_id)
 		);'''
 
+		# TODO: Create the rest of the tables, and execute the SQL for them
+
+		# Can you finish the rest @Otto? I would fucking love to -Otto
 		# cursor.execute("DROP TABLE IF EXISTS USERS;")
 		user_db = '''CREATE TABLE USERS (
 		  auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		  name VARCHAR(100) NOT NULL,
 		  email VARCHAR(100) NOT NULL,
 		  password_hash VARCHAR(100) NOT NULL,
-		  university INT NOT NULL,
+		  university VARCHAR(100) NOT NULL,
 		  photo_url VARCHAR(300) NOT NULL,
 		  instagram_id VARCHAR(100) NOT NULL,
 		  snapchat_id VARCHAR(100) NOT NULL,
 		  signed_up TIMESTAMP NOT NULL,
 		  last_login TIMESTAMP NOT NULL,
 		  is_banned BINARY(1) NOT NULL DEFAULT 0,
-		  PRIMARY KEY(auto_id),
-		  CONSTRAINT `USERS_ibfk_1` FOREIGN KEY (university) REFERENCES UNIVERSITIES (auto_id)
+		  PRIMARY KEY(auto_id, name),
+		  CONSTRAINT `name`
+			  FOREIGN KEY (`university`)
+			  REFERENCES `window_db`.`UNIVERSITIES` (`name`)
+			  ON DELETE NO ACTION
+			  ON UPDATE NO ACTION
 		);'''
 
 		# cursor.execute("DROP TABLE IF EXISTS MATCHES;")
@@ -70,7 +75,8 @@ if __name__ == '__main__':
 			name VARCHAR(100) NOT NULL,
 			email VARCHAR(100) NOT NULL,
 			country VARCHAR(100) NOT NULL,
-			PRIMARY KEY(auto_id, name)
+			PRIMARY KEY(auto_id, name),
+			INDEX `indec` (`name` ASC) VISIBLE
 			);
 		'''
 
