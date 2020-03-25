@@ -31,7 +31,7 @@ if __name__ == '__main__':
 		  snapchat_id VARCHAR(100) NOT NULL,
 		  signed_up TIMESTAMP NOT NULL,
 		  last_login TIMESTAMP NOT NULL,
-		  is_banned BINARY(1) NOT NULL DEFAULT 0,
+		  is_banned BIT(1) NOT NULL DEFAULT 0,
 		  PRIMARY KEY(auto_id, name),
 		  CONSTRAINT `name`
 			  FOREIGN KEY (`university`)
@@ -94,11 +94,11 @@ if __name__ == '__main__':
 		);
 		'''
 
-		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
-		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
-		cursor.execute("DROP TABLE IF EXISTS USERS;")
-		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
-		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
+		# cursor.execute("DROP TABLE IF EXISTS LOGINS;")
+		# cursor.execute("DROP TABLE IF EXISTS MATCHES;")
+		# cursor.execute("DROP TABLE IF EXISTS USERS;")
+		# cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
+		# cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 
 		cursor.execute(queue_db)
 		cursor.execute(universities_db)
