@@ -69,7 +69,6 @@ if __name__ == '__main__':
 						    ON DELETE NO ACTION
 						    ON UPDATE NO ACTION);'''
 
-		# cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		universities_db = '''CREATE TABLE UNIVERSITIES (
 			auto_id INT NOT NULL AUTO_INCREMENT,
 			name VARCHAR(100) NOT NULL,
@@ -94,17 +93,30 @@ if __name__ == '__main__':
 		);
 		'''
 
+		reports_db = '''CREATE TABLE `window_db`.`REPORTS` (
+						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
+						  `user_id` BIGINT NOT NULL,
+						  `report_time` TIMESTAMP NOT NULL,
+						  `report_description` TEXT NULL,
+						  PRIMARY KEY (`auto_id`, `user_id`),
+						  INDEX `auto_id_idx` (`user_id` ASC) VISIBLE,
+						    FOREIGN KEY (`user_id`)
+						    REFERENCES `window_db`.`USERS` (`auto_id`));
+		'''
+
 		# cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		# cursor.execute("DROP TABLE IF EXISTS MATCHES;")
 		# cursor.execute("DROP TABLE IF EXISTS USERS;")
 		# cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		# cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
+		cursor.execute("DROP TABLE IF EXISTS REPORTS;")
 
-		cursor.execute(queue_db)
-		cursor.execute(universities_db)
-		cursor.execute(user_db)
-		cursor.execute(matches_db)
-		cursor.execute(logins_db)
+		# cursor.execute(queue_db)
+		# cursor.execute(universities_db)
+		# cursor.execute(user_db)
+		# cursor.execute(matches_db)
+		# cursor.execute(logins_db)
+		cursor.execute(reports_db)
 
 		connectionInstance.commit()
 		print("Done! Closing DB connection")
