@@ -52,12 +52,14 @@ export class Routes {
 
             response is a json object of format:
             {
-                "status":0
+                "status":0,
+                'auto_id':1
             }
             where:
             0: success
             1: wrong email
             2: wrong password
+            3: banned
         */
 
         this.app.post('/loginuser', async (request, response) => {
@@ -67,7 +69,7 @@ export class Routes {
                 new Users().updateLoginTime(ans['auto_id']);
                 new Logins().addLogin(ans['auto_id']);
             }
-            response.json({"status":ans});
+            response.json(ans);
         });
 
         /*
@@ -86,15 +88,15 @@ export class Routes {
 
             response is a json object of format:
             {
-                "response":0
+                "status":0
             }
             0: success
-            anything else: failure
+            1: user already exists
         */
-        this.app.post('/signupuser', (request, response) => {
+        this.app.post('/signupuser', async (request, response) => {
             let {name, email, password, university, photo_url, instagram_id, snapchat_id} = request.body;
-            new Users().makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id);
-            response.json({"status":0});
+            let ans = await new Users().makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id);
+            response.json(ans);
         });
 
         /*
@@ -136,7 +138,7 @@ export class Routes {
 
             response is a json object of format:
             {
-                "response":0
+                "status":0
             }
             0: success
             anything else: failure
@@ -158,20 +160,24 @@ export class Routes {
             }
 
             response is a json object of the format:
-            {
-                "matches": [
-                    {
-                        "auto_id": 2,
-                        "name": "name2",
-                        "email": "me2@me.com",
-                        "university": "Columbia University",
-                        "photo_url": "photo_url",
-                        "instagram_id": "instagram_id",
-                        "snapchat_id": "snapchat_id"
-                    },
-                    ...
-                ]
-            }
+            [
+                {
+                    "auto_id": 1,
+                    "name": "name",
+                    "email": "me@me.com",
+                    "university": "Columbia University",
+                    "photo_url": "photo_url",
+                    "instagram_id": "instagram_id",
+                    "snapchat_id": "snapchat_id",
+                    "is_banned": {
+                        "type": "Buffer",
+                        "data": [
+                            1
+                        ]
+                    }
+                },
+                ...
+            ]
 
         */
         this.app.post('/getusermatches', async (request, response) => {
@@ -196,7 +202,7 @@ export class Routes {
 
             response is a json object of format:
             {
-                "response":0
+                "status":0
             }
             0: success
             anything else: failure
@@ -232,5 +238,25 @@ export class Routes {
 
             response.json(data);
         });
+
+        /*
+            Route to ban a user
+
+            Request is json object of format:
+            {
+                "user":1
+            }
+
+            response is json object of format:
+            {
+                "status":0
+            }
+        */
+        this.app.post('/banuser', (request, response) => {
+            let {user} = request.body
+            new Users().banUser(user);
+            console.log("banned user " + user);
+            response.json({'status':0});
+        })
     }
 }
