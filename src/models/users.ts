@@ -9,7 +9,7 @@ export class Users {
 	makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id):void {
 		let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 		let sqlquery = "INSERT INTO USERS (`name`, `email`, `password_hash`, `university`, `photo_url`, `instagram_id`, `snapchat_id`, `signed_up`, `last_login`)\
-								VALUES ('"+name+"', '"+email+"', '" +hashedPassword+"', "+university+", '"+photo_url+"', '"+instagram_id+"', '"+snapchat_id+"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+								VALUES ('"+name+"', '"+email+"', '" +hashedPassword+"', '"+university+"', '"+photo_url+"', '"+instagram_id+"', '"+snapchat_id+"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
 		this.sqlClient.query(sqlquery, (err, results, fields) => {
 			if (err) throw err;
 			console.log("Inserted new user! email: " + email);
