@@ -150,9 +150,11 @@ export class Routes {
         /*
             Route to get all matched entries from the user_matches table, for a particular user
 
-            request is a json object of the format:
+            request is a json object of the format: (Pages start counting from 0)
             {
-                "user":1
+                "user":1,
+                "pageNumber":0,
+                "pageLength":10
             }
 
             response is a json object of the format:
@@ -173,15 +175,14 @@ export class Routes {
 
         */
         this.app.post('/getusermatches', async (request, response) => {
-            let {user} = request.body;
+            let {user, pageNumber, pageLength} = request.body;
             let matches = await new Matches().getMatches(user);
-            let JSONString = '{"matches":[]}';
-            let obj = JSON.parse(JSONString);
+            let ans = [];
             for (let i = 0; i < matches["length"]; i++){
-                obj['matches'].push(await new Users().getUser(matches["data"][i]["user_2"]));
+                ans.push(await new Users().getUser(matches["data"][i]["user_2"]));
             }
-            let ans = JSON.stringify(obj);
-            response.json(obj);
+            let start = pageNumber * pageLength;
+            response.json(ans.splice(start, pageLength));
         });
 
         /*
