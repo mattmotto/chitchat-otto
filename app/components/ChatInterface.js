@@ -46,7 +46,7 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
-        const socket = io.connect('./', {
+        const socket = io.connect('/', {
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
