@@ -2,19 +2,20 @@ import * as mysql from 'mysql';
 
 // Create a connection to the database
 
-console.log((process.env.PRODUCTION ? "Production" : "Development") + " environment detected")
+var connection = null;
 
-const host = process.env.PRODUCTION ? "b9c35a93bc495c" : "127.0.0.1";
-const user = process.env.PRODUCTION ? "23d56ae1" : "dbuser";
-const password = process.env.PRODUCTION ? "us-cdbr-iron-east-01.cleardb.net" : "dbuserdbuser";
-const database = process.env.PRODUCTION ? "heroku_93d73550cb16248" : "window_db";
-
-const connection = mysql.createConnection({
-  host: host,
-  user: user,
-  password: password,
-  database: database
-});
+if(process.env.CLEARDB_DATABASE_URL) {
+  console.log("Connecting to: "+process.env.CLEARDB_DATABASE_URL);
+  connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+} else {
+  console.log("Connecting to localhost DB")
+  connection = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "dbuser",
+    password: "dbuserdbuser",
+    database: "window_db"
+  });
+}
 
 // open the MySQL connection
 connection.connect(error => {
