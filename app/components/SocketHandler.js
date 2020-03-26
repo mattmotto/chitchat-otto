@@ -1,4 +1,5 @@
 export const SocketHandler = (socket, connectedHandler, disconnectedHandler) => {
+    var mySocket = socket;
     var target_socket = null;
     var answersFrom = {}, offer;
     var peerConnection = window.RTCPeerConnection ||

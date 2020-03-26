@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 import { SocketHandler } from './SocketHandler';
+
+import Socket from "./Socket"
+
 import MatchesView from "./MatchesView"
+
+import PlusImage from "../resources/plusButton.png"
+import DisconnectImage from "../resources/disconnect.png"
+
 
 import "../styles/chatinterface.css"
 
@@ -9,13 +16,16 @@ export default class ChatInterface extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            connected: false
+            connected: false,
+            isLoading: false,
+            socket: null
         }
     }
 
     isConnectedHandler = (onComplete) => {
         this.setState({
-            connected: true
+            connected: true,
+            isLoading: false
         }, () => {
             if(onComplete) {
                 onComplete();
@@ -25,31 +35,56 @@ export default class ChatInterface extends Component {
 
     isDisconnectedHandler = (onComplete) => {
         this.setState({
-            connected: false
+            connected: false,
+            socket: null,
+            isLoading: false
         }, () => {
             if(onComplete) {
                 onComplete();
             }
         })
     }
-    
-    componentDidMount() {
+
+    findMatch = () => {
         const socket = io.connect('http://localhost:5000', {
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
             reconnectionAttempts: Infinity
         });
-        SocketHandler(socket, this.isConnectedHandler, this.isDisconnectedHandler);
+        let that = this;
+        this.setState({
+            isLoading: true
+        }, () => {
+            let socketVar = new Socket(socket, that.isConnectedHandler, that.isDisconnectedHandler);
+            this.setState({
+                socket: socketVar
+            }, () => {
+                this.state.socket.startSession();
+            })
+        })
     }
-
-
 
 	render() {
         console.log("CONNECTED: "+this.state.connected);
 		return (
 		<div>
 			<div className="left" style={{width: "75%", paddingTop: 0, height: "100vh"}}>
+                {
+                    this.state.isLoading ?  (
+                        <div className="callControlButton" style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}}>
+                            <img src={"https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif"} className="callControlImage" />
+                        </div>
+                    ) : this.state.connected ? (
+                        <div className="callControlButton" style={{backgroundColor: "rgb(192, 39, 39)"}} onClick={this.state.socket.endSession}>
+                            <img src={DisconnectImage} className="callControlImage" />
+                        </div>
+                    ) : (
+                        <div className="callControlButton" style={{backgroundColor: "#5CABB4"}} onClick={this.findMatch}>
+                            <img src={PlusImage} className="callControlImage" />
+                        </div>
+                    )
+                }
                 {
                     this.state.connected ? (
                         <video className="video-large" id="clientVideo" autoPlay></video>

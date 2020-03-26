@@ -4,7 +4,7 @@ if __name__ == '__main__':
 
 	# Ensure that the DB window_db exists
 	# Create our target tables
-	connectionInstance = pymysql.connect(host="127.0.0.1", user="root", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
+	connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
 	try:
 		cursor = connectionInstance.cursor()
 
@@ -88,11 +88,15 @@ if __name__ == '__main__':
 		);
 		'''
 
+		print("Dropping tables...")
+
 		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
 		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
+
+		print("Creating tables...")
 
 		cursor.execute(queue_db)
 		cursor.execute(universities_db)

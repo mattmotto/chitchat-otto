@@ -1,3 +1,8 @@
+video {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
 #myVideo {
     height: 15vh;
     border-radius: 50%;
@@ -9,6 +14,7 @@
 
 #clientVideo {
     width: 100%;
+    z-index: -100;
 }
 
 .clientWaiting {
@@ -30,4 +36,24 @@
 .waitingPrompt {
     margin-top: 4vh;
     color: #676767;
+}
+
+.callControlButton {
+    position: fixed;
+    top: 16vh;
+    left: 2.5vw;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.callControlButton:hover {
+    transform: scale(1.05);
+}
+
+.callControlImage {
+    color: #FFFFFF;
+    height: "6vh";
+    width: auto;
+    max-height: 5vh;
+    padding: 0.5vh;
 }
