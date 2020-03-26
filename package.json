@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "'./src/**/*.ts' --exec 'ts-node' ./src/server.ts",
+    "start": "webpack --mode production  && 'ts-node' ./src/server.ts",
     "dev": "webpack --mode development  && nodemon --watch './src/**/*.ts' --exec 'ts-node' ./src/server.ts",
     "build": "webpack --mode production"
   },
