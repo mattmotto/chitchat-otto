@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
-import { SocketHandler } from './SocketHandler';
 
 import Socket from "./Socket"
 

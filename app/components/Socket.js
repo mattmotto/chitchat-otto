@@ -8,12 +8,6 @@ window.mozRTCSessionDescription ||
 window.webkitRTCSessionDescription ||
 window.msRTCSessionDescription;
 
-navigator.getUserMedia  = navigator.getUserMedia ||
-navigator.webkitGetUserMedia ||
-navigator.mozGetUserMedia ||
-navigator.msGetUserMedia;
-
-
 var pc = null;
 
 export default class Socket {
@@ -63,6 +57,16 @@ export default class Socket {
             pc.addStream(document.socketObject.webcamStream);
         }
 
+        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function(stream) {
+            var video = document.getElementById('myVideo');
+            video.srcObject = stream;
+            document.socketObject.webcamStream = stream;
+            pc.addStream(stream);
+        })
+        .catch(function(err) {
+            console.log("Something went wrong - do you have the right permissions?");
+        })
+
         pc.onaddstream = function (obj) {
             console.log("Stream added!")
             that.connectedHandler(() => {
@@ -71,13 +75,6 @@ export default class Socket {
                 vid.srcObject = obj.stream;
             })
         }
-    
-        navigator.getUserMedia({video: true, audio: true}, function (stream) {
-            var video = document.getElementById('myVideo');
-            video.srcObject = stream;
-            document.socketObject.webcamStream = stream;
-            pc.addStream(stream);
-        }, this.webcamErrorHandler);
         
         this.socket.on('add-users', function (data) {
             let id = data.users[0];
