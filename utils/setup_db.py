@@ -1,10 +1,16 @@
 import pymysql
 
+remote_username="b9c35a93bc495c"
+remote_password="23d56ae1"
+remote_host="us-cdbr-iron-east-01.cleardb.net"
+remote_db="heroku_93d73550cb16248"
+
 if __name__ == '__main__':
 
 	# Ensure that the DB window_db exists
 	# Create our target tables
-	connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
+	connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
+	# connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
 	try:
 		cursor = connectionInstance.cursor()
 
@@ -90,6 +96,7 @@ if __name__ == '__main__':
 		);
 		'''
 
+		
 		reports_db = '''CREATE TABLE `window_db`.`REPORTS` (
 						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
 						  `user_id` BIGINT NOT NULL,
