@@ -33,7 +33,7 @@ export const SocketHandler = (socket, connectedHandler, disconnectedHandler) => 
         })
     }
 
-    navigator.getUserMedia({video: true, audio: true}, function (stream) {
+    navigator.mediaDevices.getUserMedia({video: true, audio: true}, function (stream) {
         var video = document.getElementById('myVideo');
         video.srcObject = stream;
         pc.addStream(stream);
