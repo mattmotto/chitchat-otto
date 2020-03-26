@@ -38,7 +38,7 @@ if __name__ == '__main__':
 		  PRIMARY KEY(auto_id, name),
 		  CONSTRAINT `name`
 			  FOREIGN KEY (`university`)
-			  REFERENCES `window_db`.`UNIVERSITIES` (`name`)
+			  REFERENCES `UNIVERSITIES` (`name`)
 			  ON DELETE NO ACTION
 			  ON UPDATE NO ACTION
 		);'''
@@ -53,22 +53,22 @@ if __name__ == '__main__':
 		# 	CONSTRAINT `MATCHES_ibfk_2` FOREIGN KEY (match) REFERENCES USERS (auto_id)
 		# 	);'''
 
-		matches_db = '''CREATE TABLE `window_db`.`MATCHES` (
+		matches_db = '''CREATE TABLE `MATCHES` (
 						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
 						  `user_1` BIGINT NOT NULL,
 						  `user_2` BIGINT NOT NULL,
 						  `deleted` BINARY(1) NOT NULL DEFAULT 0,
 						  PRIMARY KEY (`auto_id`, `user_1`),
-						  INDEX `user_1_idx` (`user_1` ASC) VISIBLE,
-						  INDEX `user_2_idx` (`user_2` ASC) VISIBLE,
+						  INDEX `user_1_idx` (`user_1` ASC),
+						  INDEX `user_2_idx` (`user_2` ASC),
 						  CONSTRAINT `user_1`
 						    FOREIGN KEY (`user_1`)
-						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    REFERENCES `USERS` (`auto_id`)
 						    ON DELETE NO ACTION
 						    ON UPDATE NO ACTION,
 						  CONSTRAINT `user_2`
 						    FOREIGN KEY (`user_2`)
-						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    REFERENCES `USERS` (`auto_id`)
 						    ON DELETE NO ACTION
 						    ON UPDATE NO ACTION);'''
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 			email VARCHAR(100) NOT NULL,
 			country VARCHAR(100) NOT NULL,
 			PRIMARY KEY(auto_id, name),
-			INDEX `indec` (`name` ASC) VISIBLE
+			INDEX `indec` (`name` ASC)
 			);
 		'''
 
@@ -87,48 +87,48 @@ if __name__ == '__main__':
 		user_id BIGINT NOT NULL,
 		login_time TIMESTAMP NOT NULL,
 		PRIMARY KEY(auto_id, user_id),
-		INDEX user_id_idx (user_id ASC) VISIBLE,
+		INDEX user_id_idx (user_id ASC),
 		CONSTRAINT user_id
 			FOREIGN KEY (user_id)
-			REFERENCES window_db.USERS (auto_id)
+			REFERENCES USERS (auto_id)
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION
 		);
 		'''
 
 		
-		reports_db = '''CREATE TABLE `window_db`.`REPORTS` (
+		reports_db = '''CREATE TABLE `REPORTS` (
 						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
 						  `user_id` BIGINT NOT NULL,
 						  `report_time` TIMESTAMP NOT NULL,
 						  `reported_by` BIGINT NOT NULL,
 						  `report_description` TEXT NULL,
 						  PRIMARY KEY (`auto_id`, `user_id`),
-						  INDEX `auto_id_idx` (`user_id` ASC) VISIBLE,
-						  INDEX `reported_by_idx` (`reported_by` ASC) VISIBLE,
+						  INDEX `auto_id_idx` (`user_id` ASC),
+						  INDEX `reported_by_idx` (`reported_by` ASC),
 						  CONSTRAINT `user_id_c`
 						    FOREIGN KEY (`user_id`)
-						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    REFERENCES `USERS` (`auto_id`)
 						    ON DELETE NO ACTION
 						    ON UPDATE NO ACTION,
 						  CONSTRAINT `reported_by`
 						    FOREIGN KEY (`reported_by`)
-						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    REFERENCES `USERS` (`auto_id`)
 						    ON DELETE NO ACTION
 						    ON UPDATE NO ACTION);
 		'''
 
 		print("Dropping tables...")
 
+		cursor.execute("DROP TABLE IF EXISTS REPORTS;")
 		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
 		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
-		cursor.execute("DROP TABLE IF EXISTS REPORTS;")
+
 
 		print("Creating tables...")
-
 		cursor.execute(queue_db)
 		cursor.execute(universities_db)
 		cursor.execute(user_db)
@@ -143,6 +143,3 @@ if __name__ == '__main__':
 		print(str(e))
 	finally:
 		connectionInstance.close()
-
-
-	
