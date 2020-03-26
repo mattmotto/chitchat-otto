@@ -12,11 +12,6 @@ export const SocketHandler = (socket, connectedHandler, disconnectedHandler) => 
         window.webkitRTCSessionDescription ||
         window.msRTCSessionDescription;
 
-        navigator.getUserMedia  = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia;
-
     var pc = new peerConnection({
         iceServers: [{
             url: "stun:stun.services.mozilla.com",
