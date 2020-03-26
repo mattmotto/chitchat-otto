@@ -260,10 +260,25 @@ export class Routes {
             response.json({'status':0});
         });
 
+        /*
+            Route to report a user
+
+            Request is json object of format:
+            {
+                "user":1,
+                "reported_by":2,
+                'report_description':"text"
+            }
+
+            response is json object of format:
+            {
+                "status":0
+            }
+        */
         this.app.post('/reportuser', (request, response) => {
-            let {user, report_description} = request.body;
-            new Reports().reportUser(user, report_description);
-            console.log("reported user " + user + " for " + report_description);
+            let {user, reported_by, report_description} = request.body;
+            new Reports().reportUser(user, reported_by, report_description);
+            console.log("User " + reported_by + " reported user " + user + " for " + report_description);
             response.json({'status':0});
         });
     }

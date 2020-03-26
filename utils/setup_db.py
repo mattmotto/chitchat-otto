@@ -97,11 +97,21 @@ if __name__ == '__main__':
 						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
 						  `user_id` BIGINT NOT NULL,
 						  `report_time` TIMESTAMP NOT NULL,
+						  `reported_by` BIGINT NOT NULL,
 						  `report_description` TEXT NULL,
 						  PRIMARY KEY (`auto_id`, `user_id`),
 						  INDEX `auto_id_idx` (`user_id` ASC) VISIBLE,
+						  INDEX `reported_by_idx` (`reported_by` ASC) VISIBLE,
+						  CONSTRAINT `user_id_c`
 						    FOREIGN KEY (`user_id`)
-						    REFERENCES `window_db`.`USERS` (`auto_id`));
+						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    ON DELETE NO ACTION
+						    ON UPDATE NO ACTION,
+						  CONSTRAINT `reported_by`
+						    FOREIGN KEY (`reported_by`)
+						    REFERENCES `window_db`.`USERS` (`auto_id`)
+						    ON DELETE NO ACTION
+						    ON UPDATE NO ACTION);
 		'''
 
 		# cursor.execute("DROP TABLE IF EXISTS LOGINS;")
