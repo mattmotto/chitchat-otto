@@ -5,7 +5,7 @@ import * as express from 'express';
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
-import { Pairs } from "./models/Pairs"
+import { Pairs } from "./models/pairs"
 
 export class ChatServer {
 
