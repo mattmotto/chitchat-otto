@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import io from 'socket.io-client';
 
 import Socket from "./Socket"
+import VonageWrapper from "./VonageWrapper"
 
 import MatchesView from "./MatchesView"
 
@@ -45,22 +46,11 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
-        const socket = io.connect('/', {
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax : 5000,
-            reconnectionAttempts: Infinity
-        });
-        let that = this;
+        const vonageWrapper = new VonageWrapper(this.isConnectedHandler, this.isDisconnectedHandler);
         this.setState({
-            isLoading: true
+            socket: vonageWrapper
         }, () => {
-            let socketVar = new Socket(socket, that.isConnectedHandler, that.isDisconnectedHandler);
-            this.setState({
-                socket: socketVar
-            }, () => {
-                this.state.socket.startSession();
-            })
+            vonageWrapper.startSession();
         })
     }
 
@@ -75,7 +65,7 @@ export default class ChatInterface extends Component {
                             <img src={"https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif"} className="callControlImage" />
                         </div>
                     ) : this.state.connected ? (
-                        <div className="callControlButton" style={{backgroundColor: "rgb(192, 39, 39)"}} onClick={this.state.socket.endSession}>
+                        <div className="callControlButton" style={{backgroundColor: "rgb(192, 39, 39)"}} onClick={() => console.log("Disconnecting")}>
                             <img src={DisconnectImage} className="callControlImage" />
                         </div>
                     ) : (
@@ -86,7 +76,7 @@ export default class ChatInterface extends Component {
                 }
                 {
                     this.state.connected ? (
-                        <video className="video-large" id="clientVideo" autoPlay></video>
+                        <div id="clientVideo"></div>
                     ) : (
                         <div className="clientWaiting">
                             <h2 className="waitingPrompt">What're you waiting for?</h2>
@@ -94,7 +84,7 @@ export default class ChatInterface extends Component {
                         </div>
                     )
                 }
-                <video className="video-large" id="myVideo" autoPlay></video>
+                <div id="myVideo"></div>
             </div>
             <div className="right" style={{width: "25%", paddingLeft: 0, paddingRight: 0, paddingTop: 0}}>
                 <MatchesView user_id={0}/>
