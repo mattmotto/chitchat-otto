@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 
-import Socket from "./Socket"
 import VonageWrapper from "./VonageWrapper"
 
 import MatchesView from "./MatchesView"
@@ -46,11 +45,21 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
-        const vonageWrapper = new VonageWrapper(this.isConnectedHandler, this.isDisconnectedHandler);
+        const socket = io.connect('/', {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: Infinity
+        });
         this.setState({
-            socket: vonageWrapper
+            isLoading: true
         }, () => {
-            vonageWrapper.startSession();
+            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler);
+            this.setState({
+                socket: vonageWrapper
+            }, () => {
+                vonageWrapper.startSession();
+            })
         })
     }
 

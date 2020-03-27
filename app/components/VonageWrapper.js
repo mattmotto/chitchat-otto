@@ -2,24 +2,39 @@ var session = null;
 
 export default class VonageWrapper {
   
-  constructor(onConnect, onDisconnect) {
+  constructor(socket, onConnect, onDisconnect) {
+    this.socket = socket
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
-    this.session = null;
   }
 
   startSession() {
-    const SERVER = 'https://vontagetokbox-test.herokuapp.com';
+    // const SERVER = 'https://vontagetokbox-test.herokuapp.com';
     const that = this;
 
-    fetch(SERVER + '/session').then(function(res) {
-       return res.json()
-    }).then(function(res) {
-        that.apiKey = res.apiKey;
-        that.sessionId = res.sessionId;
-        that.token = res.token;
+    this.socket.on('start-session', function (data) {
+      if(data.to = that.socket.id || data.from == that.socket.id) {
+        console.log(JSON.stringify(data));
+        that.apiKey = data.sessionData.apiKey;
+        that.sessionId = data.sessionData.sessionId;
+        that.token = data.sessionData.token;
+        console.log("Initialising Session...");
         that.initializeSession();
-      }).catch(handleError);
+      }
+    })
+
+    this.socket.on('abrupt-remove', function (data) {
+      console.log("connectionDestroyed has been called as well, terminating session...");
+    })
+
+    // fetch(SERVER + '/session').then(function(res) {
+    //    return res.json()
+    // }).then(function(res) {
+    //     that.apiKey = res.apiKey;
+    //     that.sessionId = res.sessionId;
+    //     that.token = res.token;
+    //     that.initializeSession();
+    //   }).catch(handleError);
   }
 
   initializeSession() {

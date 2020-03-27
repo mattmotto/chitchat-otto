@@ -6,6 +6,7 @@ import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
 import { Pairs } from "./models/pairs"
+import generateSession from "./handlers/VonageHandler"
 
 export class ChatServer {
 
@@ -40,19 +41,6 @@ export class ChatServer {
         });
 
         this.io.on('connection', async (socket) => {
-            /*
-                Here, I'm emitting a list of users back to the socket that made the connection - this is what is being used to click a socket.
-                When the socket connects, we send this back before anything else
-                Instead of this, track the list of connected users using a DB, and return only one user -> the one that must be connected to.
-                We can treat this as a queue - those that have been waiting the longest, get a connection first.
-                It's worth noting that this returns only one user too - but it just returns every user that the client adds - which we don't want
-
-                When two users connect, the client will send a request asking for user information - this will be unconnected from the backend process used to pair devices based on socket
-
-                NOTE: socket.broadcast.emit sends to ALL connections EXCEPT the sender. This makes sense - the sender shouldn't be able to connect with themselves.
-
-                It's worth noting that IDs are unique (https://stackoverflow.com/questions/20962970/how-unique-is-socket-id)
-            */
 
             const matchable = await this.pairClient.findMatch(socket.id);
             
@@ -60,9 +48,14 @@ export class ChatServer {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
                 const target_socket = matchable["socket_id_1"];
                 this.pairClient.makeMatch(target_socket, socket.id);
-                // Send a create-chat message to the second socket with the data about the first socket
-                socket.broadcast.emit('add-users', {
-                    users: [{"to": socket.id, "from": target_socket}]
+                
+                const sessionData = await generateSession();
+                console.log("Session Data: "+JSON.stringify(sessionData));
+                // Send a create message to both sockets
+                this.io.emit('start-session', {
+                    "to": socket.id,
+                    "from": target_socket,
+                    "sessionData": sessionData
                 });
             } else {
                 this.pairClient.addLoneSocket(socket.id);
