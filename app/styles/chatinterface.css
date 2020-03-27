@@ -43,8 +43,8 @@ video {
 
 .callControlButton {
     position: fixed;
-    top: 16vh;
-    left: 2.5vw;
+    top: 18vh;
+    left: 5vw;
     border-radius: 50%;
     z-index: 10;
 }
@@ -57,6 +57,94 @@ video {
     color: #FFFFFF;
     height: "6vh";
     width: auto;
-    max-height: 5vh;
+    max-height: 6vh;
     padding: 0.5vh;
+}
+
+div[disabled]
+{
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.ccIconButton {
+    position: fixed;
+    top: 18vh;
+    left: 15vw;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.ccIconButton:hover {
+    transform: scale(1.05);
+}
+
+.ccIconImage {
+    color: #FFFFFF;
+    height: "6vh";
+    width: auto;
+    max-height: 6vh;
+    padding: 0.5vh;
+}
+
+.callControlLoading {
+    position: fixed;
+    top: 18vh;
+    left: 5vw;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.regionControlButton:hover {
+    transform: scale(1.05);
+}
+
+.regionControlButton {
+    position: fixed;
+    top: 18vh;
+    left: 10vw;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.regionControlImage {
+    color: #FFFFFF;
+    height: "6vh";
+    width: auto;
+    max-height: 6vh;
+    padding: 0.5vh;
+}
+
+@keyframes waitingPulse {
+	0% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(92,171,180,0.7);
+	}
+
+	70% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 10px rgba(92,171,180,0.7);
+	}
+
+	100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(92,171,180,0.7);
+	}
+}
+
+@keyframes loadingPulse {
+	0% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(192, 39, 39, 0.7);
+	}
+
+	70% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 10px rgba(192, 39, 39, 0.7);
+	}
+
+	100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(192, 39, 39, 0.7);
+	}
 }

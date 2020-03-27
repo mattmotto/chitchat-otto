@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Navbar, Button, Form, FormControl, Nav, NavDropdown} from 'react-bootstrap'
 
+import CCLogo from "../resources/cc_logo.png"
+
 const PLACEHOLDER="https://media-exp1.licdn.com/dms/image/C4D03AQE6Z2qUD8qVlg/profile-displayphoto-shrink_200_200/0?e=1586995200&v=beta&t=weFdlTvJ8BlZiV90O_Aide_rg_5jNzVji2syR5BeziU";
 
 export default class Header extends Component {
@@ -17,9 +19,10 @@ export default class Header extends Component {
         return (
             <div>
                 <Navbar bg="light" variant="light" style={{paddingTop: "1vh", paddingBottom: "1vh", paddingRight: "0.5vw", paddingLeft: "0.5vw", height: "8vh"}}>
-                    <Navbar.Brand>Window</Navbar.Brand>
+                    <Navbar.Brand><img src={CCLogo} style={{
+                        width: "30vh", height: "auto", marginTop: "0.3vh", marginBottom: "0.3vh"
+                        }} /></Navbar.Brand>
                     <Nav className="mr-auto">
-                    <Nav.Link>About Us</Nav.Link>
                     </Nav>
                     {
                         this.props.loggedIn ? (

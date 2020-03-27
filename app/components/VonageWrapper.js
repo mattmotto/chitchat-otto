@@ -6,6 +6,7 @@ export default class VonageWrapper {
     this.socket = socket
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
+    document.myActiveConnection = this;
   }
 
   startSession() {
@@ -26,15 +27,6 @@ export default class VonageWrapper {
     this.socket.on('abrupt-remove', function (data) {
       console.log("connectionDestroyed has been called as well, terminating session...");
     })
-
-    // fetch(SERVER + '/session').then(function(res) {
-    //    return res.json()
-    // }).then(function(res) {
-    //     that.apiKey = res.apiKey;
-    //     that.sessionId = res.sessionId;
-    //     that.token = res.token;
-    //     that.initializeSession();
-    //   }).catch(handleError);
   }
 
   initializeSession() {
@@ -53,31 +45,33 @@ export default class VonageWrapper {
       that.onDisconnect();
     })
 
-    // Create a publisher
-    var publisher = OT.initPublisher('myVideo', {
-      insertMode: 'append',
-      width: '100%',
-      height: '100%'
-    }, handleError);
-
     // Connect to the session
     session.connect(this.token, function(error) {
       // If the connection is successful, initialize a publisher and publish to the session
       if (error) {
         handleError(error);
       } else {
-        session.publish(publisher, handleError);
-        that.onConnect();
+        that.onConnect(() => {
+          var publisher = OT.initPublisher('myVideo', {
+            insertMode: 'append',
+            width: '100%',
+            height: '100%'
+          }, handleError);
+          session.publish(publisher, handleError);
+        })
+        // that.onConnect();
       }
     });
   }
 
-  // Called when the session needs to be ended
   endSession() {
-    session.disconnect();
-    session = null;
-    this.onDisconnect();
+    document.myActiveConnection.onDisconnect(() => {
+      document.myActiveConnection.socket.disconnect();
+      session.disconnect();
+      session = null;
+    });
   }
+
 }
 
 // Handling all of our errors here by alerting them
