@@ -1,20 +1,93 @@
 import React, {Component} from 'react';
 import { Button, Form, Col, Row } from 'react-bootstrap';
 import "../styles/home.css"
+
 import ChatInterface from "./ChatInterface"
+
 import {Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+import MakePOST from "./wrappers/RequestWrapper"
+
 const PRIMARY = "#2A36CF";
-import options from './data';
+
+const FORM_MAP = {
+	"fname" : "firstName",
+	"lname" : "lastName",
+	"email" : "email",
+	"password": "password",
+	"confirmPassword": "confirmPassword",
+	"instagram": "instagram",
+	"snapchat": "snapchat"
+}
 
 
 export default class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected: []
+			options: [],
+			selected: [],
+			firstName: "",
+			lastName: "",
+			email: "",
+			password: "",
+			confirmPassword: "",
+			instagram: "",
+			snapchat: ""
 		}
+	}
+
+	componentWillMount() {
+		MakePOST("getuniversities", {}, (data) => {
+			this.setState({
+				options: data
+			})
+		})
+	}
+
+	sendRegisterRequest = () => {
+		if(this.state.firstName && this.state.lastName && this.state.email && this.state.password && this.state.confirmPassword) {
+			if(this.state.password == this.state.confirmPassword) {
+				let payload = {
+					name: this.state.firstName + " " + this.state.lastName,
+					email: this.state.email,
+					password: this.state.password,
+					university: this.state.selected[0].name,
+					photo_url: "https://davidwilsondmd.com/wp-content/uploads/2015/11/user-300x300.png",
+					instagram_id: this.state.instagram,
+					snapchat_id: this.state.snapchat
+				}
+				MakePOST("signupuser", payload, (data) => {
+					if(data.status != 1) {
+						alert("Welcome to ChitChat! Please use your credentials to sign in")
+						this.setState({
+							firstName: "",
+							lastName: "",
+							email: "",
+							password: "",
+							confirmPassword: "",
+							selected: [],
+							instagram: "",
+							snapchat: ""
+						})
+					} else {
+						alert("Oops. A user with this email ID already exists. Do you want to try and reset your password?")
+					}
+				})
+				console.log(JSON.stringify(payload))
+			} else {
+				console.log("Passwords must match!")
+			}
+		} else {
+			console.log("Please fill in all the needed fields")
+		}
+	}
+
+	handleOnChange = (event) => {
+		this.setState({
+			[FORM_MAP[event.target.id]] : event.target.value
+		});
 	}
 
 	changeSelectedSchool = (selected) => {
@@ -45,17 +118,17 @@ export default class Home extends Component {
 				  <Form>
 					<Form.Label>Your Name</Form.Label>
 					<Form.Row>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="text" placeholder="First Name" />
+					  <Form.Group as={Col} controlId="fname">
+						<Form.Control type="text" placeholder="First Name" value={this.state.firstName} onChange={this.handleOnChange}/>
 					  </Form.Group>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="text" placeholder="Last Name" />
+					  <Form.Group as={Col} controlId="lname">
+						<Form.Control type="text" placeholder="Last Name" value={this.state.lastName} onChange={this.handleOnChange}/>
 					  </Form.Group>
 					</Form.Row>
 					<Form.Label>Email address &amp; University</Form.Label>
 					<Form.Row>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="email" placeholder="Enter email" />
+					  <Form.Group as={Col} controlId="email">
+						<Form.Control type="email" placeholder="Enter email" value={this.state.email} onChange={this.handleOnChange}/>
 						<Form.Text className="text-muted">
 						  Please use your .edu email!
 						</Form.Text>
@@ -67,7 +140,7 @@ export default class Home extends Component {
 						  multiple={false}
 						  onChange={this.changeSelectedSchool}
 						  placeholder="Where do you study?"
-						  options={options}
+						  options={this.state.options}
 						  selected={this.state.selected}
 						/>
 						<Form.Text className="text-muted">
@@ -78,33 +151,33 @@ export default class Home extends Component {
 		  
 					<Form.Label>Password</Form.Label>
 					<Form.Row>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="password" placeholder="Password" />
+					  <Form.Group as={Col} controlId="password">
+						<Form.Control type="password" placeholder="Password" value={this.state.password} onChange={this.handleOnChange}/>
 					  </Form.Group>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="password" placeholder="Confirm Password" />
+					  <Form.Group as={Col} controlId="confirmPassword">
+						<Form.Control type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={this.handleOnChange}/>
 					  </Form.Group>
 					</Form.Row>
 		  
 					<Form.Label>Social Media</Form.Label>
 					<Form.Row>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="text" placeholder="Instagram Handle" />
+					  <Form.Group as={Col} controlId="instagram">
+						<Form.Control type="text" placeholder="Instagram Handle (Optional!)" value={this.state.instagram} onChange={this.handleOnChange}/>
 					  </Form.Group>
-					  <Form.Group as={Col} controlId="formName">
-						<Form.Control type="password" placeholder="Snapchat ID" />
+					  <Form.Group as={Col} controlId="snapchat">
+						<Form.Control type="text" placeholder="Snapchat ID (Optional!)" value={this.state.snapchat} onChange={this.handleOnChange}/>
 					  </Form.Group>
 					</Form.Row>
 					<Form.Text className="text-muted">
 					  You only share your social media with people that you really get
-					  along with. Also, it's optional.
+					  along with.
 					</Form.Text>
 					<br />
 		  
 					<Button
 					  className="homeButton"
 					  style={{ marginLeft: "0.5vw" }}
-					  type="submit"
+					  onClick={this.sendRegisterRequest}
 					>
 					  Sign Up
 					</Button>

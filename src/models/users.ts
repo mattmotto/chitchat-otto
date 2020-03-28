@@ -6,7 +6,7 @@ export class Users {
 	private table:String = "USERS";
 	private sqlClient:any = (sql as any);
 
-	makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id):Promise<Object> {
+	makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id):Promise<Object> {		
 		let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 		let checkQuery = "SELECT * FROM USERS WHERE email='" + email + "';"
 		let sqlquery = "INSERT INTO USERS (`name`, `email`, `password_hash`, `university`, `photo_url`, `instagram_id`, `snapchat_id`, `signed_up`)\

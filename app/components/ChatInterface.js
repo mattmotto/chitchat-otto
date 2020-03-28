@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
+import Cookies from 'js-cookie';
 
-import VonageWrapper from "./VonageWrapper"
+import VonageWrapper from "./wrappers/VonageWrapper"
+import MakePOST from "./wrappers/RequestWrapper"
 
 import MatchesView from "./MatchesView"
 
@@ -13,7 +15,6 @@ import College from "../resources/college.png"
 
 import Tour from 'reactour'
 
-
 import "../styles/chatinterface.css"
 
 export default class ChatInterface extends Component {
@@ -24,10 +25,13 @@ export default class ChatInterface extends Component {
             isLoading: false,
             socket: null,
             universityMode: false,
-            needsTour: false
+            friendPage: 0,
+            // needsTour: props.firstLogin
+            needsTour: false,
+            userData: {}
         }
     }
-
+    
     isConnectedHandler = (onComplete) => {
         this.setState({
             connected: true,

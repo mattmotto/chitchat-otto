@@ -2,6 +2,7 @@
     Server configuration file to handle online video chat functionality
 */
 import * as express from 'express';
+import * as morgan from 'morgan';
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
@@ -29,6 +30,9 @@ export class ChatServer {
     private createApp(): void {
         this.app = express();
         this.app.use(express.static('public'));
+        if(!process.env.PRODUCTION) {
+            this.app.use(morgan('dev'));
+        }
     }
 
     private config(): void {

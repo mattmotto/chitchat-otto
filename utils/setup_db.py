@@ -32,10 +32,10 @@ if __name__ == '__main__':
 		  password_hash VARCHAR(100) NOT NULL,
 		  university VARCHAR(100) NOT NULL,
 		  photo_url VARCHAR(300) NOT NULL,
-		  instagram_id VARCHAR(100) NOT NULL,
-		  snapchat_id VARCHAR(100) NOT NULL,
+		  instagram_id VARCHAR(100),
+		  snapchat_id VARCHAR(100),
 		  signed_up TIMESTAMP NOT NULL,
-		  last_login TIMESTAMP NOT NULL,
+		  last_login TIMESTAMP,
 		  is_banned BIT(1) NOT NULL DEFAULT 0,
 		  PRIMARY KEY(auto_id, name),
 		  CONSTRAINT `name`

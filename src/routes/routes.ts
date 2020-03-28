@@ -54,7 +54,8 @@ export class Routes {
             response is a json object of format:
             {
                 "status":0,
-                'auto_id':1
+                'auto_id':1,
+                first_login: true/false
             }
             where:
             0: success
