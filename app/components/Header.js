@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {Navbar, Button, Form, FormControl, Nav, NavDropdown} from 'react-bootstrap'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Popup from "reactjs-popup";
-import UserSettings from "./UserSettings"
 
 import MakePOST from "./wrappers/RequestWrapper"
 
-import CCLogo from "../resources/cc_logo.png"
 import Home from './Home';
+import ChatInterface from "./ChatInterface";
+import UserSettings from "./UserSettings";
 
-const PLACEHOLDER="https://media-exp1.licdn.com/dms/image/C4D03AQE6Z2qUD8qVlg/profile-displayphoto-shrink_200_200/0?e=1586995200&v=beta&t=weFdlTvJ8BlZiV90O_Aide_rg_5jNzVji2syR5BeziU";
+import CCLogo from "../resources/cc_logo.png"
 
 export default class Header extends Component {
     constructor(props) {
@@ -18,16 +18,23 @@ export default class Header extends Component {
         this.state = {
             email: "",
             password: "",
+            loggedIn: false,
+            firstLogin: false,
             userData: {}
         }
     }
-
     componentWillMount() {
+        this.fetchUserInformation();
+    }
+
+    fetchUserInformation = () => {
         const auto_id = Cookies.get('user_id');
         if(auto_id) {
             MakePOST("getuserinfo", {auto_id}, (data) => {
                 if(data.status == 0) {
                     this.setState({
+                        loggedIn: true,
+                        firstLogin: data.data.first_login,
                         userData: data.data
                     });
                 }
@@ -48,13 +55,19 @@ export default class Header extends Component {
     }
 
     getRoutes = () => {
-        return (<React.Fragment>
-          <Route path="/settings" component={UserSettings} />
-          {
-              
-          }
-          <Route exact path="/" component={Home} />
-        </React.Fragment>);
+        return (
+            <React.Fragment>
+                <Route exact path="/">
+                    {this.state.loggedIn ? <Redirect to="/chat" /> : <Home />}
+                </Route>
+                <Route path="/chat">
+                    {this.state.loggedIn ? <ChatInterface /> : <Redirect to="/" />}
+                </Route>
+                <Route exact path="/settings">
+                    {this.state.loggedIn ? <UserSettings /> : <Redirect to="/" />}
+                </Route>
+            </React.Fragment>
+        );
       }
 
     checkUser = () => {
@@ -64,9 +77,12 @@ export default class Header extends Component {
                     Cookies.set('user_id', response.auto_id);
                     this.setState({
                         email: "",
-                        password: ""
+                        password: "",
+                        loggedIn: true,
+                        firstLogin: response.first_login,
+                    }, () => {
+                        this.fetchUserInformation();
                     })
-                    this.props.onLogIn(response.first_login);
                 } else {
                     alert("Invalid username/password! Please try again")
                 }
@@ -76,10 +92,21 @@ export default class Header extends Component {
         }
     }
 
+    logoutUser = () => {
+        Cookies.remove('user_id');
+        this.setState({
+            email: "",
+            password: "",
+            loggedIn: false,
+            firstLogin: false
+        })
+    }
+
     render() {
         const login_cookie = Cookies.get('user_id');
         return (
             <div>
+                <Router>
                 <Navbar bg="light" variant="light" style={{paddingTop: "1vh", paddingBottom: "1vh", paddingRight: "0.5vw", paddingLeft: "0.5vw", height: "8vh"}}>
                     <Navbar.Brand><img src={CCLogo} style={{
                         width: "30vh", height: "auto", marginTop: "0.3vh", marginBottom: "0.3vh"
@@ -91,7 +118,7 @@ export default class Header extends Component {
                             <NavDropdown title={<img src={this.state.userData["photo_url"]} style={{height: "5vh", width: "auto", borderRadius: "50%"}} />} style={{marginRight: "2vw"}} id="basic-nav-dropdown">
                                 <NavDropdown.Item href="/settings">Account Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={this.props.onLogOut}>Logout</NavDropdown.Item>
+                                <NavDropdown.Item onClick={this.logoutUser}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         ) : (
                             <>
@@ -104,6 +131,8 @@ export default class Header extends Component {
                         )
                     }
                 </Navbar>
+                {this.getRoutes()}
+                </Router>
             </div>
         );
     }

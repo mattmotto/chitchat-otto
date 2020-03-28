@@ -36,13 +36,6 @@ export class Routes {
     public getRoutes(): void {
 
         /*
-            Serve the index page
-        */
-        this.app.get('/', (request, response) => {
-            response.sendFile(HTML_FILE);
-        });
-
-        /*
             Route to login existing user
 
             request is a json object of format:
@@ -288,5 +281,12 @@ export class Routes {
             console.log("User " + reported_by + " reported user " + user + " for " + report_description);
             response.json({'status':0});
         });
+
+        /*
+            Serve the index page - anything that isn't one of these - leave it to the React Router
+        */
+       this.app.get('*', (request, response) => {
+        response.sendFile(HTML_FILE);
+    });
     }
 }

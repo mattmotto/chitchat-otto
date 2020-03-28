@@ -46,14 +46,7 @@ export default class App extends Component {
 	render() {
 		return (
 			<>
-			<Header loggedIn={this.state.isLoggedIn} onLogIn={this.onLogIn} onLogOut={this.onLogOut}/>
-			{
-				this.state.isLoggedIn ? (
-						<ChatInterface firstLogin={this.state.firstLogin}/>
-				) : (
-					<Home onSignUp={this.onSignUp} />
-				)
-			}	
+			<Header loggedIn={this.state.isLoggedIn} />
 			</>
 		)
 	}
