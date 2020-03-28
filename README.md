@@ -1,5 +1,5 @@
-# window
-NodeJS and TypeScript based server for a video chat application. This app uses https://socket.io/ to handle data transmission and socket management
+# ChitChat
+NodeJS, TypeScript, and ReactJS based full stack webapp for a video chat application. This app uses https://socket.io/ to handle data transmission and socket management. This app also uses OpenTok for WebRTC integration.
 ## Execution
 1. Please ensure that you have npm installed
 2. If you're running the project for the first time, first execute: ```npm i```
