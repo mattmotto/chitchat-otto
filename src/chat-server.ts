@@ -82,9 +82,9 @@ export class ChatServer {
                 //     "sessionData": sessionData
                 // });
 
-                this.io.to(`${socket.id}`).emit('start session', {"to":socket.id, "from":target_socket, "sessionData":sessionData});
+                this.io.to(`${socket.id}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
 
-                this.io.to(`${target_socket}`).emit('start_session', {"to":socket.id, "from":target_socket, "sessionData":sessionData});
+                this.io.to(`${target_socket}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
 
             } else {
                 this.pairClient.addLoneSocket(socket.id);
