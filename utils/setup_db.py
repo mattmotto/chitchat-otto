@@ -1,4 +1,6 @@
 import pymysql
+from sqlalchemy import create_engine
+import pandas as pd
 
 remote_username="b9c35a93bc495c"
 remote_password="23d56ae1"
@@ -131,6 +133,12 @@ if __name__ == '__main__':
 		print("Creating tables...")
 		cursor.execute(queue_db)
 		cursor.execute(universities_db)
+		print("Reading and writing college data...")
+		df = pd.read_csv("./collegedata.csv")
+		sql = "INSERT INTO `universities` (`name`, `email`, `country`) VALUES (%s, %s, %s)"
+		for index, row in df.iterrows():
+			cursor.execute(sql, (row["College"], row["email"], row["Country"]))
+		print("College data insert done!")
 		cursor.execute(user_db)
 		cursor.execute(matches_db)
 		cursor.execute(logins_db)
