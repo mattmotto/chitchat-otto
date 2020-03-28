@@ -66,11 +66,17 @@ export class Routes {
         this.app.post('/loginuser', async (request, response) => {
             let {email, password} = request.body;
             let ans = await new Users().loginUser(email, password);
+            let first_login = false;
             if (ans['status'] == 0){
                 new Users().updateLoginTime(ans['auto_id']);
                 new Logins().addLogin(ans['auto_id']);
+                if(ans['last_login'] == null){
+                    first_login = true;
+                }
+                response.json({"status":ans['status'], "auto_id": ans['auto_id'], 'first_login':first_login});
+            } else {
+                response.json({"status":ans['status']});
             }
-            response.json(ans);
         });
 
         /*
