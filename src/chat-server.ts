@@ -44,7 +44,9 @@ export class ChatServer {
 
             const matchable = await this.pairClient.findMatch(socket.id);
             console.log("Email sent: "+socket.handshake.query.email);
-            
+            // Mode can be either "C" or "G"
+            console.log("Mode sent: "+socket.handshake.query.mode);
+
             if (Object.keys(matchable).length != 0) {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
                 const target_socket = matchable["socket_id_1"];
