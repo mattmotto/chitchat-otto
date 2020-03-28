@@ -76,11 +76,16 @@ export class ChatServer {
                 
                 Remove can work as is, that's okay
                 */
-                this.io.emit('start-session', {
-                    "to": socket.id,
-                    "from": target_socket,
-                    "sessionData": sessionData
-                });
+                // this.io.emit('start-session', {
+                //     "to": socket.id,
+                //     "from": target_socket,
+                //     "sessionData": sessionData
+                // });
+
+                this.io.to(`${socket.id}`).emit('start session', {"to":socket.id, "from":target_socket, "sessionData":sessionData});
+
+                this.io.to(`${target_socket}`).emit('start_session', {"to":socket.id, "from":target_socket, "sessionData":sessionData});
+
             } else {
                 this.pairClient.addLoneSocket(socket.id);
             }
