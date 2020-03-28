@@ -56,7 +56,8 @@ export default class ChatInterface extends Component {
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
-            reconnectionAttempts: Infinity
+            reconnectionAttempts: Infinity,
+            query:"email="+"raghav.mecheri@gmail.com"
         });
         this.setState({
             isLoading: true

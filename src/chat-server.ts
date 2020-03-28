@@ -43,6 +43,7 @@ export class ChatServer {
         this.io.on('connection', async (socket) => {
 
             const matchable = await this.pairClient.findMatch(socket.id);
+            console.log("Email sent: "+socket.handshake.query.email);
             
             if (Object.keys(matchable).length != 0) {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
