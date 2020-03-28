@@ -53,37 +53,7 @@ export class ChatServer {
                 console.log("Session Data: "+JSON.stringify(sessionData));
                 // Send a create message to both sockets
 
-                /*
-                Right now, we run this.io.emit - this sends the message to all the open sockets.
-                I then manually filter the data out based on whether the data is relevant to the client in question
-                Ref: /app/components/VonageWrapper.js : line 16
-
-                Can we change this such that we only emit this to the two sockets in question? We can keep the check as a redundancy anyway
-                It's risky to emit socket information to everyone, anyone who checks the network logs would be able to interrupt random pairs
-
-                Essentially, we want to replace this.io.emit with two calls:
-                    io.to(socket.id).emit(
-                        "to": socket.id,
-                        "from": target_socket,
-                        "sessionData": sessionData);
-
-                    io.to(target_socket.id).emit(
-                        "to": socket.id,
-                        "from": target_socket,
-                        "sessionData": sessionData);
-
-                Socket IO docs: https://socket.io/docs/emit-cheatsheet/
-                
-                Remove can work as is, that's okay
-                */
-                // this.io.emit('start-session', {
-                //     "to": socket.id,
-                //     "from": target_socket,
-                //     "sessionData": sessionData
-                // });
-
                 this.io.to(`${socket.id}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
-
                 this.io.to(`${target_socket}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
 
             } else {
