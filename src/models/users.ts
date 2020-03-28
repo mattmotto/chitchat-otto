@@ -9,8 +9,8 @@ export class Users {
 	makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id):Promise<Object> {
 		let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 		let checkQuery = "SELECT * FROM USERS WHERE email='" + email + "';"
-		let sqlquery = "INSERT INTO USERS (`name`, `email`, `password_hash`, `university`, `photo_url`, `instagram_id`, `snapchat_id`, `signed_up`, `last_login`)\
-								VALUES ('"+name+"', '"+email+"', '" +hashedPassword+"', '"+university+"', '"+photo_url+"', '"+instagram_id+"', '"+snapchat_id+"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+		let sqlquery = "INSERT INTO USERS (`name`, `email`, `password_hash`, `university`, `photo_url`, `instagram_id`, `snapchat_id`, `signed_up`)\
+								VALUES ('"+name+"', '"+email+"', '" +hashedPassword+"', '"+university+"', '"+photo_url+"', '"+instagram_id+"', '"+snapchat_id+"', CURRENT_TIMESTAMP);";
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query(checkQuery, (err, results, fields) => {
 				if (err) throw err;
@@ -39,7 +39,7 @@ export class Users {
 	loginUser(email, password): Promise<Object>{
 		return new Promise((resolve, reject) => {
 			let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
-			this.sqlClient.query("SELECT email, password_hash, auto_id, is_banned FROM USERS WHERE email='" +email+"';", (err, results, fields) => {
+			this.sqlClient.query("SELECT email, password_hash, auto_id, is_banned, last_login FROM USERS WHERE email='" +email+"';", (err, results, fields) => {
 				if (results.length==0){
 					resolve({"status":1});
 				}
@@ -50,7 +50,7 @@ export class Users {
 					resolve({'status':3});
 				}
 				else{
-					resolve({"status":0, "auto_id":results[0]['auto_id']});
+					resolve({"status":0, "auto_id":results[0]['auto_id'], "last_login":results[0]['last_login']});
 				}
 			});
 		});
