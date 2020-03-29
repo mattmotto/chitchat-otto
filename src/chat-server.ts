@@ -87,6 +87,14 @@ export class ChatServer {
                 If I understand sockets right, we can leave the below two functions untouched. However, I could be very, very wrong. We'll find out.
             */
 
+            // @Otto
+            socket.on('wants-friend', (data) => {
+                // We know who wants to friend the person they're talking to
+                // Pull the person they're talking to, and assign that value to friend_socket
+                //this.io.to(`${talking_to}`).emit('friend-requested', {});
+            })
+
+            /*
             socket.on('make-offer', (data) => {
                 socket.to(data.to).emit('offer-made', {
                     offer: data.offer,
@@ -100,7 +108,7 @@ export class ChatServer {
                     answer: data.answer
                 });
             });
-
+            */
         });
     }
 
