@@ -10,5 +10,3 @@ NodeJS, TypeScript, and ReactJS based full stack webapp for a video chat applica
 3. Visit the same page on another tab - you should see a socket ID pop up on the second tab
 4. Click the socket ID on the second tab, to establish the connection with the socket in question (which is the one on the first page)
 5. Talk to yourself during this time of social isolation :)))
-## Database Design
-<img src="./misc/er_3_24_20.jpeg">
