@@ -61,7 +61,7 @@ export default class Header extends Component {
                     {this.state.loggedIn ? <Redirect to="/chat" /> : <Home />}
                 </Route>
                 <Route path="/chat">
-                    {this.state.loggedIn ? <ChatInterface /> : <Redirect to="/" />}
+                    {this.state.loggedIn ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
                 </Route>
                 <Route exact path="/settings">
                     {this.state.loggedIn ? <UserSettings /> : <Redirect to="/" />}

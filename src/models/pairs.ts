@@ -7,7 +7,7 @@ export class Pairs {
 	private table:String = "CURRENT_PAIRS";
 	private sqlClient:any = (sql as any);
 
-	private getMatch(socket_id): Promise<Object> {
+	getMatch(socket_id): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket_id+"\" OR socket_id_2=\""+socket_id+"\" LIMIT 1;", (err, results, fields) => {
 				if (err) throw err;
@@ -16,7 +16,7 @@ export class Pairs {
 		});
 	}
 
-	private async findMatch(email, mode): Promise<Object> {
+	async findMatch(email, mode): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2 IS NULL and mode_1='" + mode + "';", (err, results, fields) => {
 				if (err) throw err;
@@ -25,15 +25,14 @@ export class Pairs {
 		});
 	}
 
-	private async makeMatch(current_socket, new_socket, email, mode) {
-		console.log(email + " from makeMatch");
+	async makeMatch(current_socket, new_socket, email, mode) {
 		let data = await new Users().getUserByEmail(email);
 		this.sqlClient.query("UPDATE CURRENT_PAIRS SET user_2="+data['auto_id']+", email_2=\""+data['email']+"\", socket_id_2=\""+new_socket+"\", mode_2=\""+mode+"\" WHERE socket_id_1=\""+current_socket+"\"", (err, results, fields) => {
 			if (err) throw err;
 		});
 	}
 
-	private removeEntry(socket): Promise<String> {
+	removeEntry(socket): Promise<String> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket+"\" LIMIT 1", (err, results, fields) => {
 				if (err) throw err;
@@ -50,7 +49,6 @@ export class Pairs {
 						}
 					})
 				} else {
-					console.log(JSON.stringify(results))
 					this.sqlClient.query("DELETE FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket+"\"", (err, deleteResults, fields) => {
 						if (err) throw err;
 						resolve(results[0]["socket_id_2"])
@@ -60,11 +58,35 @@ export class Pairs {
 		})
 	}
 
-	private async addLoneSocket(socket, email, mode) {
-		console.log(email + " from addLoneSocket");
+	async addLoneSocket(socket, email, mode) {
 		let data = await new Users().getUserByEmail(email);
-		this.sqlClient.query("INSERT INTO CURRENT_PAIRS (user_1, email_1, mode_1, socket_id_1) VALUES ('" + data['auto_id'] + ", '" + data['email'] + "', '" + mode + "', " + socket + ");", (err, results, fields) => {
+		this.sqlClient.query("INSERT INTO CURRENT_PAIRS (user_1, email_1, mode_1, socket_id_1) VALUES ("+data['auto_id']+", \""+data['email']+"\", \""+mode+"\", \""+socket+"\");", (err, results, fields) => {
 			if (err) throw err; 
+		})
+	}
+
+	private getUserFromSocket(socket_id): Promise<Number> {
+		return new Promise((resolve, reject) => {
+			this.sqlClient.query("SELECT user_1 FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket_id+"\" LIMIT 1;", (err, results, fields) => {
+				if (err) throw err;
+				if(results.length != 0) {
+					resolve(results[0]["user_1"])
+				} else {
+					this.sqlClient.query("SELECT user_2 FROM CURRENT_PAIRS WHERE socket_id_2=\""+socket_id+"\" LIMIT 1;", (err, results, fields) => {
+						if (err) throw err;
+						resolve((results.length !=0 ? results[0]["user_2"] : -1));
+					})
+				}
+			});
+		})
+	}
+
+	getUserData(socket_id): Promise<Object> {
+		return new Promise( async (resolve, reject) => {
+			const auto_id = await this.getUserFromSocket(socket_id);
+			console.log("FOUND ID: "+JSON.stringify(auto_id))
+			const result = await new Users().getUser(auto_id);
+			resolve(result);
 		})
 	}
 }

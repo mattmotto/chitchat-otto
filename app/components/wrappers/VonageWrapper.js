@@ -14,14 +14,13 @@ export default class VonageWrapper {
     const that = this;
 
     this.socket.on('start-session', function (data) {
-      if(data.to = that.socket.id || data.from == that.socket.id) {
-        console.log(JSON.stringify(data));
-        that.apiKey = data.sessionData.apiKey;
-        that.sessionId = data.sessionData.sessionId;
-        that.token = data.sessionData.token;
-        console.log("Initialising Session...");
-        that.initializeSession();
-      }
+      console.log("Connection from: "+data.client);
+      console.log("Client Data: "+data.clientData);
+      that.apiKey = data.sessionData.apiKey;
+      that.sessionId = data.sessionData.sessionId;
+      that.token = data.sessionData.token;
+      console.log("Initialising Session...");
+      that.initializeSession();
     })
 
     this.socket.on('abrupt-remove', function (data) {

@@ -17,7 +17,6 @@ export class Users {
 				if (results.length==0){
 					this.sqlClient.query(sqlquery, (err, results, fields) => {
 						if (err) throw err;
-						console.log("Inserted new user! email: " + email);
 						resolve({"status":0});
 					});
 				}
@@ -31,6 +30,7 @@ export class Users {
 	getUser(auto_id): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT auto_id, name, email, university, photo_url, instagram_id, snapchat_id, is_banned FROM USERS WHERE auto_id=" +auto_id+";", (err, results, fields) => {
+				if (err) throw err;
 				resolve(results.length==0 ? {} : results[0])
 			});
 		});
@@ -39,7 +39,6 @@ export class Users {
 	getUserByEmail(email): Promise<Object> {
 		return new Promise((resolve, reject) => {
 			this.sqlClient.query("SELECT auto_id, name, email, university, photo_url, instagram_id, snapchat_id, is_banned FROM USERS WHERE email='" +email+"';", (err, results, fields) => {
-				console.log(results);
 				resolve(results.length==0 ? {} : results[0])
 			});
 		});

@@ -56,12 +56,13 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
+        console.log("User Email: "+this.props.userData.email);
         const socket = io.connect('/', {
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
             reconnectionAttempts: Infinity,
-            query:"email="+"raghav.mecheri@gmail.com"
+            query:`email=${this.props.userData.email}&mode=${"G"}`
         });
         this.setState({
             isLoading: true

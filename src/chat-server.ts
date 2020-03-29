@@ -58,11 +58,12 @@ export class ChatServer {
                 this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
                 
                 const sessionData = await generateSession();
-                console.log("Session Data: "+JSON.stringify(sessionData));
+                //console.log("Session Data: "+JSON.stringify(sessionData));
                 // Send a create message to both sockets
-
-                this.io.to(`${socket.id}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
-                this.io.to(`${target_socket}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
+                const socketData = await this.pairClient.getUserData(socket.id);
+                const targetData = await this.pairClient.getUserData(target_socket);
+                this.io.to(`${socket.id}`).emit('start-session', {"client": target_socket, "sessionData": sessionData, "clientData": socketData});
+                this.io.to(`${target_socket}`).emit('start-session', {"client": socket.id, "sessionData": sessionData, "clientData": targetData});
 
             } else {
                 this.pairClient.addLoneSocket(socket.id, socket.handshake.query.email, socket.handshake.query.mode);
