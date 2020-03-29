@@ -24,7 +24,7 @@ export default class ChatInterface extends Component {
             connected: false,
             isLoading: false,
             socket: null,
-            universityMode: false,
+            // universityMode: false,
             friendPage: 0,
             // needsTour: props.firstLogin
             needsTour: false,
@@ -61,7 +61,7 @@ export default class ChatInterface extends Component {
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
             reconnectionAttempts: Infinity,
-            query:"email="+"raghav.mecheri@gmail.com&mode="+(this.state.universityMode ? "C" : "G")
+            query:"email="+"raghav.mecheri@gmail.com"
         });
         this.setState({
             isLoading: true
@@ -75,15 +75,16 @@ export default class ChatInterface extends Component {
         })
     }
 
+    /*
     switchRegionModes = () => {
         let {universityMode} = this.state;
         this.setState({
             universityMode: !universityMode
         })
     }
+    */
 
 	render() {
-        console.log("Current mode: "+this.state.universityMode)
 		return (
         <>
 		<div id="parent">
@@ -93,10 +94,6 @@ export default class ChatInterface extends Component {
                         <>
                             <div className="callControlButton" style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}}>
                                 <img src={"https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif"} className="callControlImage" />
-                            </div>
-
-                            <div className="regionControlButton" disabled style={{backgroundColor: "#5CABB4"}}>
-                                <img src={this.state.universityMode ? College:Globe} style={this.state.universityMode ? {padding:"1vh"}:{padding:"0.5vh"}} className="regionControlImage" />
                             </div>
 
                             <div className="ccIconButton" disabled style={{backgroundColor: "#FFFFFF"}}>
@@ -110,10 +107,6 @@ export default class ChatInterface extends Component {
                                 <img src={DisconnectImage} className="callControlImage" />
                             </div>
 
-                            <div className="regionControlButton" disabled style={{backgroundColor: "#5CABB4"}}>
-                                <img src={this.state.universityMode ? College:Globe} style={this.state.universityMode ? {padding:"1vh"}:{padding:"0.5vh"}} className="regionControlImage" />
-                            </div>
-
                             <div className="ccIconButton" style={{backgroundColor: "#FFFFFF", animation: "waitingPulse 2s 3"}} onClick={() => console.log("Add Friend")}>
                                 <img src={CCIcon} className="ccIconImage" />
                             </div>
@@ -122,10 +115,6 @@ export default class ChatInterface extends Component {
                         <>
                             <div className="callControlButton" id="startCall" style={{backgroundColor: "#5CABB4", animation: "waitingPulse 2s 3"}} onClick={this.findMatch}>
                                 <img src={PlusImage} className="callControlImage" />
-                            </div>
-
-                            <div className="regionControlButton" id="modeSelector" style={{backgroundColor: "#5CABB4"}} onClick={this.switchRegionModes}>
-                                <img src={this.state.universityMode ? College:Globe} style={this.state.universityMode ? {padding:"1vh"}:{padding:"0.5vh"}} className="regionControlImage" />
                             </div>
 
                             <div className="ccIconButton" id="addFriend" disabled style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}}>

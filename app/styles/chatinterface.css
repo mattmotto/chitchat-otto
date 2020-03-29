@@ -70,7 +70,7 @@ div[disabled]
 .ccIconButton {
     position: fixed;
     top: 18vh;
-    left: 15vw;
+    left: 10vw;
     border-radius: 50%;
     z-index: 10;
 }
@@ -99,6 +99,7 @@ div[disabled]
     transform: scale(1.05);
 }
 
+/*
 .regionControlButton {
     position: fixed;
     top: 18vh;
@@ -114,6 +115,7 @@ div[disabled]
     max-height: 6vh;
     padding: 0.5vh;
 }
+*/
 
 @keyframes waitingPulse {
 	0% {
