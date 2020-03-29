@@ -29,6 +29,7 @@ export default class Header extends Component {
 
     fetchUserInformation = () => {
         const auto_id = Cookies.get('user_id');
+        console.log("Checking: "+auto_id)
         if(auto_id) {
             MakePOST("getuserinfo", {auto_id}, (data) => {
                 if(data.status == 0) {
@@ -57,14 +58,14 @@ export default class Header extends Component {
     getRoutes = () => {
         return (
             <React.Fragment>
-                <Route exact path="/">
-                    {this.state.loggedIn ? <Redirect to="/chat" /> : <Home />}
-                </Route>
                 <Route path="/chat">
-                    {this.state.loggedIn ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
+                    {Cookies.get('user_id') ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
                 </Route>
-                <Route exact path="/settings">
-                    {this.state.loggedIn ? <UserSettings /> : <Redirect to="/" />}
+                <Route path="/me">
+                    {Cookies.get('user_id') ? (<UserSettings userData={this.state.userData} />) : <Redirect to="/" />}
+                </Route>
+                <Route exact path="/">
+                    {Cookies.get('user_id') ? <Redirect to="/chat" /> : <Home />}
                 </Route>
             </React.Fragment>
         );
@@ -116,7 +117,7 @@ export default class Header extends Component {
                     {
                         login_cookie ? (
                             <NavDropdown title={<img src={this.state.userData["photo_url"]} style={{height: "5vh", width: "auto", borderRadius: "50%"}} />} style={{marginRight: "2vw"}} id="basic-nav-dropdown">
-                                <NavDropdown.Item href="/settings">Account Settings</NavDropdown.Item>
+                                <NavDropdown.Item href="/me">Account Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={this.logoutUser}>Logout</NavDropdown.Item>
                             </NavDropdown>

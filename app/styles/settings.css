@@ -1,0 +1,22 @@
+.settingsContainer {
+    text-align: center;
+    padding-top: 10vh;
+}
+
+.profilePicture {
+    height: 15vh;
+    width: auto;
+    border-radius: 50%;
+}
+
+.welcomeText {
+    font-size: 1.3rem;
+    margin-top: 3vh;
+}
+
+.footer {
+    text-align: left;
+    position: fixed;
+    left: 1vw;
+    bottom: 1vh;
+}
