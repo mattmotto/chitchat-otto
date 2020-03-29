@@ -12,19 +12,32 @@ if __name__ == '__main__':
 	# Ensure that the DB window_db exists
 	# Create our target tables
 	# connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
-	connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
+	connectionInstance = pymysql.connect(host="127.0.0.1", user="root", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
+
 	try:
 		cursor = connectionInstance.cursor()
 
-		# cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 		queue_db = '''CREATE TABLE CURRENT_PAIRS (
 		auto_id BIGINT NOT NULL AUTO_INCREMENT,
+		user_1 BIGINT NOT NULL,
+		email_1 VARCHAR(100) NOT NULL,
+		user_2 BIGINT,
+		email_2 VARCHAR(100),
 		socket_id_1 VARCHAR(100) NOT NULL,
 		socket_id_2 VARCHAR(100),
-		PRIMARY KEY(auto_id)
+		mode_1 VARCHAR(1) NOT NULL, 
+		mode_2 VARCHAR(2),
+		PRIMARY KEY(auto_id),
+		CONSTRAINT `user_id_1`
+		  FOREIGN KEY (user_1) REFERENCES `USERS` (auto_id),
+		CONSTRAINT `user_id_2`
+		  FOREIGN KEY (user_2) REFERENCES `USERS` (auto_id),
+		CONSTRAINT `user_email_1`
+		  FOREIGN KEY (email_1) REFERENCES `USERS` (email),
+		CONSTRAINT `user_email_2`
+		  FOREIGN KEY (email_2) REFERENCES `USERS` (email)
 		);'''
 
-		# cursor.execute("DROP TABLE IF EXISTS USERS;")
 		user_db = '''CREATE TABLE USERS (
 		  auto_id BIGINT NOT NULL AUTO_INCREMENT,
 		  name VARCHAR(100) NOT NULL,
@@ -37,23 +50,14 @@ if __name__ == '__main__':
 		  signed_up TIMESTAMP NOT NULL,
 		  last_login TIMESTAMP,
 		  is_banned BIT(1) NOT NULL DEFAULT 0,
-		  PRIMARY KEY(auto_id, name),
+		  PRIMARY KEY(auto_id, name, email),
+		  INDEX `email` (`email` ASC),
 		  CONSTRAINT `name`
 			  FOREIGN KEY (`university`)
 			  REFERENCES `UNIVERSITIES` (`name`)
 			  ON DELETE NO ACTION
 			  ON UPDATE NO ACTION
 		);'''
-
-		# cursor.execute("DROP TABLE IF EXISTS MATCHES;")
-		# matches_db = '''CREATE TABLE MATCHES (
-		# 	auto_id INT NOT NULL AUTO_INCREMENT,
-		# 	user INT NOT NULL,
-		# 	match INT NOT NULL,
-		# 	PRIMARY KEY(user, auto_id),
-		# 	CONSTRAINT `MATCHES_ibfk_1` FOREIGN KEY (user) REFERENCES USERS (auto_id),
-		# 	CONSTRAINT `MATCHES_ibfk_2` FOREIGN KEY (match) REFERENCES USERS (auto_id)
-		# 	);'''
 
 		matches_db = '''CREATE TABLE `MATCHES` (
 						  `auto_id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -125,13 +129,12 @@ if __name__ == '__main__':
 		cursor.execute("DROP TABLE IF EXISTS REPORTS;")
 		cursor.execute("DROP TABLE IF EXISTS LOGINS;")
 		cursor.execute("DROP TABLE IF EXISTS MATCHES;")
+		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
 		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
-		cursor.execute("DROP TABLE IF EXISTS CURRENT_PAIRS;")
 
 
 		print("Creating tables...")
-		cursor.execute(queue_db)
 		cursor.execute(universities_db)
 		print("Reading and writing college data...")
 		df = pd.read_csv("./collegedata.csv")
@@ -139,7 +142,9 @@ if __name__ == '__main__':
 		for index, row in df.iterrows():
 			cursor.execute(sql, (row["College"], row["email"], row["Country"]))
 		print("College data insert done!")
+
 		cursor.execute(user_db)
+		cursor.execute(queue_db)
 		cursor.execute(matches_db)
 		cursor.execute(logins_db)
 		cursor.execute(reports_db)

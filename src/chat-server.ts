@@ -46,15 +46,16 @@ export class ChatServer {
 
         this.io.on('connection', async (socket) => {
 
-            const matchable = await this.pairClient.findMatch(socket.id);
+            const matchable = await this.pairClient.findMatch(socket.id, socket.handshake.query.mode);
             console.log("Email sent: "+socket.handshake.query.email);
             // Mode can be either "C" or "G"
             console.log("Mode sent: "+socket.handshake.query.mode);
+            console.log(matchable);
 
             if (Object.keys(matchable).length != 0) {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
                 const target_socket = matchable["socket_id_1"];
-                this.pairClient.makeMatch(target_socket, socket.id);
+                this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
                 
                 const sessionData = await generateSession();
                 console.log("Session Data: "+JSON.stringify(sessionData));
@@ -64,7 +65,7 @@ export class ChatServer {
                 this.io.to(`${target_socket}`).emit('start-session', {"to": socket.id, "from": target_socket, "sessionData": sessionData});
 
             } else {
-                this.pairClient.addLoneSocket(socket.id);
+                this.pairClient.addLoneSocket(socket.id, socket.handshake.query.email, socket.handshake.query.mode);
             }
 
             // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
