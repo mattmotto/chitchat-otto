@@ -99,6 +99,23 @@ div[disabled]
     transform: scale(1.05);
 }
 
+.userProfileInfo {
+    position: absolute;
+    top: 13vh;
+    right: 28%;
+    z-index: 100;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.profileImage {
+    border-radius: 50%;
+    height: 10vh;
+    width: auto;
+    margin-bottom: 2vh;
+}
+
 /*
 .regionControlButton {
     position: fixed;

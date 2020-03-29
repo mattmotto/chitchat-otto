@@ -28,14 +28,16 @@ export default class ChatInterface extends Component {
             friendPage: 0,
             // needsTour: props.firstLogin
             needsTour: false,
-            userData: {}
+            userData: {},
+            clientData: {}
         }
     }
     
-    isConnectedHandler = (onComplete) => {
+    isConnectedHandler = (clientData, onComplete) => {
         this.setState({
             connected: true,
-            isLoading: false
+            isLoading: false,
+            clientData
         }, () => {
             if(onComplete) {
                 onComplete();
@@ -47,7 +49,8 @@ export default class ChatInterface extends Component {
         this.setState({
             connected: false,
             socket: null,
-            isLoading: false
+            isLoading: false,
+            clientData: {}
         }, () => {
             if(onComplete) {
                 onComplete();
@@ -56,7 +59,6 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
-        console.log("User Email: "+this.props.userData.email);
         const socket = io.connect('/', {
             reconnection: true,
             reconnectionDelay: 1000,
@@ -110,6 +112,12 @@ export default class ChatInterface extends Component {
 
                             <div className="ccIconButton" style={{backgroundColor: "#FFFFFF", animation: "waitingPulse 2s 3"}} onClick={() => console.log("Add Friend")}>
                                 <img src={CCIcon} className="ccIconImage" />
+                            </div>
+
+                            <div className="userProfileInfo">
+                                <img src={this.state.clientData.photo_url} className="profileImage"/>
+                                <p style={{color: "#5CABB4", fontSize: "1.3rem", marginBottom: "0vh"}}>{this.state.clientData.name}</p>
+                                <p style={{marginTop: "0.3vh", marginBottom: "0vh"}}>{this.state.clientData.university}</p>
                             </div>
                         </>
                     ) : (

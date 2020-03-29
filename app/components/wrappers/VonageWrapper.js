@@ -15,7 +15,7 @@ export default class VonageWrapper {
 
     this.socket.on('start-session', function (data) {
       console.log("Connection from: "+data.client);
-      console.log("Client Data: "+data.clientData);
+      document.clientDataStore = data.clientData;
       that.apiKey = data.sessionData.apiKey;
       that.sessionId = data.sessionData.sessionId;
       that.token = data.sessionData.token;
@@ -41,6 +41,7 @@ export default class VonageWrapper {
     });
 
     session.on('connectionDestroyed', function(event) {
+      document.clientDataStore = {};
       that.onDisconnect();
     })
 
@@ -50,7 +51,7 @@ export default class VonageWrapper {
       if (error) {
         handleError(error);
       } else {
-        that.onConnect(() => {
+        that.onConnect(document.clientDataStore, () => {
           var publisher = OT.initPublisher('myVideo', {
             insertMode: 'append',
             width: '100%',
