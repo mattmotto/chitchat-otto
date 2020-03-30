@@ -10,6 +10,7 @@ import {Matches} from '../models/matches';
 import {Logins} from '../models/logins';
 import {Universities} from '../models/universities';
 import {Reports} from '../models/reports';
+import {Email} from '../handlers/SendGridHandler';
 
 const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
@@ -97,6 +98,10 @@ export class Routes {
         this.app.post('/signupuser', async (request, response) => {
             let {name, email, password, university, photo_url, instagram_id, snapchat_id} = request.body;
             let ans = await new Users().makeUser(name, email, password, university, photo_url, instagram_id, snapchat_id);
+            if (ans['status'] == 0){
+                new Email().welcomeEmail(email);
+            }
+
             response.json(ans);
         });
 
@@ -264,7 +269,59 @@ export class Routes {
             Serve the index page - anything that isn't one of these - leave it to the React Router
         */
        this.app.get('*', (request, response) => {
-        response.sendFile(HTML_FILE);
-    });
+           response.sendFile(HTML_FILE);
+       });
+
+       /*
+            Route to handle a lost password
+
+            Request is json object of format:
+            {
+                "user":1
+            }
+
+            response is json object of format:
+            {
+                "status":0
+            }
+        */
+       this.app.post('/lostpassword', (request, response) => {
+           let {user} = request.body;
+
+           new Users().updateLostPassword(user);
+
+           response.json({'status':0});
+       });
+
+       /*
+            Route to change a user's password
+
+            request is a json object of format:
+            {
+                "user":1,
+                "password":"password",
+                "newPass":"newPassword"
+            }
+
+            response is a json object of format:
+            {
+                "status":0
+            }
+            
+            0:success
+            1:wrong password
+            2:user not found. Big not good.
+        */
+       this.app.post('/changepassword', async (request, response) => {
+           let {user, password, newPass} = request.body;
+           let ans = await new Users().changePassword(user, password, newPass);
+           response.json({'status':ans['status']});
+       });
+
+       this.app.post('/updatesocial', (request, response) => {
+           let{user, snapchat_id, instagram_id} = request.body;
+           new Users().updateSocial(user, snapchat_id, instagram_id);
+           response.json({"status":0});
+       });
     }
 }

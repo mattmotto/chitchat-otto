@@ -1,5 +1,6 @@
 import * as sql from "./db"
 import * as crypto from 'crypto';
+import {Email} from '../handlers/SendGridHandler';
 
 export class Users {
 
@@ -77,6 +78,44 @@ export class Users {
 			if (err) throw err;
 		});
 	}
+
+	updateLostPassword(user):void {
+		let temp = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+		let hashedPassword = crypto.createHash('md5').update(temp).digest('hex');
+		let sqlquery = "UPDATE USERS SET password_hash='" + hashedPassword + "' WHERE auto_id=" + user +";";
+		new Email().resetLostPasswordEmail(user, temp);
+		this.sqlClient.query(sqlquery, (err, results, fields) => {
+			if (err) throw err;
+		});
+	}
+
+	changePassword(user, password, newPass):Promise<Object> {
+		return new Promise((resolve, reject) => {
+			let hashedPassword = crypto.createHash('md5').update(password).digest('hex');
+			let newHash = crypto.createHash('md5').update(newPass).digest('hex');
+			this.sqlClient.query("SELECT password_hash FROM USERS WHERE auto_id=" +user+";", (err, results, fields) => {
+				if (results.length==0){
+					resolve({"status":2});
+				}
+				else if (hashedPassword != results[0]['password_hash']){
+					resolve({"status":1});
+				}
+				else{
+					this.sqlClient.query("UPDATE USERS SET password_hash='" + newHash + "' WHERE auto_id=" + user + ";", (err, results, fields) => {
+						if (err) throw err;
+					});
+					resolve({"status":0});
+				}
+			});
+		});
+	}
+
+	updateSocial(user, snapchat_id, instagram_id):void{
+		this.sqlClient.query("UPDATE USERS SET snapchat_id='" + snapchat_id + "', instagram_id='" + instagram_id + "' WHERE auto_id=" + user + ";", (err, results, fields) => {
+			if (err) throw err;
+		});
+	}
+
 }
 
 	
