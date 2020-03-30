@@ -56,6 +56,16 @@ export class ChatServer {
 
             if (Object.keys(matchable).length != 0) {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
+                
+                // If in production, check to make sure that the same user isn't connecting with themselves
+                if(process.env.CLEARDB_DATABASE_URL) {
+                    if(matchable.email_1 == socket.handshake.query.email) {
+                        this.io.to(`${socket.id}`).emit('terminate-session');
+                    }
+                } else {
+                    console.log("Development environment detected - allowing for self connections");
+                }
+                
                 const target_socket = matchable["socket_id_1"];
                 this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
                 
@@ -83,10 +93,15 @@ export class ChatServer {
 
             socket.on('friend-confirmed', async (mode) => {
                 const matchable = await this.pairClient.fetchMatchData(socket.id, mode);
-                this.io.to(`${matchable.socket_id_1}`).emit('confirm-friend');
-                this.io.to(`${matchable.socket_id_2}`).emit('confirm-friend');
-                new Matches().makeMatch(matchable.user_1, matchable.user_2);
-                console.log("Match made!")
+                const result = await new Matches().canMatch(matchable.user_1, matchable.user_2)
+                if(result) {
+                    this.io.to(`${matchable.socket_id_1}`).emit('confirm-friend');
+                    this.io.to(`${matchable.socket_id_2}`).emit('confirm-friend');
+                    new Matches().makeMatch(matchable.user_1, matchable.user_2);
+                } else {
+                    this.io.to(`${matchable.socket_id_1}`).emit('reject-friend');
+                    this.io.to(`${matchable.socket_id_2}`).emit('reject-friend');
+                }
             })
 
             socket.on('disconnect', async () => {

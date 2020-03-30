@@ -31,11 +31,23 @@ export default class VonageWrapper {
     })
 
     this.socket.on('confirm-friend', function() {
-      that.confirmFriendHandler();
+      that.confirmFriendHandler(true);
+    })
+
+    this.socket.on('reject-friend', function() {
+      that.confirmFriendHandler(false);
     })
 
     this.socket.on('abrupt-remove', function (data) {
       console.log("connectionDestroyed has been called as well, terminating session...");
+    })
+
+    this.socket.on('terminate-session', function () {
+      document.myActiveConnection.onDisconnect(() => {
+        document.myActiveConnection.socket.disconnect();
+        session.disconnect();
+        session = null;
+      });
     })
   }
 

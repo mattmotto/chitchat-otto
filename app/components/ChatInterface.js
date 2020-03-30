@@ -69,8 +69,13 @@ export default class ChatInterface extends Component {
         })
     }
 
-    confirmFriendHandler = () => {
-        console.log("UI changes on friending")
+    confirmFriendHandler = (resolution) => {
+        if(resolution) {
+            console.log("UI changes on friending");
+        } else {
+            console.log("You're already friends");
+        }
+        
     }
 
     handleFriendAdd = () => {
