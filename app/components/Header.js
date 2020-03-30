@@ -3,6 +3,7 @@ import {Navbar, Button, Form, FormControl, Nav, NavDropdown} from 'react-bootstr
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Popup from "reactjs-popup";
+import {NotificationManager} from 'react-notifications';
 
 import MakePOST from "./wrappers/RequestWrapper"
 
@@ -85,11 +86,11 @@ export default class Header extends Component {
                         this.fetchUserInformation();
                     })
                 } else {
-                    alert("Invalid username/password! Please try again")
+                    NotificationManager.error("Invalid username/password! Please try again", "Authentication Error", 5000);
                 }
             })
         } else {
-            alert("Please enter a username and password")
+            NotificationManager.error("Please enter a username and password", "Authentication Error", 5000);
         }
     }
 

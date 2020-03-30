@@ -5,6 +5,8 @@ import "../styles/home.css"
 import ChatInterface from "./ChatInterface"
 
 import {Typeahead} from 'react-bootstrap-typeahead';
+import {NotificationManager} from 'react-notifications';
+
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import MakePOST from "./wrappers/RequestWrapper"
@@ -47,7 +49,7 @@ export default class Home extends Component {
 	}
 
 	sendRegisterRequest = () => {
-		if(this.state.firstName && this.state.lastName && this.state.email && this.state.password && this.state.confirmPassword) {
+		if(this.state.firstName != "" && this.state.lastName != "" && this.state.email != "" && this.state.password != "" && this.state.confirmPassword != "") {
 			if(this.state.password == this.state.confirmPassword) {
 				let payload = {
 					name: this.state.firstName + " " + this.state.lastName,
@@ -72,15 +74,15 @@ export default class Home extends Component {
 							snapchat: ""
 						})
 					} else {
-						alert("Oops. A user with this email ID already exists. Do you want to try and reset your password?")
+						NotificationManager.error("Oops. A user with this email ID already exists. Do you want to try and reset your password?", "Registration Error", 5000);
 					}
 				})
 				console.log(JSON.stringify(payload))
 			} else {
-				console.log("Passwords must match!")
+				NotificationManager.error("Please make sure that your passwords match!", "Registration Error", 5000);
 			}
 		} else {
-			console.log("Please fill in all the needed fields")
+			NotificationManager.error("Please make sure that you've filled in all your needed fields!", "Registration Error", 5000);
 		}
 	}
 

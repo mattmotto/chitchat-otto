@@ -34,6 +34,7 @@
     "react-bootstrap": "^1.0.0-beta.17",
     "react-bootstrap-typeahead": "^5.0.0-alpha.1",
     "react-dom": "^16.13.1",
+    "react-notifications": "^1.5.0",
     "react-router-dom": "^5.1.2",
     "reactjs-popup": "^1.5.0",
     "reactour": "^1.16.3",

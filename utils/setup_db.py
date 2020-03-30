@@ -140,6 +140,7 @@ if __name__ == '__main__':
 		df = pd.read_csv("./collegedata.csv")
 		sql = "INSERT INTO `universities` (`name`, `email`, `country`) VALUES (%s, %s, %s)"
 		for index, row in df.iterrows():
+			print("Inserting: "+str(row))
 			cursor.execute(sql, (row["College"], row["email"], row["Country"]))
 		print("College data insert done!")
 

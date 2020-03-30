@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 import Cookies from 'js-cookie';
+import {NotificationManager} from 'react-notifications';
 
 import VonageWrapper from "./wrappers/VonageWrapper"
 import MakePOST from "./wrappers/RequestWrapper"
@@ -16,6 +17,11 @@ import College from "../resources/college.png"
 import Tour from 'reactour'
 
 import "../styles/chatinterface.css"
+import 'react-notifications/lib/notifications.css';
+
+
+const TIME_LIMIT = 7;
+const BUFFER_TIME = 1;
 
 export default class ChatInterface extends Component {
     constructor(props) {
@@ -39,7 +45,16 @@ export default class ChatInterface extends Component {
             isLoading: false,
             clientData
         }, () => {
+            const that = this;
             if(onComplete) {
+                setTimeout(()=> {
+                    // When the timeout is done, give the user a buffer before we end the call
+                    setTimeout(()=> {
+                        NotificationManager.warning('Your call just ended! Remember, our calls have an 8 minute time limit', 'Call Limit', 5000);
+                        that.state.socket.endSession();
+                    }, (BUFFER_TIME*60*1000))
+                    NotificationManager.warning('Your ChitChat is set to end in a minute! Remember to friend each other if you want to keep this going :)', 'Call Limit', 5000);
+                },(TIME_LIMIT*60*1000))
                 onComplete();
             }
         })
