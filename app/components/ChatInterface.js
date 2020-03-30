@@ -34,6 +34,7 @@ export default class ChatInterface extends Component {
             friendPage: 0,
             // needsTour: props.firstLogin
             needsTour: false,
+            friendRequest: false,
             userData: {},
             clientData: {}
         }
@@ -43,6 +44,7 @@ export default class ChatInterface extends Component {
         this.setState({
             connected: true,
             isLoading: false,
+            friendRequest: false,
             clientData
         }, () => {
             const that = this;
@@ -59,6 +61,24 @@ export default class ChatInterface extends Component {
                 onComplete();
             }
         })
+    }
+
+    friendStateHandler = (friendRequest) => {
+        this.setState({
+            friendRequest
+        })
+    }
+
+    confirmFriendHandler = () => {
+        console.log("UI changes on friending")
+    }
+
+    handleFriendAdd = () => {
+        if(this.state.friendRequest) {
+            this.state.socket.confirmFriendRequest("G");
+        } else {
+            this.state.socket.sendFriendMessage("G");
+        }
     }
 
     isDisconnectedHandler = (onComplete) => {
@@ -85,7 +105,7 @@ export default class ChatInterface extends Component {
         this.setState({
             isLoading: true
         }, () => {
-            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler);
+            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
             this.setState({
                 socket: vonageWrapper
             }, () => {
@@ -125,10 +145,17 @@ export default class ChatInterface extends Component {
                             <div className="callControlButton" style={{backgroundColor: "rgb(192, 39, 39)"}} onClick={this.state.socket.endSession}>
                                 <img src={DisconnectImage} className="callControlImage" />
                             </div>
-
-                            <div className="ccIconButton" style={{backgroundColor: "#FFFFFF", animation: "waitingPulse 2s 3"}} onClick={() => console.log("Add Friend")}>
-                                <img src={CCIcon} className="ccIconImage" />
-                            </div>
+                            {
+                                this.state.friendRequest ? (
+                                    <div className="ccIconButton" style={{backgroundColor: "#FFFFFF", animation: "waitingPulse 2s infinite"}} onClick={this.handleFriendAdd}>
+                                        <img src={CCIcon} className="ccIconImage" />
+                                    </div>
+                                ) : (
+                                    <div className="ccIconButton" style={{backgroundColor: "#FFFFFF"}} onClick={this.handleFriendAdd}>
+                                        <img src={CCIcon} className="ccIconImage" />
+                                    </div>
+                                )
+                            }
 
                             <div className="userProfileInfo">
                                 <img src={this.state.clientData.photo_url} className="profileImage"/>

@@ -7,6 +7,8 @@ import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
 import { Pairs } from "./models/pairs"
+import { Matches } from './models/matches';
+
 import generateSession from "./handlers/VonageHandler"
 
 export class ChatServer {
@@ -69,7 +71,23 @@ export class ChatServer {
                 this.pairClient.addLoneSocket(socket.id, socket.handshake.query.email, socket.handshake.query.mode);
             }
 
-            // Instead of sending out a socket broadcast, add the socket to a record of availible sockets
+            socket.on('friend-requested', async (mode) => {
+                const matchable = await this.pairClient.fetchMatchData(socket.id, mode);
+                if(matchable.socket_id_1 == socket.id) {
+                    this.io.to(`${matchable.socket_id_2}`).emit('friend-check');
+                } else {
+                    this.io.to(`${matchable.socket_id_1}`).emit('friend-check');
+                }
+                console.log(matchable);
+            })
+
+            socket.on('friend-confirmed', async (mode) => {
+                const matchable = await this.pairClient.fetchMatchData(socket.id, mode);
+                this.io.to(`${matchable.socket_id_1}`).emit('confirm-friend');
+                this.io.to(`${matchable.socket_id_2}`).emit('confirm-friend');
+                new Matches().makeMatch(matchable.user_1, matchable.user_2);
+                console.log("Match made!")
+            })
 
             socket.on('disconnect', async () => {
 

@@ -129,28 +129,6 @@ export class Routes {
         });
 
         /*
-            Route to create an entry in the user_matches table, for two users who've decided to share their details
-
-            request is a json object of the format:
-            {
-                "user_1":1,
-                "user_2":2
-            }
-
-            response is a json object of format:
-            {
-                "status":0
-            }
-            0: success
-            anything else: failure
-        */
-        this.app.post('/createusermatch', (request, response) => {
-            let {user_1, user_2} = request.body;
-            new Matches().makeMatch(user_1, user_2)
-            response.json({"status":0});
-        });
-
-        /*
             Route to get all matched entries from the user_matches table, for a particular user
 
             request is a json object of the format: (Pages start counting from 0)

@@ -89,4 +89,20 @@ export class Pairs {
 			resolve(result);
 		})
 	}
+
+	fetchMatchData(socket_id, mode): Promise<Object> {
+		return new Promise((resolve, reject) => {
+			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_1=\""+socket_id+"\" AND mode_1=\""+mode+"\" LIMIT 1;", (err, results, fields) => {
+				if (err) throw err;
+				if(results.length != 0) {
+					resolve(results[0])
+				} else {
+					this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2=\""+socket_id+"\" AND mode_2=\""+mode+"\" LIMIT 1;", (err, results, fields) => {
+						if (err) throw err;
+						resolve((results.length !=0 ? results[0] : -1));
+					})
+				}
+			});
+		})
+	}
 }

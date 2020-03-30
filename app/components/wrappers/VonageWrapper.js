@@ -2,10 +2,12 @@ var session = null;
 
 export default class VonageWrapper {
   
-  constructor(socket, onConnect, onDisconnect) {
+  constructor(socket, onConnect, onDisconnect, friendStateHandler, confirmFriendHandler) {
     this.socket = socket
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
+    this.friendStateHandler = friendStateHandler;
+    this.confirmFriendHandler = confirmFriendHandler;
     document.myActiveConnection = this;
   }
 
@@ -15,12 +17,21 @@ export default class VonageWrapper {
 
     this.socket.on('start-session', function (data) {
       console.log("Connection from: "+data.client);
+      document.clientSocket = data.client;
       document.clientDataStore = data.clientData;
       that.apiKey = data.sessionData.apiKey;
       that.sessionId = data.sessionData.sessionId;
       that.token = data.sessionData.token;
       console.log("Initialising Session...");
       that.initializeSession();
+    })
+
+    this.socket.on('friend-check', function() {
+      that.friendStateHandler(true);
+    })
+
+    this.socket.on('confirm-friend', function() {
+      that.confirmFriendHandler();
     })
 
     this.socket.on('abrupt-remove', function (data) {
@@ -41,6 +52,7 @@ export default class VonageWrapper {
     });
 
     session.on('connectionDestroyed', function(event) {
+      document.clientSocket = null;
       document.clientDataStore = {};
       that.onDisconnect();
     })
@@ -62,6 +74,15 @@ export default class VonageWrapper {
         // that.onConnect();
       }
     });
+  }
+
+  sendFriendMessage(mode) {
+    console.log("Sending friend request...");
+    this.socket.emit('friend-requested', mode);
+  }
+
+  confirmFriendRequest(mode) {
+    this.socket.emit('friend-confirmed', mode);
   }
 
   endSession() {
