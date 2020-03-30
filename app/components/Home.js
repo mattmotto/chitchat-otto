@@ -169,8 +169,7 @@ export default class Home extends Component {
 					  </Form.Group>
 					</Form.Row>
 					<Form.Text className="text-muted">
-					  You only share your social media with people that you really get
-					  along with.
+					  By pressing "Sign Up", you agree to ChitChat's <a href="www.google.com" style={{color:"#5CABB4"}}>terms and conditions</a> and <a href="www.google.com" style={{color:"#5CABB4"}}>privacy policy</a>
 					</Form.Text>
 					<br />
 		  
