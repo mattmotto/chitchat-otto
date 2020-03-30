@@ -50,7 +50,8 @@ export default class ChatInterface extends Component {
                 setTimeout(()=> {
                     // When the timeout is done, give the user a buffer before we end the call
                     setTimeout(()=> {
-                        NotificationManager.warning('Your call just ended! Remember, our calls have an 8 minute time limit', 'Call Limit', 5000);
+                        // When the second timeout is done, just hang the call up after a warning
+                        NotificationManager.warning('Your ChitChat just ended! Remember, our calls have an 8 minute time limit', 'Call Limit', 7000);
                         that.state.socket.endSession();
                     }, (BUFFER_TIME*60*1000))
                     NotificationManager.warning('Your ChitChat is set to end in a minute! Remember to friend each other if you want to keep this going :)', 'Call Limit', 5000);
