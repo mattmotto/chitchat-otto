@@ -318,7 +318,7 @@ export class Routes {
            response.json({'status':ans['status']});
        });
 
-       this.app.post('/updatesocial', (request, response) => {
+       this.app.post('/updatesocialmedia', (request, response) => {
            let{user, snapchat_id, instagram_id} = request.body;
            new Users().updateSocial(user, snapchat_id, instagram_id);
            response.json({"status":0});
