@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Popup from "reactjs-popup";
-import MatchDetailPopup from "./MatchDetailPopup";
+import MatchDetailPopup from "./popups/MatchDetailPopup";
 import Cookies from 'js-cookie';
 
 import MakePOST from "./wrappers/RequestWrapper";

@@ -28,6 +28,16 @@ export default class MatchDetailPopup extends Component {
             <br />
             <Button className="homeButton" style={{marginRight: "1vw", width: "5vw", marginTop: "3vh"}} onClick={() => {
                 console.log(this.state.email);
+                MakePOST("lostpassword", {
+                    email: this.state.email
+                }, (data) => {
+                    if(data.status == 0) {
+                        NotificationManager.success("Check your inbox for instructions to log back in!", "Reset email sent", 5000);
+                        this.props.close();
+                    } else {
+                        NotificationManager.failure("No account found associated with this email ID", "Reset Error", 5000);
+                    }
+                })
             }}>Reset</Button>
             <Button className="homeButton" style={{marginLeft: "1vw", width: "5vw", marginTop: "3vh"}} onClick={this.props.close}>Close</Button>
         </div>

@@ -266,13 +266,6 @@ export class Routes {
             response.json({'status':0});
         });
 
-        /*
-            Serve the index page - anything that isn't one of these - leave it to the React Router
-        */
-       this.app.get('*', (request, response) => {
-           response.sendFile(HTML_FILE);
-       });
-
        /*
             Route to handle a lost password
 
@@ -289,11 +282,10 @@ export class Routes {
             1: user not found
         */
        this.app.post('/lostpassword', async (request, response) => {
-           let {user} = request.body;
-
-           let exists = await new Users().getUser(user);
-           if (exists['data'] == {}){
-               new Users().updateLostPassword(user);
+           let {email} = request.body;
+           let exists = await new Users().getUserByEmail(email);
+           if (exists != {}) {
+               new Users().updateLostPassword(exists['auto_id']);
                response.json({'status':0});
            } else {
                response.json({'status':1});
@@ -370,5 +362,12 @@ export class Routes {
            new SSS().uploadProfPic(user, pic);
            response.json({"status":0});
        });
+
+       /*
+            Serve the index page - anything that isn't one of these - leave it to the React Router
+        */
+       this.app.get('*', (request, response) => {
+            response.sendFile(HTML_FILE);
+        });
     }
 }
