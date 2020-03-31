@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import Popup from "reactjs-popup";
 import MatchDetailPopup from "./popups/MatchDetailPopup";
+import data from "./match_mock"
 import Cookies from 'js-cookie';
+import {Row} from 'react-bootstrap'
 
 import MakePOST from "./wrappers/RequestWrapper";
 
@@ -55,14 +57,14 @@ export default class MatchesView extends Component {
                     {
                         this.state.matches.map((match) => (
                             <React.Fragment>
-                            <Popup  trigger={
-                                <div className="matchCell">
+                            <Popup trigger={
+                                <Row className="matchCell">
                                     <img src={match.photo_url} className="matchProfilePicture" />
                                     <div className="matchContent">
                                         <p className="matchName">{match.name}</p>
                                         <p className="matchUniversity">{match.university}</p>
                                     </div>
-                                </div>
+                                </Row>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
                                         <MatchDetailPopup data={match} close={close} handleDelete={this.updateFriendList}/>

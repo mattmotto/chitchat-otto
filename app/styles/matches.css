@@ -10,9 +10,8 @@
 }
 
 .matchCell {
-    height: 6vh;
     padding-top: 0.5vh;
-    cursor: pointer;
+    cursor: pointer
 }
 
 .matchCell:hover {
@@ -51,4 +50,5 @@
 
 .cellLine {
     color: #676767;
+    margin-top: 0;
 }
