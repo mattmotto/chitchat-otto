@@ -11,6 +11,7 @@ import {Logins} from '../models/logins';
 import {Universities} from '../models/universities';
 import {Reports} from '../models/reports';
 import {Email} from '../handlers/SendGridHandler';
+import {SSS} from '../handlers/AWSHandler';
 
 const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
@@ -318,9 +319,49 @@ export class Routes {
            response.json({'status':ans['status']});
        });
 
+       /*
+            Route to change a user's password
+
+            request is a json object of format:
+            {
+                "user":1,
+                "snapchat_id":"password",
+                "instagram_id":"newPassword"
+            }
+
+            response is a json object of format:
+            {
+                "status":0
+            }
+            
+            0:success
+            anything else: failure
+        */
        this.app.post('/updatesocialmedia', (request, response) => {
            let{user, snapchat_id, instagram_id} = request.body;
            new Users().updateSocial(user, snapchat_id, instagram_id);
+           response.json({"status":0});
+       });
+
+       /*
+            Route to change a user's password
+
+            request is a json object of format:
+            {
+                "user":1,
+                "pic":idk
+            }
+
+            response is a json object of format:
+            {
+                "status":0
+            }
+            
+            0:success
+        */
+       this.app.post('/uploadprofpic', (request, response) => {
+           let {user, pic} = request.body;
+           new SSS().uploadProfPic(user, pic);
            response.json({"status":0});
        });
     }
