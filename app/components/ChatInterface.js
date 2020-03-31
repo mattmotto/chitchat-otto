@@ -158,7 +158,7 @@ export default class ChatInterface extends Component {
                             </div>
                             {
                                 this.state.areFriends ? (
-                                    <div className="ccIconButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                    <div className="ccIconButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4", animation: "waitingPulse 2s 3"}}>
                                         <img src={TICKICON} className="callControlImage" style={{padding: "1vh"}} />
                                     </div>
                                 ) : this.state.friendRequest ? (
