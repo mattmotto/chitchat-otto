@@ -364,15 +364,8 @@ export class Routes {
            new SSS().uploadProfPic(user, pic);
            response.json({"status":0});
        });
-
-       /*
-<<<<<<< HEAD
-            Serve the index page - anything that isn't one of these - leave it to the React Router
-        */
-       this.app.get('*', (request, response) => {
-            response.sendFile(HTML_FILE);
-        });
-=======
+        
+        /*
             Route to get usage stats
 
             request:
@@ -403,6 +396,5 @@ export class Routes {
        this.app.get('*', (request, response) => {
            response.sendFile(HTML_FILE);
        });
->>>>>>> 32bd52d39753a8d1d2dd78059dbd0b603b226321
     }
 }

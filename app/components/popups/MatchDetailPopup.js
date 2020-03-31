@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Button } from 'react-bootstrap';
 import Cookies from 'js-cookie';
-import MakePOST from "./wrappers/RequestWrapper";
+import MakePOST from "../wrappers/RequestWrapper";
 import {NotificationManager} from 'react-notifications';
 
 export default function MatchDetailPopup(props) {

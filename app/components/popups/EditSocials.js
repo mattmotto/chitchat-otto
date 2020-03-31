@@ -60,7 +60,6 @@ export default class EditSocials extends Component {
                 }, (data) => {
                     if(data.status == 0) {
                         NotificationManager.success("Your social media accounts have been sucessfully updated!", "Sucessful Update", 5000);
-                        this.props.fixSM(this.state.snapchat, this.state.instagram);
                         this.props.close();
                     } else {
                         NotificationManager.success("An unforseen error occured. Please try again later.", "Unsucessful Update", 5000);
