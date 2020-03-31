@@ -5,18 +5,46 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
+import * as AWS from 'aws-sdk';
+import * as multer from 'multer';
+import * as multerS3 from 'multer-s3';
+
 import {Users} from '../models/users';
 import {Matches} from '../models/matches';
 import {Logins} from '../models/logins';
 import {Universities} from '../models/universities';
 import {Reports} from '../models/reports';
 import {Email} from '../handlers/SendGridHandler';
-import {SSS} from '../handlers/AWSHandler';
 
-const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
-const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
+const DIST_DIR = path.join(__dirname, '../../dist');
+const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
 const PASS = "GULATI6969";
+
+const ID = 'AKIAVMQORFX44NI34NPT';
+const SECRET = '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';
+const BUCKET = "chitchat-us-bucket";
+
+let s3 = new AWS.S3({
+    accessKeyId: ID,
+    secretAccessKey: SECRET,
+    region: "us-east-2"
+});
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: BUCKET,
+    acl: 'public-read',
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString()+file.originalname)
+    }
+  })
+})
+
 
 export class Routes {
 
@@ -222,7 +250,6 @@ export class Routes {
         */
         this.app.post('/getuniversities', async (request, response) => {
             let data = await new Universities().getUniversityNames();
-
             response.json(data);
         });
 
@@ -359,10 +386,14 @@ export class Routes {
             
             0:success
         */
-       this.app.post('/uploadprofpic', (request, response) => {
-           let {user, pic} = request.body;
-           new SSS().uploadProfPic(user, pic);
-           response.json({"status":0});
+       this.app.post('/uploadprofpic', upload.single('profilePicture'), (req, res) => {
+           let { user } = req.body;
+           let aws_url = req["file"]["location"];
+           new Users().updateProfPic(user, aws_url);
+           res.json({
+               status: 0,
+               url: aws_url
+           })
        });
         
         /*
