@@ -11,6 +11,7 @@ import MakePOST from "./wrappers/RequestWrapper"
 import Home from './Home';
 import ChatInterface from "./ChatInterface";
 import UserSettings from "./UserSettings";
+import ResetPassword from "./ResetPassword"
 
 import CCLogo from "../resources/cc_logo.png"
 
@@ -135,6 +136,13 @@ export default class Header extends Component {
                                 <FormControl type="text" placeholder="Email ID" className="mr-sm-2" value={this.state.email} onChange={this.updateEmail} />
                                 <FormControl type="password" placeholder="Password" className="mr-sm-2" value={this.state.password} onChange={this.updatePassword} />
                                 <Button variant="outline-primary" className="homeButton" onClick={this.checkUser}>Log In</Button>
+                                <Popup trigger={
+                                <Button variant="outline-primary" className="homeButton" style={{marginLeft: "0.5vw"}}>Forgot Password</Button>
+                                } modal closeOnDocumentClick position="top center">
+                                    {close => (
+                                        <ResetPassword close={close} />
+                                    )}
+                                </Popup>
                             </Form>
                             </>
                         )

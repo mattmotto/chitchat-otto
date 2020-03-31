@@ -55,7 +55,7 @@ export default class MatchesView extends Component {
                                 </div>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
-                                        <MatchDetailPopup data={match} close={close}/>
+                                        <MatchDetailPopup data={match} close={close} handleDelete={this.state.updateFriendList}/>
                                     )}
                                 </Popup>
                             <hr className="cellLine"/>

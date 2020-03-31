@@ -19,6 +19,11 @@ const FORM_MAP = {
 	"snapchat": "snapchat"
 }
 
+function validateEmail(elementValue){      
+	var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	return emailPattern.test(elementValue); 
+} 
+
 
 export default class Home extends Component {
 	constructor(props) {
@@ -44,36 +49,45 @@ export default class Home extends Component {
 		})
 	}
 
+	checkEmailRegex = () => {
+		let suffix = this.state.selected[0].email;
+		let email = this.state.email;
+		return (validateEmail(email) && email.endsWith(suffix))
+	}
+
 	sendRegisterRequest = () => {
 		if(this.state.firstName != "" && this.state.lastName != "" && this.state.email != "" && this.state.password != "" && this.state.confirmPassword != "") {
 			if(this.state.password == this.state.confirmPassword) {
-				let payload = {
-					name: this.state.firstName + " " + this.state.lastName,
-					email: this.state.email,
-					password: this.state.password,
-					university: this.state.selected[0].name,
-					photo_url: "https://davidwilsondmd.com/wp-content/uploads/2015/11/user-300x300.png",
-					instagram_id: this.state.instagram,
-					snapchat_id: this.state.snapchat
-				}
-				MakePOST("signupuser", payload, (data) => {
-					if(data.status != 1) {
-						NotificationManager.success("Welcome to ChitChat! Please use your credentials to sign in", "Success", 5000);
-						this.setState({
-							firstName: "",
-							lastName: "",
-							email: "",
-							password: "",
-							confirmPassword: "",
-							selected: [],
-							instagram: "",
-							snapchat: ""
-						})
-					} else {
-						NotificationManager.error("Oops. A user with this email ID already exists. Do you want to try and reset your password?", "Registration Error", 5000);
+				if(this.checkEmailRegex()) {
+					let payload = {
+						name: this.state.firstName + " " + this.state.lastName,
+						email: this.state.email,
+						password: this.state.password,
+						university: this.state.selected[0].name,
+						photo_url: "https://davidwilsondmd.com/wp-content/uploads/2015/11/user-300x300.png",
+						instagram_id: this.state.instagram,
+						snapchat_id: this.state.snapchat
 					}
-				})
-				console.log(JSON.stringify(payload))
+					MakePOST("signupuser", payload, (data) => {
+						if(data.status != 1) {
+							NotificationManager.success("Welcome to ChitChat! Please use your credentials to sign in", "Success", 5000);
+							this.setState({
+								firstName: "",
+								lastName: "",
+								email: "",
+								password: "",
+								confirmPassword: "",
+								selected: [],
+								instagram: "",
+								snapchat: ""
+							})
+						} else {
+							NotificationManager.error("Oops. A user with this email ID already exists. Do you want to try and reset your password?", "Registration Error", 5000);
+						}
+					})
+				} else {
+					NotificationManager.error("Please enter the .edu email address associated with your school", "Registration Error", 5000);
+				}
 			} else {
 				NotificationManager.error("Please make sure that your passwords match!", "Registration Error", 5000);
 			}

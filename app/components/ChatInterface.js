@@ -8,7 +8,7 @@ import MatchesView from "./MatchesView"
 
 import PlusImage from "../resources/plusButton.png"
 import DisconnectImage from "../resources/disconnect.png"
-import CCIcon from "../resources/cc_icon.png"
+import CCIcon from "../resources/add2.png"
 
 import Tour from 'reactour'
 
@@ -26,7 +26,6 @@ export default class ChatInterface extends Component {
             connected: false,
             isLoading: false,
             socket: null,
-            // universityMode: false,
             friendPage: 0,
             // needsTour: props.firstLogin
             needsTour: false,
@@ -67,9 +66,9 @@ export default class ChatInterface extends Component {
 
     confirmFriendHandler = (resolution) => {
         if(resolution) {
-            console.log("UI changes on friending");
+            NotificationManager.success('You\'ve been added as friends!', 'Added Friend', 7000);
         } else {
-            console.log("You're already friends");
+            NotificationManager.warning('The two of you are already friends!', 'Already Friends', 7000);
         }
         
     }
@@ -103,26 +102,14 @@ export default class ChatInterface extends Component {
             reconnectionAttempts: Infinity,
             query:`email=${this.props.userData.email}&mode=${"G"}`
         });
+        const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
         this.setState({
-            isLoading: true
+            isLoading: true,
+            socket: vonageWrapper
         }, () => {
-            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
-            this.setState({
-                socket: vonageWrapper
-            }, () => {
-                vonageWrapper.startSession();
-            })
+            vonageWrapper.startSession();
         })
     }
-
-    /*
-    switchRegionModes = () => {
-        let {universityMode} = this.state;
-        this.setState({
-            universityMode: !universityMode
-        })
-    }
-    */
 
 	render() {
 		return (
@@ -132,12 +119,12 @@ export default class ChatInterface extends Component {
                 {
                     this.state.isLoading ?  (
                         <>
-                            <div className="callControlButton" style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}}>
+                            <div className="callControlButton" style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}} onClick={this.state.socket.endSession}>
                                 <img src={"https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif"} className="callControlImage" />
                             </div>
 
-                            <div className="ccIconButton" disabled style={{backgroundColor: "#FFFFFF"}}>
-                                <img src={CCIcon} className="ccIconImage" />
+                            <div className="ccIconButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                             </div>
                         </>
 
@@ -148,12 +135,12 @@ export default class ChatInterface extends Component {
                             </div>
                             {
                                 this.state.friendRequest ? (
-                                    <div className="ccIconButton" style={{backgroundColor: "#FFFFFF", animation: "waitingPulse 2s infinite"}} onClick={this.handleFriendAdd}>
-                                        <img src={CCIcon} className="ccIconImage" />
+                                    <div className="ccIconButton"  style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4", animation: "waitingPulse 2s infinite"}} onClick={this.handleFriendAdd}>
+                                        <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                                     </div>
                                 ) : (
-                                    <div className="ccIconButton" style={{backgroundColor: "#FFFFFF"}} onClick={this.handleFriendAdd}>
-                                        <img src={CCIcon} className="ccIconImage" />
+                                    <div className="ccIconButton"  style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.handleFriendAdd}>
+                                        <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                                     </div>
                                 )
                             }
@@ -170,8 +157,8 @@ export default class ChatInterface extends Component {
                                 <img src={PlusImage} className="callControlImage" />
                             </div>
 
-                            <div className="ccIconButton" id="addFriend" disabled style={{backgroundColor: "#FFFFFF", border: "1px solid #5CABB4"}}>
-                                <img src={CCIcon} className="ccIconImage" />
+                            <div className="ccIconButton" id="addFriend" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                             </div>
                         </>
                     )

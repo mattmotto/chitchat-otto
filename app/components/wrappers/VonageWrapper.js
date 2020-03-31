@@ -100,8 +100,10 @@ export default class VonageWrapper {
   endSession() {
     document.myActiveConnection.onDisconnect(() => {
       document.myActiveConnection.socket.disconnect();
-      session.disconnect();
-      session = null;
+      if(session != null) {
+        session.disconnect();
+        session = null; 
+      }
     });
   }
 
