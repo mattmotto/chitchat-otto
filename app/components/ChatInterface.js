@@ -9,6 +9,7 @@ import MatchesView from "./MatchesView"
 import PlusImage from "../resources/plusButton.png"
 import DisconnectImage from "../resources/disconnect.png"
 import CCIcon from "../resources/add2.png"
+import TICKICON from "../resources/tickmark.png"
 
 import Tour from 'reactour'
 
@@ -30,6 +31,7 @@ export default class ChatInterface extends Component {
             // needsTour: props.firstLogin
             needsTour: false,
             friendRequest: false,
+            refreshFriends: false,
             userData: {},
             clientData: {}
         }
@@ -40,6 +42,8 @@ export default class ChatInterface extends Component {
             connected: true,
             isLoading: false,
             friendRequest: false,
+            sentFriendRequest: false,
+            areFriends: false,
             clientData
         }, () => {
             const that = this;
@@ -67,8 +71,15 @@ export default class ChatInterface extends Component {
     confirmFriendHandler = (resolution) => {
         if(resolution) {
             NotificationManager.success('You\'ve been added as friends!', 'Added Friend', 7000);
+            this.setState({
+                refreshFriends: !this.state.refreshFriends,
+                areFriends: true
+            })
         } else {
             NotificationManager.warning('The two of you are already friends!', 'Already Friends', 7000);
+            this.setState({
+                areFriends: true
+            })
         }
         
     }
@@ -77,7 +88,15 @@ export default class ChatInterface extends Component {
         if(this.state.friendRequest) {
             this.state.socket.confirmFriendRequest("G");
         } else {
-            this.state.socket.sendFriendMessage("G");
+            if(this.state.sentFriendRequest) {
+                NotificationManager.warning("You've already sent this user a friend request!", "Request Already Sent", 5000);
+            } else {
+                this.setState({
+                    sentFriendRequest: true
+                }, () => {
+                    this.state.socket.sendFriendMessage("G");
+                })
+            }
         }
     }
 
@@ -95,20 +114,24 @@ export default class ChatInterface extends Component {
     }
 
     findMatch = () => {
-        const socket = io.connect('/', {
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax : 5000,
-            reconnectionAttempts: Infinity,
-            query:`email=${this.props.userData.email}&mode=${"G"}`
-        });
-        const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
-        this.setState({
-            isLoading: true,
-            socket: vonageWrapper
-        }, () => {
-            vonageWrapper.startSession();
-        })
+        if(this.props.userData.email) {
+            const socket = io.connect('/', {
+                reconnection: true,
+                reconnectionDelay: 1000,
+                reconnectionDelayMax : 5000,
+                reconnectionAttempts: Infinity,
+                query:`email=${this.props.userData.email}&mode=${"G"}`
+            });
+            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
+            this.setState({
+                isLoading: true,
+                socket: vonageWrapper
+            }, () => {
+                vonageWrapper.startSession();
+            })
+        } else {
+            NotificationManager.error("An unknown connection error occured. Please try logging out, and logging into ChitChat again.", "Connection Error", 5000);
+        }
     }
 
 	render() {
@@ -134,11 +157,19 @@ export default class ChatInterface extends Component {
                                 <img src={DisconnectImage} className="callControlImage" />
                             </div>
                             {
-                                this.state.friendRequest ? (
+                                this.state.areFriends ? (
+                                    <div className="ccIconButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                        <img src={TICKICON} className="callControlImage" style={{padding: "1vh"}} />
+                                    </div>
+                                ) : this.state.friendRequest ? (
                                     <div className="ccIconButton"  style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4", animation: "waitingPulse 2s infinite"}} onClick={this.handleFriendAdd}>
                                         <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                                     </div>
-                                ) : (
+                                ) : this.state.sentFriendRequest ? (
+                                    <div className="ccIconButton"  style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4", animation: "waitingPulse 2s infinite"}} onClick={this.handleFriendAdd}>
+                                        <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
+                                    </div>
+                                ): (
                                     <div className="ccIconButton"  style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.handleFriendAdd}>
                                         <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                                     </div>
@@ -178,7 +209,7 @@ export default class ChatInterface extends Component {
                 }
             </div>
             <div className="right" style={{width: "25%", paddingLeft: 0, paddingRight: 0, paddingTop: 0}}>
-                <MatchesView id="#friendList" user_id={0}/>
+                <MatchesView id="#friendList" user_id={0} refresh={this.state.refreshFriends}/>
             </div>
 		</div>
         {this.state.needsTour ? (<Tour steps={STEPS} />) : (<></>)}

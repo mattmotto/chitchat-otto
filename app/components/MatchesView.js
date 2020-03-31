@@ -22,6 +22,16 @@ export default class MatchesView extends Component {
         this.updateFriendList();
     }
 
+    componentWillReceiveProps(prevProps) {
+        const { refresh } = this.props;
+        console.log("IN THE OTHER COMPONENT")
+        console.log(refresh)
+        console.log(prevProps.refresh)
+        if (prevProps.refresh != refresh) {
+            this.updateFriendList();
+        }
+      }
+
     updateFriendList = () => {
         const auto_id = Cookies.get('user_id');
         MakePOST("getusermatches", {
@@ -55,7 +65,7 @@ export default class MatchesView extends Component {
                                 </div>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
-                                        <MatchDetailPopup data={match} close={close} handleDelete={this.state.updateFriendList}/>
+                                        <MatchDetailPopup data={match} close={close} handleDelete={this.updateFriendList}/>
                                     )}
                                 </Popup>
                             <hr className="cellLine"/>

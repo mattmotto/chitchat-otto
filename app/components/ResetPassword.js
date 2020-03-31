@@ -23,7 +23,7 @@ export default class MatchDetailPopup extends Component {
             <p className="welcomeText">Enter your email ID</p>
 
             <Form.Group controlId="fname" style={{display: "inline-block"}}>
-				<Form.Control type="text" placeholder="Email ID" value={this.state.email} onChange={this.handleEmailChange}/>
+				<Form.Control type="text" placeholder="Email ID" value={this.state.email} onChange={this.handleEmailChange} style={{width: "15cd ..vw"}}/>
 			</Form.Group>
             <br />
             <Button className="homeButton" style={{marginRight: "1vw", width: "5vw", marginTop: "3vh"}} onClick={() => {
