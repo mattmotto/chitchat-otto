@@ -122,6 +122,20 @@ export class Users {
 		});
 	}
 
+	getStats():Promise<Object>{
+		return new Promise((resolve, reject) => {
+			this.sqlClient.query("SELECT COUNT(auto_id) AS total FROM USERS;", (err, results, fields) => {
+				if (err) throw err;
+				this.sqlClient.query("SELECT COUNT(auto_id) AS total FROM LOGINS;", (err2, results2, fields2) => {
+					if (err2) throw err2;
+					let avg = results2[0]['total']/results[0]['total'];
+					resolve({'numUsers': results[0]['total'], 'numLogins':results2[0]['total'], 'avgLogins':avg});
+				});
+			});
+
+		});
+	}
+
 }
 
 	
