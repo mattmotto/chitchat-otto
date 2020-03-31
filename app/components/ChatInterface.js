@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 import {NotificationManager} from 'react-notifications';
+import Cookies from 'js-cookie';
 
 import VonageWrapper from "./wrappers/VonageWrapper"
 
@@ -28,12 +29,23 @@ export default class ChatInterface extends Component {
             isLoading: false,
             socket: null,
             friendPage: 0,
-            // needsTour: props.firstLogin
             needsTour: false,
             friendRequest: false,
             refreshFriends: false,
             userData: {},
             clientData: {}
+        }
+    }
+
+    componentWillMount() {
+        let new_site = Cookies.get("CC_NT");
+        if(!new_site) {
+            this.setState({
+                needsTour: true
+            }, () => {
+                console.log("First login detected!");
+                Cookies.set("CC_NT", "CC_NT");
+            })
         }
     }
     
@@ -137,8 +149,8 @@ export default class ChatInterface extends Component {
 	render() {
 		return (
         <>
-		<div id="parent">
-			<div className="left" style={{width: "75%", paddingTop: 0, height: "100vh"}}>
+		<div>
+			<div className="left" id="chatSection" style={{width: "75%", paddingTop: 0, height: "100vh"}}>
                 {
                     this.state.isLoading ?  (
                         <>
@@ -209,10 +221,10 @@ export default class ChatInterface extends Component {
                 }
             </div>
             <div className="right" style={{width: "25%", paddingLeft: 0, paddingRight: 0, paddingTop: 0}}>
-                <MatchesView id="#friendList" user_id={0} refresh={this.state.refreshFriends}/>
+                <MatchesView user_id={0} refresh={this.state.refreshFriends}/>
             </div>
 		</div>
-        {this.state.needsTour ? (<Tour steps={STEPS} />) : (<></>)}
+        <Tour steps={STEPS} isOpen={this.state.needsTour} onRequestClose={() => this.setState({needsTour:false})}/>
         </>
 		);
 	}
@@ -220,20 +232,16 @@ export default class ChatInterface extends Component {
 
 const STEPS = [
     {
-        selector: '#parent',
-        content: 'Hey! Thanks for signing up with ChitChat! This is your main chat window. Use it to meet up with cool new people :)'
+        selector: '#chatSection',
+        content: 'Hey! Thanks for signing up with ChitChat! What you see in front of you is your main chat window. Use it to meet up with cool new people :)'
     },{
         selector: '#startCall',
         content: 'This is your start call button. Use it when you\'re ready to get started!'
     },{
         selector: '#addFriend',
-        content: 'Use this to mark yourself as friend-able to your new ChitChat pal! If both of you hit this button, you\'ll both automatically get added to each others\' friend lists.' 
+        content: 'Use this to mark yourself as friend-able to your new ChitChat pal! If you see the button pulsing before you hit it, that means that your ChitChat pal wants to friend you. If both of you hit this button, you\'ll both automatically get added to each others\' friend lists.' 
     },{
-        selector: '#modeSelector',
-        content: 'Looking for something closer to home? Use the ChitChat region control to either meet college students from the same school as you, or from across the US!' 
-    },
-    {
-        selector: '#friendList',
+        selector: '#friendTitle',
         content: 'And finally, you can find your ChitChat friends here! Access their social media information (if they\'ve added any), and stay in touch with them as we all get through these testing times.' 
     },
 ]

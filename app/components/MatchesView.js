@@ -48,7 +48,7 @@ export default class MatchesView extends Component {
     render() {
         if(this.state.matches.length != 0) {
             return (
-                <div className="matchesTableWrapper">
+                <div className="matchesTableWrapper" id="friendTitle">
                     <h2 className="matchTitle">My Friends</h2>
                     <hr className="cellLine" />
                     <div className="matchesTable">
@@ -77,7 +77,7 @@ export default class MatchesView extends Component {
             );
         } else {
             return (
-                <div className="matchesTableWrapper">
+                <div className="matchesTableWrapper" id="friendTitle">
                     <h2 className="matchTitle">My Friends</h2>
                     <hr className="cellLine" />
                     <div className="matchesTable">

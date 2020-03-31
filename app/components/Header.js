@@ -123,7 +123,7 @@ export default class Header extends Component {
             <div>
                 <Router>
                 <Navbar bg="light" variant="light" style={{paddingTop: "1vh", paddingBottom: "1vh", paddingRight: "0.5vw", paddingLeft: "0.5vw", height: "8vh"}}>
-                    <Navbar.Brand><img src={CCLogo} style={{
+                    <Navbar.Brand id="titleLogo"><img src={CCLogo} style={{
                         width: "30vh", height: "auto", marginTop: "0.3vh", marginBottom: "0.3vh"
                         }} /></Navbar.Brand>
                     <Nav className="mr-auto">
