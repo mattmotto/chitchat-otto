@@ -42,6 +42,7 @@ export default class UserSettings extends React.Component {
                                     )}
                                 </Popup>
                 <div className="footer">
+                    <span>Please report any bugs/issues <a target="_blank" href="https://forms.gle/BTkzsgJenn5cvwYj9">here</a></span><br/>
                     <span>Shoutout to Natasha Levytska for <a href="https://dribbble.com/shots/4985430-Boredom">boredom</a> and Yimbo Escárrega for <a href="https://dribbble.com/shots/4143720-Waiting-around-to-die">Waiting around to die</a></span>
                 </div>
             </div>
