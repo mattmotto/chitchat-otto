@@ -58,8 +58,8 @@ export class ChatServer {
                 console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
                 
                 // If in production, check to make sure that the same user isn't connecting with themselves
-                if(process.env.CLEARDB_DATABASE_URL) {
-                    if(matchable.email_1 == socket.handshake.query.email) {
+                if(process.env.PRODUCTION) {
+                    if(matchable.email_1 != socket.handshake.query.email) {
                         this.io.to(`${socket.id}`).emit('terminate-session');
                     }
                 } else {
