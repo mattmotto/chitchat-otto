@@ -67,6 +67,12 @@ div[disabled]
   opacity: 0.35;
 }
 
+button[disabled]
+{
+  pointer-events: none;
+  opacity: 0.35;
+}
+
 .ccIconButton {
     position: fixed;
     top: 18vh;

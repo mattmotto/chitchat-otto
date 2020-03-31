@@ -48,6 +48,13 @@ body {
     border-color: #FFFFFF;
 }
 
+.homeButton[disabled] {
+    color: #5CABB4;
+    background-color: #FFFFFF;
+    border-color: #5CABB4;
+    opacity: 0.35;
+}
+
 .homeButton:active {
     color: #FFFFFF !important;
     background-color: #5CABB4 !important;

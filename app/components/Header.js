@@ -65,7 +65,7 @@ export default class Header extends Component {
                     {Cookies.get('user_id') ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
                 </Route>
                 <Route path="/me">
-                    {Cookies.get('user_id') ? (<UserSettings userData={this.state.userData} />) : <Redirect to="/" />}
+                    {Cookies.get('user_id') ? (<UserSettings userData={this.state.userData} refreshData={this.refreshData}/>) : <Redirect to="/" />}
                 </Route>
                 <Route exact path="/termsconditions">
                     <DocumentView isTC={true} />
@@ -110,6 +110,11 @@ export default class Header extends Component {
             loggedIn: false,
             firstLogin: false
         })
+    }
+
+    refreshData = () => {
+        console.log("Calling...");
+        this.fetchUserInformation();
     }
 
     render() {

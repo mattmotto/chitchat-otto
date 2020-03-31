@@ -4,6 +4,7 @@ import Popup from "reactjs-popup";
 
 import ChangePassword from "./popups/ChangePassword"
 import EditSocials from "./popups/EditSocials"
+import UploadProfile from "./popups/UploadProfile"
 
 import "../styles/settings.css"
 
@@ -17,7 +18,14 @@ export default class UserSettings extends React.Component {
             <div className="settingsContainer">
                 <img src={this.props.userData.photo_url} className="profilePicture"/>
                 <p className="welcomeText">Welcome, {this.props.userData.name}!</p>
-                <Button className="homeButton" style={{marginTop: "2vh", marginBottom: "2vh", width: "13vw"}}>Change Your Profile Picture</Button> <br />
+                <Popup trigger={
+                                 <Button className="homeButton" style={{marginTop: "2vh", marginBottom: "2vh", width: "13vw"}}>Change Your Profile Picture</Button>
+                                } modal closeOnDocumentClick position="top center">
+                                    {close => (
+                                        <UploadProfile close={close} userData={this.props.userData} refreshData={this.props.refreshData}/>
+                                    )}
+                                </Popup>
+                <br />
                 <Popup trigger={
                                  <Button className="homeButton" style={{marginBottom: "2vh", width: "13vw"}}>Edit Your Social Accounts</Button>
                                 } modal closeOnDocumentClick position="top center">
