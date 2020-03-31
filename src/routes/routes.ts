@@ -285,13 +285,19 @@ export class Routes {
             {
                 "status":0
             }
+            0: success
+            1: user not found
         */
-       this.app.post('/lostpassword', (request, response) => {
+       this.app.post('/lostpassword', async (request, response) => {
            let {user} = request.body;
 
-           new Users().updateLostPassword(user);
-
-           response.json({'status':0});
+           let exists = await new Users().getUser(user);
+           if (exists['data'] == {}){
+               new Users().updateLostPassword(user);
+               response.json({'status':0});
+           } else {
+               response.json({'status':1});
+           }
        });
 
        /*
