@@ -167,7 +167,7 @@ export default class Home extends Component {
 					  </Form.Group>
 					</Form.Row>
 					<Form.Text className="text-muted">
-					  By pressing "Sign Up", you agree to ChitChat's <a href="www.google.com" style={{color:"#5CABB4"}}>terms and conditions</a> and <a href="www.google.com" style={{color:"#5CABB4"}}>privacy policy</a>
+					  By pressing "Sign Up", I affirm that I'm both above 18 years of age, and I agree to ChitChat's <a href="www.google.com" style={{color:"#5CABB4"}}>terms and conditions</a> and <a href="www.google.com" style={{color:"#5CABB4"}}>privacy policy</a>
 					</Form.Text>
 					<br />
 		  

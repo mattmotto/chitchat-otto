@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Popup from "reactjs-popup";
 import {NotificationManager} from 'react-notifications';
+import DocumentView from "./DocumentView"
 
 import MakePOST from "./wrappers/RequestWrapper"
 
@@ -64,6 +65,12 @@ export default class Header extends Component {
                 </Route>
                 <Route path="/me">
                     {Cookies.get('user_id') ? (<UserSettings userData={this.state.userData} />) : <Redirect to="/" />}
+                </Route>
+                <Route exact path="/termsconditions">
+                    <DocumentView isTC={true} />
+                </Route>
+                <Route exact path="/privacypolicy">
+                    <DocumentView isTC={false} />
                 </Route>
                 <Route exact path="/">
                     {Cookies.get('user_id') ? <Redirect to="/chat" /> : <Home />}

@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import {NotificationManager} from 'react-notifications';
 
 import VonageWrapper from "./wrappers/VonageWrapper"
-import MakePOST from "./wrappers/RequestWrapper"
 
 import MatchesView from "./MatchesView"
 
