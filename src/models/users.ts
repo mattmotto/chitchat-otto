@@ -116,6 +116,12 @@ export class Users {
 		});
 	}
 
+	updateProfPic(user, url):void {
+		this.sqlClient.query("UPDATE USERS SET photo_url='" + url + "WHERE auto_id=" + user + ";", (err, results, fields) => {
+			if (err) throw err;
+		});
+	}
+
 }
 
 	
