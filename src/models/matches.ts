@@ -33,9 +33,9 @@ export class Matches{
 	}
 
 	deleteMatch(user_1, user_2):void{
-		this.sqlClient.query("UPDATE MATCHES SET deleted=1 WHERE user_1=" + user_1 + " and user_2=" + user_2 + ";", (err, results, fields) => {
+		this.sqlClient.query("DELETE FROM MATCHES WHERE user_1=" + user_1 + " and user_2=" + user_2 + ";", (err, results, fields) => {
 			if (err) throw err;
-			this.sqlClient.query("UPDATE MATCHES SET deleted=1 WHERE user_1=" + user_2 + " and user_2=" + user_1 + ";", (err, results, fields) => {
+			this.sqlClient.query("DELETE FROM MATCHES WHERE user_1=" + user_2 + " and user_2=" + user_1 + ";", (err, results, fields) => {
 				if (err) throw err;
 				console.log("deleted both pairs!");
 			});
