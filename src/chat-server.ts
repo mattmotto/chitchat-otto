@@ -60,22 +60,30 @@ export class ChatServer {
                 // If in production, check to make sure that the same user isn't connecting with themselves
                 if(process.env.PRODUCTION) {
                     if(matchable.email_1 != socket.handshake.query.email) {
-                        this.io.to(`${socket.id}`).emit('terminate-session');
+                        const target_socket = matchable["socket_id_1"];
+                        this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
+                        
+                        const sessionData = await generateSession();
+                        //console.log("Session Data: "+JSON.stringify(sessionData));
+                        // Send a create message to both sockets
+                        const socketData = await this.pairClient.getUserData(socket.id);
+                        const targetData = await this.pairClient.getUserData(target_socket);
+                        this.io.to(`${socket.id}`).emit('start-session', {"client": target_socket, "sessionData": sessionData, "clientData": socketData});
+                        this.io.to(`${target_socket}`).emit('start-session', {"client": socket.id, "sessionData": sessionData, "clientData": targetData});
                     }
                 } else {
                     console.log("Development environment detected - allowing for self connections");
+                    const target_socket = matchable["socket_id_1"];
+                    this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
+                    
+                    const sessionData = await generateSession();
+                    //console.log("Session Data: "+JSON.stringify(sessionData));
+                    // Send a create message to both sockets
+                    const socketData = await this.pairClient.getUserData(socket.id);
+                    const targetData = await this.pairClient.getUserData(target_socket);
+                    this.io.to(`${socket.id}`).emit('start-session', {"client": target_socket, "sessionData": sessionData, "clientData": socketData});
+                    this.io.to(`${target_socket}`).emit('start-session', {"client": socket.id, "sessionData": sessionData, "clientData": targetData});
                 }
-                
-                const target_socket = matchable["socket_id_1"];
-                this.pairClient.makeMatch(target_socket, socket.id, socket.handshake.query.email, socket.handshake.query.mode);
-                
-                const sessionData = await generateSession();
-                //console.log("Session Data: "+JSON.stringify(sessionData));
-                // Send a create message to both sockets
-                const socketData = await this.pairClient.getUserData(socket.id);
-                const targetData = await this.pairClient.getUserData(target_socket);
-                this.io.to(`${socket.id}`).emit('start-session', {"client": target_socket, "sessionData": sessionData, "clientData": socketData});
-                this.io.to(`${target_socket}`).emit('start-session', {"client": socket.id, "sessionData": sessionData, "clientData": targetData});
 
             } else {
                 this.pairClient.addLoneSocket(socket.id, socket.handshake.query.email, socket.handshake.query.mode);
