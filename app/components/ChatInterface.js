@@ -158,7 +158,7 @@ export default class ChatInterface extends Component {
                                 <img src={"https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif"} className="callControlImage" />
                             </div>
 
-                            <div className="ccIconButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                            <div className="ccIconButton" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
                                 <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                             </div>
                         </>
