@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 
 import Home from "./components/Home"
 import Header from "./components/Header"
+import MobileLanding from "./components/MobileLanding"
 
 import {NotificationContainer} from 'react-notifications';
+import MediaQuery from 'react-responsive'
 
 
 export default class App extends Component {
@@ -12,6 +14,14 @@ export default class App extends Component {
 	}
 
 	render() {
-		return (<><Header/><NotificationContainer/></>);
+		return (
+		<>
+		<MediaQuery minDeviceWidth={1224}>
+			<Header/><NotificationContainer/>
+		</MediaQuery>
+		<MediaQuery maxDeviceWidth={1224}>
+			<MobileLanding />
+		</MediaQuery>
+		</>);
 	}
 }
