@@ -2,16 +2,12 @@ import React, {Component} from 'react';
 import { Button, Form, Col, Row } from 'react-bootstrap';
 import "../styles/home.css"
 
-import ChatInterface from "./ChatInterface"
-
 import {Typeahead} from 'react-bootstrap-typeahead';
 import {NotificationManager} from 'react-notifications';
 
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import MakePOST from "./wrappers/RequestWrapper"
-
-const PRIMARY = "#2A36CF";
 
 const FORM_MAP = {
 	"fname" : "firstName",
@@ -62,7 +58,7 @@ export default class Home extends Component {
 				}
 				MakePOST("signupuser", payload, (data) => {
 					if(data.status != 1) {
-						alert("Welcome to ChitChat! Please use your credentials to sign in")
+						NotificationManager.success("Welcome to ChitChat! Please use your credentials to sign in", "Success", 5000);
 						this.setState({
 							firstName: "",
 							lastName: "",

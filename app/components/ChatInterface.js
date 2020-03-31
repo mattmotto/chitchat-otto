@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
-import Cookies from 'js-cookie';
 import {NotificationManager} from 'react-notifications';
 
 import VonageWrapper from "./wrappers/VonageWrapper"
@@ -11,8 +10,6 @@ import MatchesView from "./MatchesView"
 import PlusImage from "../resources/plusButton.png"
 import DisconnectImage from "../resources/disconnect.png"
 import CCIcon from "../resources/cc_icon.png"
-import Globe from "../resources/globe.svg"
-import College from "../resources/college.png"
 
 import Tour from 'reactour'
 

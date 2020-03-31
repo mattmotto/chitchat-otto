@@ -11,12 +11,10 @@ if(process.env.CLEARDB_DATABASE_URL) {
   console.log("Connecting to localhost DB")
   connection = mysql.createPool({
     host: "127.0.0.1",
-    user: "root",
+    user: "dbuser",
     password: "dbuserdbuser",
     database: "window_db"
   });
 }
 
 module.exports = connection;
-
-
