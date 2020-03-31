@@ -138,7 +138,7 @@ export default class Header extends Component {
                         ) : (
                             <>
                             <Form inline>
-                                <FormControl type="text" placeholder="Email ID" className="mr-sm-2" value={this.state.email} onChange={this.updateEmail} />
+                                <FormControl type="text" placeholder="Email" className="mr-sm-2" value={this.state.email} onChange={this.updateEmail} />
                                 <FormControl type="password" placeholder="Password" className="mr-sm-2" value={this.state.password} onChange={this.updatePassword} />
                                 <Button variant="outline-primary" className="homeButton" onClick={this.checkUser}>Log In</Button>
                                 <Popup trigger={
