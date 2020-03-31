@@ -16,6 +16,8 @@ import {SSS} from '../handlers/AWSHandler';
 const DIST_DIR = path.join(__dirname, '../../dist'); // NEW
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); // NEW
 
+const PASS = "GULATI6969";
+
 export class Routes {
 
     private app: express.Application;
@@ -266,7 +268,7 @@ export class Routes {
             response.json({'status':0});
         });
 
-       /*
+        /*
             Route to handle a lost password
 
             Request is json object of format:
@@ -364,10 +366,43 @@ export class Routes {
        });
 
        /*
+<<<<<<< HEAD
             Serve the index page - anything that isn't one of these - leave it to the React Router
         */
        this.app.get('*', (request, response) => {
             response.sendFile(HTML_FILE);
         });
+=======
+            Route to get usage stats
+
+            request:
+            {
+                "password":"GULATI6969"
+            }
+
+            Response:
+            {
+                "status":0,
+                ...
+            }
+       */
+       this.app.post('/getuserstats', async (request, response) => {
+           let {password} = request.body;
+           if (password == PASS){
+               let ans = await new Users().getStats();
+               response.json({'status':0, 'numUsers':ans['numUsers'], 'numLogins':ans['numLogins'], 'avgLogins':ans['avgLogins']});
+           } else {
+               response.json({'status': 1});
+           }
+       });
+
+        /*
+            THIS MUST ALWAYS BE AT THE BOTTOM
+            Serve the index page - anything that isn't one of these - leave it to the React Router
+        */
+       this.app.get('*', (request, response) => {
+           response.sendFile(HTML_FILE);
+       });
+>>>>>>> 32bd52d39753a8d1d2dd78059dbd0b603b226321
     }
 }
