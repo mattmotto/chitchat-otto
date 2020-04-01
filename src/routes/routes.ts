@@ -202,11 +202,17 @@ export class Routes {
             let {user, pageNumber, pageLength} = request.body;
             let matches = await new Matches().getMatches(user);
             let ans = [];
+            let next_page = false;
             for (let i = 0; i < matches["length"]; i++){
                 ans.push(await new Users().getUser(matches["data"][i]["user_2"]));
             }
             let start = pageNumber * pageLength;
-            response.json(ans.splice(start, pageLength));
+            if (ans[start+pageLength+1]){
+                next_page = true;
+            }
+            console.log(matches["length"]);
+            console.log(start + pageLength);
+            response.json({"matches":ans.splice(start, pageLength), "hasNextPage":next_page});
         });
 
         /*
