@@ -432,7 +432,12 @@ export class Routes {
             Serve the index page - anything that isn't one of these - leave it to the React Router
         */
        this.app.get('*', (request, response) => {
-           response.sendFile(HTML_FILE);
+           if(process.env.PRODUCTION && !request.secure) {
+            response.redirect("https://" + request.headers.host + request.url);
+           } else {
+               console.log(request.headers.host);
+               response.sendFile(HTML_FILE);
+           }
        });
     }
 }
