@@ -8,7 +8,6 @@ import * as bodyParser from 'body-parser';
 import * as AWS from 'aws-sdk';
 import * as multer from 'multer';
 import * as multerS3 from 'multer-s3';
-import * as sslRedirect from 'heroku-ssl-redirect';
 
 import {Users} from '../models/users';
 import {Matches} from '../models/matches';
@@ -60,7 +59,6 @@ export class Routes {
     private setupConfig(): void {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(sslRedirect());
     }
     
     private setStaticDir(): void {
