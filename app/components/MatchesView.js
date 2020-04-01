@@ -16,7 +16,8 @@ export default class MatchesView extends Component {
         super(props);
         this.state = {
             friendPage: 0,
-            matches: []
+            matches: [],
+            hasNextPage: false
         }
     }
 
@@ -26,9 +27,6 @@ export default class MatchesView extends Component {
 
     componentWillReceiveProps(prevProps) {
         const { refresh } = this.props;
-        console.log("IN THE OTHER COMPONENT")
-        console.log(refresh)
-        console.log(prevProps.refresh)
         if (prevProps.refresh != refresh) {
             this.updateFriendList();
         }
@@ -42,7 +40,8 @@ export default class MatchesView extends Component {
             pageLength: PAGE_SIZE
         }, (data) => {
             this.setState({
-                matches: data
+                matches: data.matches,
+                hasNextPage: data.hasNextPage
             })
         })
     }
@@ -53,7 +52,7 @@ export default class MatchesView extends Component {
                 <div className="matchesTableWrapper" id="friendTitle">
                     <h2 className="matchTitle">My Friends</h2>
                     <Button disabled={this.state.friendPage==0}>Prev</Button>
-                    <Button disabled={this.state.matches.length!=PAGE_SIZE}>Next</Button>
+                    <Button disabled={this.state.hasNextPage}>Next</Button>
                     <hr className="cellLine" />
                     <div className="matchesTable">
                     {
@@ -88,7 +87,7 @@ export default class MatchesView extends Component {
                             friendPage 
                         })
                     }}className="homeButton" style={{width: "3vw", marginLeft: "2.5vw", marginTop: "2vh", fontSize: "0.85rem"}}>Prev</Button>
-                    <Button disabled={this.state.matches.length!=PAGE_SIZE} onClick={() => {
+                    <Button disabled={this.state.hasNextPage} onClick={() => {
                         let friendPage = this.state.friendPage + 1;
                         this.setState({
                             friendPage

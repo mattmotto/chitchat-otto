@@ -175,24 +175,27 @@ export class Routes {
             }
 
             response is a json object of the format:
-            [
-                {
-                    "auto_id": 1,
-                    "name": "name",
-                    "email": "me@me.com",
-                    "university": "Columbia University",
-                    "photo_url": "photo_url",
-                    "instagram_id": "instagram_id",
-                    "snapchat_id": "snapchat_id",
-                    "is_banned": {
-                        "type": "Buffer",
-                        "data": [
-                            1
-                        ]
-                    }
-                },
-                ...
-            ]
+            {
+                matches: [
+                    {
+                        "auto_id": 1,
+                        "name": "name",
+                        "email": "me@me.com",
+                        "university": "Columbia University",
+                        "photo_url": "photo_url",
+                        "instagram_id": "instagram_id",
+                        "snapchat_id": "snapchat_id",
+                        "is_banned": {
+                            "type": "Buffer",
+                            "data": [
+                                1
+                            ]
+                        }
+                    },
+                    ...
+                ],
+                hasNextPage: true/false
+            }
 
         */
         this.app.post('/getusermatches', async (request, response) => {
