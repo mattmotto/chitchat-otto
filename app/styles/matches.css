@@ -5,7 +5,8 @@
 
 .matchesTable {
     height: 80vh;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     text-align: center;
 }
 
@@ -52,4 +53,8 @@
 .cellLine {
     color: #676767;
     margin-top: 0;
+}
+
+.imageButton:hover {
+    transform: scale(1.025);
 }

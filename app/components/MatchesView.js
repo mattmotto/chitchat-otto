@@ -8,6 +8,8 @@ import {Row, Button} from 'react-bootstrap'
 import MakePOST from "./wrappers/RequestWrapper";
 
 import "../styles/matches.css"
+import LEFTARROW from "../resources/left.png";
+import RIGHTARROW from "../resources/right.png";
 
 const PAGE_SIZE = 10;
 
@@ -47,32 +49,50 @@ export default class MatchesView extends Component {
     }
 
     render() {
+        console.log(this.state.hasNextPage)
         if(this.state.matches.length != 0) {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">
+                    <img src={LEFTARROW} disabled={this.state.friendPage==0} style={{height: "3vh", width: "auto", marginLeft: "2.5vw", marginTop: "2vh", float: "left"}} onClick={() => {
+                        let friendPage = this.state.friendPage - 1;
+                        this.setState({
+                            friendPage 
+                        }, ()=> {
+                            this.updateFriendList();
+                        })
+                    }}/>
+
+                    <img src={RIGHTARROW} disabled={!this.state.hasNextPage} style={{height: "3vh", width: "auto", marginRight: "2.5vw", marginTop: "2vh", float: "right"}} onClick={() => {
+                        let friendPage = this.state.friendPage + 1;
+                        this.setState({
+                            friendPage 
+                        }, ()=> {
+                            this.updateFriendList();
+                        })
+                    }}/>
+
                     <h2 className="matchTitle">My Friends</h2>
-                    <Button disabled={this.state.friendPage==0}>Prev</Button>
-                    <Button disabled={this.state.hasNextPage}>Next</Button>
+
                     <hr className="cellLine" />
                     <div className="matchesTable">
                     {
                         this.state.matches.map((match) => (
                             <React.Fragment>
-                            <Popup trigger={
-                                <Row className="matchCell">
-                                    <img src={match.photo_url} className="matchProfilePicture" />
-                                    <div className="matchContent">
-                                        <p className="matchName">{match.name}</p>
-                                        <p className="matchUniversity">{match.university}</p>
-                                    </div>
-                                </Row>
-                                } modal closeOnDocumentClick position="top center">
-                                    {close => (
-                                        <MatchDetailPopup data={match} close={close} handleDelete={this.updateFriendList}/>
-                                    )}
-                                </Popup>
-                            <hr className="cellLine"/>
-                        </React.Fragment>
+                                <Popup trigger={
+                                    <Row className="matchCell">
+                                        <img src={match.photo_url} className="matchProfilePicture" />
+                                        <div className="matchContent">
+                                            <p className="matchName">{match.name}</p>
+                                            <p className="matchUniversity">{match.university}</p>
+                                        </div>
+                                    </Row>
+                                    } modal closeOnDocumentClick position="top center">
+                                        {close => (
+                                            <MatchDetailPopup data={match} close={close} handleDelete={this.updateFriendList}/>
+                                        )}
+                                    </Popup>
+                                <hr className="cellLine"/>
+                            </React.Fragment>
                         ))
                     }
                     </div>
@@ -81,21 +101,28 @@ export default class MatchesView extends Component {
         } else {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">
-                    <Button disabled={this.state.friendPage==0} onClick={() => {
+                    <img src={LEFTARROW} className="imageButton" disabled={this.state.friendPage==0} style={{height: "3vh", width: "auto", marginLeft: "2.5vw", marginTop: "2vh", float: "left"}} onClick={() => {
                         let friendPage = this.state.friendPage - 1;
                         this.setState({
                             friendPage 
+                        }, ()=> {
+                            this.updateFriendList();
                         })
-                    }}className="homeButton" style={{width: "3vw", marginLeft: "2.5vw", marginTop: "2vh", fontSize: "0.85rem"}}>Prev</Button>
-                    <Button disabled={this.state.hasNextPage} onClick={() => {
+                    }}/>
+
+                    <img src={RIGHTARROW} className="imageButton" disabled={!this.state.hasNextPage} style={{height: "3vh", width: "auto", marginRight: "2.5vw", marginTop: "2vh", float: "right"}} onClick={() => {
                         let friendPage = this.state.friendPage + 1;
                         this.setState({
-                            friendPage
+                            friendPage 
+                        }, ()=> {
+                            this.updateFriendList();
                         })
-                    }}className="homeButton" style={{width: "3vw", marginRight: "2.5vw", marginTop: "2vh", fontSize: "0.85rem", float: "right"}}>Next</Button>
+                    }}/>
+
                     <h2 className="matchTitle">My Friends</h2>
+
                     <hr className="cellLine" />
-                    <div className="matchesTable">
+                    <div className="matchesTable" style={{overflow: "hidden"}}>
                         <div className="matchCell">
                             <p className="matchName">No friends yet :(</p>
                         </div>

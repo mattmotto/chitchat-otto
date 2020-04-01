@@ -67,6 +67,12 @@ div[disabled]
   opacity: 0.35;
 }
 
+img[disabled]
+{
+  pointer-events: none;
+  opacity: 0.35;
+}
+
 button[disabled]
 {
   pointer-events: none;

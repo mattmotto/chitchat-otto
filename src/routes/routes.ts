@@ -210,8 +210,6 @@ export class Routes {
             if (ans[start+pageLength+1]){
                 next_page = true;
             }
-            console.log(matches["length"]);
-            console.log(start + pageLength);
             response.json({"matches":ans.splice(start, pageLength), "hasNextPage":next_page});
         });
 
