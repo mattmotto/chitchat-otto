@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import MatchDetailPopup from "./popups/MatchDetailPopup";
 import data from "./match_mock"
 import Cookies from 'js-cookie';
-import {Row} from 'react-bootstrap'
+import {Row, Button} from 'react-bootstrap'
 
 import MakePOST from "./wrappers/RequestWrapper";
 
@@ -52,6 +52,8 @@ export default class MatchesView extends Component {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">
                     <h2 className="matchTitle">My Friends</h2>
+                    <Button disabled={this.state.friendPage==0}>Prev</Button>
+                    <Button disabled={this.state.matches.length!=PAGE_SIZE}>Next</Button>
                     <hr className="cellLine" />
                     <div className="matchesTable">
                     {
@@ -81,6 +83,18 @@ export default class MatchesView extends Component {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">
                     <h2 className="matchTitle">My Friends</h2>
+                    <Button disabled={this.state.friendPage==0} onClick={() => {
+                        let friendPage = this.state.friendPage - 1;
+                        this.setState({
+                            friendPage 
+                        })
+                    }}className="homeButton" style={{width: "4vw", marginRight: "1.5vw", marginBottom: "2vh"}}>Prev</Button>
+                    <Button disabled={this.state.matches.length!=PAGE_SIZE} onClick={() => {
+                        let friendPage = this.state.friendPage + 1;
+                        this.setState({
+                            friendPage
+                        })
+                    }}className="homeButton" style={{width: "4vw", marginLeft: "1.5vw", marginBottom: "2vh"}}>Next</Button>
                     <hr className="cellLine" />
                     <div className="matchesTable">
                         <div className="matchCell">

@@ -39,6 +39,7 @@ body {
     color: #5CABB4;
     background-color: #FFFFFF;
     border-color: #5CABB4;
+    overflow: hidden;
 }
 
 .homeButton:hover {

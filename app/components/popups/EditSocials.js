@@ -43,7 +43,7 @@ export default class EditSocials extends Component {
             <p className="welcomeText">Change Your Social Media Accounts</p>
 
             <Form.Group controlId="fname" style={{display: "inline-block", marginRight: "1vw"}}>
-				<Form.Control type="text" placeholder="Instagram Account" value={this.state.instagram} onChange={this.handleInstagramChange}/>
+				<Form.Control type="text" placeholder="@Instagram Account" value={this.state.instagram} onChange={this.handleInstagramChange}/>
 			</Form.Group>
 
             <Form.Group controlId="fname" style={{display: "inline-block", marginLeft: "1vw"}}>
@@ -52,7 +52,7 @@ export default class EditSocials extends Component {
             
             <br />
 
-            <Button className="homeButton" style={{marginRight: "1vw", width: "5vw", marginTop: "3vh"}} onClick={() => {
+            <Button className="homeButton" style={{marginRight: "1vw", width: "6.5vw", marginTop: "3vh"}} onClick={() => {
                 MakePOST("updatesocialmedia", {
                     user: this.props.userData.auto_id,
                     snapchat_id: this.state.snapchat,
@@ -66,7 +66,7 @@ export default class EditSocials extends Component {
                     }
                 })
             }}>Change</Button>
-            <Button className="homeButton" style={{marginLeft: "1vw", width: "5vw", marginTop: "3vh"}} onClick={this.props.close}>Close</Button>
+            <Button className="homeButton" style={{marginLeft: "1vw", width: "6.5vw", marginTop: "3vh"}} onClick={this.props.close}>Close</Button>
         </div>
         );
     }

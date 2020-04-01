@@ -171,14 +171,14 @@ export default class Home extends Component {
 					<Form.Label>Social Media</Form.Label>
 					<Form.Row>
 					  <Form.Group as={Col} controlId="instagram">
-						<Form.Control type="text" placeholder="Instagram Handle (Optional!)" value={this.state.instagram} onChange={this.handleOnChange}/>
+						<Form.Control type="text" placeholder="@Instagram ID (Optional!)" value={this.state.instagram} onChange={this.handleOnChange}/>
 					  </Form.Group>
 					  <Form.Group as={Col} controlId="snapchat">
 						<Form.Control type="text" placeholder="Snapchat ID (Optional!)" value={this.state.snapchat} onChange={this.handleOnChange}/>
 					  </Form.Group>
 					</Form.Row>
 					<Form.Text className="text-muted">
-					  By pressing "Sign Up", I affirm that I'm both above 18 years of age, and I agree to ChitChat's <a href="www.google.com" style={{color:"#5CABB4"}}>terms and conditions</a> and <a href="www.google.com" style={{color:"#5CABB4"}}>privacy policy</a>
+					  By pressing "Sign Up", I affirm that I'm both above 18 years of age, and I agree to ChitChat's <a href="/termsconditions" style={{color:"#5CABB4"}}>terms and conditions</a> and <a href="/privacypolicy" style={{color:"#5CABB4"}}>privacy policy</a>
 					</Form.Text>
 					<br />
 		  

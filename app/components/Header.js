@@ -130,7 +130,7 @@ export default class Header extends Component {
                     </Nav>
                     {
                         login_cookie ? (
-                            <NavDropdown title={<img src={this.state.userData["photo_url"]} style={{height: "5vh", width: "auto", borderRadius: "50%"}} />} style={{marginRight: "2vw"}} id="basic-nav-dropdown">
+                            <NavDropdown title={<img src={this.state.userData["photo_url"]} style={{height: "5vh", width: "5vh", borderRadius: "50%"}} />} style={{marginRight: "2vw"}} id="basic-nav-dropdown">
                                 <NavDropdown.Item href="/me">Account Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={this.logoutUser}>Logout</NavDropdown.Item>

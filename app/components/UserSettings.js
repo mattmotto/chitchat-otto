@@ -19,7 +19,7 @@ export default class UserSettings extends React.Component {
                 <img src={this.props.userData.photo_url} className="profilePicture"/>
                 <p className="welcomeText">Welcome, {this.props.userData.name}!</p>
                 <Popup trigger={
-                                 <Button className="homeButton" style={{marginTop: "2vh", marginBottom: "2vh", width: "13vw"}}>Change Your Profile Picture</Button>
+                                 <Button className="homeButton" style={{marginTop: "2vh", marginBottom: "2vh", width: "16vw"}}>Change Profile Picture</Button>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
                                         <UploadProfile close={close} userData={this.props.userData} refreshData={this.props.refreshData}/>
@@ -27,7 +27,7 @@ export default class UserSettings extends React.Component {
                                 </Popup>
                 <br />
                 <Popup trigger={
-                                 <Button className="homeButton" style={{marginBottom: "2vh", width: "13vw"}}>Edit Your Social Accounts</Button>
+                                 <Button className="homeButton" style={{marginBottom: "2vh", width: "16vw"}}>Edit Social Accounts</Button>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
                                         <EditSocials close={close} userData={this.props.userData} />
@@ -35,7 +35,7 @@ export default class UserSettings extends React.Component {
                                 </Popup>
                 <br />
                 <Popup trigger={
-                                 <Button className="homeButton" style={{width: "13vw"}}>Reset Your Password</Button>
+                                 <Button className="homeButton" style={{width: "16vw"}}>Reset Password</Button>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
                                         <ChangePassword close={close} />
