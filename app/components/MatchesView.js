@@ -82,19 +82,19 @@ export default class MatchesView extends Component {
         } else {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">
-                    <h2 className="matchTitle">My Friends</h2>
                     <Button disabled={this.state.friendPage==0} onClick={() => {
                         let friendPage = this.state.friendPage - 1;
                         this.setState({
                             friendPage 
                         })
-                    }}className="homeButton" style={{width: "4vw", marginRight: "1.5vw", marginBottom: "2vh"}}>Prev</Button>
+                    }}className="homeButton" style={{width: "3vw", marginLeft: "2.5vw", marginTop: "2vh", fontSize: "0.85rem"}}>Prev</Button>
                     <Button disabled={this.state.matches.length!=PAGE_SIZE} onClick={() => {
                         let friendPage = this.state.friendPage + 1;
                         this.setState({
                             friendPage
                         })
-                    }}className="homeButton" style={{width: "4vw", marginLeft: "1.5vw", marginBottom: "2vh"}}>Next</Button>
+                    }}className="homeButton" style={{width: "3vw", marginRight: "2.5vw", marginTop: "2vh", fontSize: "0.85rem", float: "right"}}>Next</Button>
+                    <h2 className="matchTitle">My Friends</h2>
                     <hr className="cellLine" />
                     <div className="matchesTable">
                         <div className="matchCell">

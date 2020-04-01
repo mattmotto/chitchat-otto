@@ -81,6 +81,8 @@ export class ChatServer {
                     // Send a create message to both sockets
                     const socketData = await this.pairClient.getUserData(socket.id);
                     const targetData = await this.pairClient.getUserData(target_socket);
+                    // console.log("Emitting: "+JSON.stringify(socketData)+" to :"+target_socket);
+                    // console.log("Emitting: "+JSON.stringify(targetData)+" to : "+socket.id);
                     this.io.to(`${socket.id}`).emit('start-session', {"client": target_socket, "sessionData": sessionData, "clientData": targetData});
                     this.io.to(`${target_socket}`).emit('start-session', {"client": socket.id, "sessionData": sessionData, "clientData": socketData});
                 }

@@ -1,12 +1,12 @@
 .matchesTableWrapper {
     background-color: #f8f9fa;
     height: 100vh;
-    text-align: center;
 }
 
 .matchesTable {
     height: 80vh;
     overflow: scroll;
+    text-align: center;
 }
 
 .matchCell {
@@ -33,9 +33,9 @@
 }
 
 .matchTitle {
-    padding-top: 4vh;
+    padding-top: 1.5vh;
     color: #676767;
-    margin-bottom: 2vh;
+    margin-bottom: 3vh;
     text-align: center;
 }
 

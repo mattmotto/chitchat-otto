@@ -67,6 +67,7 @@ export default class VonageWrapper {
 
     session.on('connectionDestroyed', function(event) {
       document.clientSocket = null;
+      session = null;
       document.clientDataStore = {};
       that.onDisconnect();
     })
