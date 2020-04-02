@@ -146,6 +146,19 @@ button[disabled]
     transform: scale(1.05);
 }
 
+.connectedDetails {
+    position: fixed;
+    top: 18vh;
+    left: 60vw;
+}
+
+.connectedText {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1vh;
+    color: #676767;
+}
+
 
 @keyframes waitingPulse {
 	0% {

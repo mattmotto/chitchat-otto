@@ -183,6 +183,11 @@ export default class ChatInterface extends Component {
                             <div className="regionControlButton" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
                                 <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
                             </div>
+
+                            <div className="connectedDetails">
+                                <p className="connectedText">Total Online: 12345</p>
+                                <p className="connectedText">Your School: 12345</p>
+                            </div>
                         </>
 
                     ) : this.state.connected ? (
@@ -232,6 +237,11 @@ export default class ChatInterface extends Component {
 
                             <div className="regionControlButton" id="regionControl" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.switchRegionMode}>
                                 <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
+                            </div>
+
+                            <div className="connectedDetails">
+                                <p className="connectedText">Total Online: 12345</p>
+                                <p className="connectedText">Your School: 12345</p>
                             </div>
                         </>
                     )
