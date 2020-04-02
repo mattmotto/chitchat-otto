@@ -4,7 +4,7 @@ import * as mysql from 'mysql';
 
 var connection = null;
 
-if(process.env.PRODUCTION) {
+if(process.env.PRODUCTION || process.env.STAGING) {
   console.log("Connecting to: "+process.env.CLEARDB_DATABASE_URL);
   connection = mysql.createPool(process.env.CLEARDB_DATABASE_URL);
 } else {

@@ -230,7 +230,7 @@ export default class ChatInterface extends Component {
                                 <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                             </div>
 
-                            <div className="regionControlButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.switchRegionMode}>
+                            <div className="regionControlButton" id="regionControl" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.switchRegionMode}>
                                 <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
                             </div>
                         </>
@@ -270,6 +270,9 @@ const STEPS = [
     },{
         selector: '#addFriend',
         content: 'Use this to mark yourself as friend-able to your new ChitChat pal! If you see the button pulsing before you hit it, that means that your ChitChat pal wants to friend you. If both of you hit this button, you\'ll both automatically get added to each others\' friend lists.' 
+    },{
+        selector: "#regionControl",
+        content: "Use this to either enter global mode, or stick to college mode! College mode allows you to connect with people only from your school, while global mode lets you meet college kids across the world!"
     },{
         selector: '#friendTitle',
         content: 'And finally, you can find your ChitChat friends here! Access their social media information (if they\'ve added any), and stay in touch with them as we all get through these testing times.' 
