@@ -107,10 +107,6 @@ button[disabled]
     z-index: 10;
 }
 
-.regionControlButton:hover {
-    transform: scale(1.05);
-}
-
 .userProfileInfo {
     position: absolute;
     top: 13vh;
@@ -129,11 +125,11 @@ button[disabled]
 }
 
 
-/*
+
 .regionControlButton {
     position: fixed;
     top: 18vh;
-    left: 10vw;
+    left: 15vw;
     border-radius: 50%;
     z-index: 10;
 }
@@ -145,7 +141,11 @@ button[disabled]
     max-height: 6vh;
     padding: 0.5vh;
 }
-*/
+
+.regionControlButton:hover {
+    transform: scale(1.05);
+}
+
 
 @keyframes waitingPulse {
 	0% {

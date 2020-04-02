@@ -11,6 +11,8 @@ import PlusImage from "../resources/plusButton.png"
 import DisconnectImage from "../resources/disconnect.png"
 import CCIcon from "../resources/add2.png"
 import TICKICON from "../resources/tickmark.png"
+import COLLEGE from "../resources/college.png"
+import GLOBE from "../resources/globe.svg"
 
 import Tour from 'reactour'
 
@@ -32,6 +34,7 @@ export default class ChatInterface extends Component {
             needsTour: false,
             friendRequest: false,
             refreshFriends: false,
+            collegeMode: true,
             userData: {},
             clientData: {}
         }
@@ -43,7 +46,6 @@ export default class ChatInterface extends Component {
             this.setState({
                 needsTour: true
             }, () => {
-                console.log("First login detected!");
                 Cookies.set("CC_NT", "CC_NT");
             })
         }
@@ -97,8 +99,9 @@ export default class ChatInterface extends Component {
     }
 
     handleFriendAdd = () => {
+        let mode = this.state.collegeMode ? "C" : "G"
         if(this.state.friendRequest) {
-            this.state.socket.confirmFriendRequest("G");
+            this.state.socket.confirmFriendRequest(mode);
         } else {
             if(this.state.sentFriendRequest) {
                 NotificationManager.warning("You've already sent this user a friend request!", "Request Already Sent", 5000);
@@ -106,7 +109,7 @@ export default class ChatInterface extends Component {
                 this.setState({
                     sentFriendRequest: true
                 }, () => {
-                    this.state.socket.sendFriendMessage("G");
+                    this.state.socket.sendFriendMessage(mode);
                 })
             }
         }
@@ -131,14 +134,23 @@ export default class ChatInterface extends Component {
         })
     }
 
+    switchRegionMode = (event) => {
+        let oldCollegeMode  = this.state.collegeMode;
+        console.log()
+        this.setState({
+            collegeMode: !oldCollegeMode
+        })
+    }
+
     findMatch = () => {
         if(this.props.userData.email) {
+            let mode = this.state.collegeMode ? "C" : "G"
             const socket = io.connect('/', {
                 reconnection: true,
                 reconnectionDelay: 1000,
                 reconnectionDelayMax : 5000,
                 reconnectionAttempts: Infinity,
-                query:`email=${this.props.userData.email}&mode=${"G"}`
+                query:`email=${this.props.userData.email}&mode=${mode}`
             });
             const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
             this.setState({
@@ -167,6 +179,10 @@ export default class ChatInterface extends Component {
                             <div className="ccIconButton" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
                                 <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
                             </div>
+
+                            <div className="regionControlButton" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
+                            </div>
                         </>
 
                     ) : this.state.connected ? (
@@ -194,6 +210,10 @@ export default class ChatInterface extends Component {
                                 )
                             }
 
+                            <div className="regionControlButton" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
+                                <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
+                            </div>
+
                             <div className="userProfileInfo">
                                 <img src={this.state.clientData.photo_url} className="profileImage"/>
                                 <p style={{color: "#5CABB4", fontSize: "1.3rem", marginBottom: "0vh"}}>{this.state.clientData.name}</p>
@@ -208,6 +228,10 @@ export default class ChatInterface extends Component {
 
                             <div className="ccIconButton" id="addFriend" disabled style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}}>
                                 <img src={CCIcon} className="callControlImage" style={{padding: "1vh"}} />
+                            </div>
+
+                            <div className="regionControlButton" style={{backgroundColor: "#5CABB4", border: "1px solid #5CABB4"}} onClick={this.switchRegionMode}>
+                                <img src={this.state.collegeMode ? COLLEGE : GLOBE} className="regionControlImage" style={{padding: "1vh"}} />
                             </div>
                         </>
                     )
