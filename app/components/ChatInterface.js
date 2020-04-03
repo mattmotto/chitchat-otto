@@ -7,10 +7,10 @@ import VonageWrapper from "./wrappers/VonageWrapper"
 
 import MatchesView from "./MatchesView"
 
-import PlusImage from "../resources/plusButton.png"
-import DisconnectImage from "../resources/disconnect.png"
-import CCIcon from "../resources/add2.png"
-import TICKICON from "../resources/tickmark.png"
+const PlusImage = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/plusButton.png";
+const DisconnectImage = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/disconnect.png";
+const CCIcon = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/add2.png";
+const TICKICON = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/tickmark.png";
 
 import Tour from 'reactour'
 

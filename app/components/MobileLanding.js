@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CCLogo from "../resources/cc_logo.png"
+const CCLogo = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/cc_logo.png";
 
 export default function MobileLanding(props) {
     return (
