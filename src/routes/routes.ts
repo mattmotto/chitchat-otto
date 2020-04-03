@@ -14,6 +14,7 @@ import {Matches} from '../models/matches';
 import {Logins} from '../models/logins';
 import {Universities} from '../models/universities';
 import {Reports} from '../models/reports';
+import {Pairs} from '../models/pairs';
 import {Email} from '../handlers/SendGridHandler';
 
 const DIST_DIR = path.join(__dirname, '../../dist');
@@ -425,6 +426,24 @@ export class Routes {
            } else {
                response.json({'status': 1});
            }
+       });
+
+       /*
+            Route to get number of active users
+
+            request:
+            {
+            }
+
+            Response:
+            {
+                "status":0,
+                "num":1
+            }
+       */
+       this.app.post('/countactiveusers', async (request, response) => {
+           let ans = await new Pairs().getAllActive();
+           response.json({"status":0, "num":ans["numUsers"]});
        });
 
         /*
