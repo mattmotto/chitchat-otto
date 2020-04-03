@@ -105,4 +105,17 @@ export class Pairs {
 			});
 		})
 	}
+
+	getAllActive(): Promise<Object>{
+		return new Promise((resolve, reject) => {
+			this.sqlClient.query("SELECT COUNT(auto_id) AS total_paired FROM CURRENT_PAIRS WHERE socket_id_2 is not null;", (err, results, fields) => {
+				if (err) throw err;
+				this.sqlClient.query("SELECT COUNT(auto_id) AS total_lone FROM CURRENT_PAIRS WHERE socket_id_2 is null;", (err2, results2, fields2) => {
+					if (err2) throw err2;
+					let total = results2[0]['total_lone'] + (2 * results[0]['total_paired']);
+					resolve({'numUsers': total});
+				});
+			});
+		});
+	}
 }
