@@ -8,8 +8,8 @@ import {Row, Button} from 'react-bootstrap'
 import MakePOST from "./wrappers/RequestWrapper";
 
 import "../styles/matches.css"
-import LEFTARROW from "../resources/left.png";
-import RIGHTARROW from "../resources/right.png";
+const LEFTARROW = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/left.png";
+const RIGHTARROW = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/right.png";
 
 const PAGE_SIZE = 10;
 
