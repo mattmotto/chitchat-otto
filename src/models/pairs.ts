@@ -17,11 +17,21 @@ export class Pairs {
 	}
 
 	async findMatch(email, mode): Promise<Object> {
-		return new Promise((resolve, reject) => {
-			this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2 IS NULL and mode_1='" + mode + "';", (err, results, fields) => {
-				if (err) throw err;
-				resolve(results.length==0 ? {} : results[0])
-			});
+		return new Promise(async (resolve, reject) => {
+			if (mode == 'C'){
+				let data = await new Users().getUserByEmail(email);
+				this.sqlClient.query("Select current_pairs.auto_id, `user_1`, `email_1`, `socket_id_1`, `mode_1`, `university` from current_pairs\
+	join users on current_pairs.user_1 = users.auto_id\
+	where current_pairs.socket_id_2 is null and `university` = '"+ data['university'] + "' and `mode_1` = 'C';", (err, results, fields) => {
+					if (err) throw err;
+					resolve(results.length==0 ? {} : results[0])
+				});
+			} else{
+				this.sqlClient.query("SELECT * FROM CURRENT_PAIRS WHERE socket_id_2 IS NULL and mode_1='G';", (err, results, fields) => {
+					if (err) throw err;
+					resolve(results.length==0 ? {} : results[0])
+				});
+			}
 		});
 	}
 
