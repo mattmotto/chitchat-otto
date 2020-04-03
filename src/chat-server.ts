@@ -49,14 +49,8 @@ export class ChatServer {
         this.io.on('connection', async (socket) => {
 
             const matchable = await this.pairClient.findMatch(socket.handshake.query.email, socket.handshake.query.mode);
-            console.log("Email sent: "+socket.handshake.query.email);
             // Mode can be either "C" or "G"
-            console.log("Mode sent: "+socket.handshake.query.mode);
-            console.log(matchable);
-
-            if (Object.keys(matchable).length != 0) {
-                console.log("Found match for "+socket.id + " with: "+matchable["socket_id_1"]);
-                
+            if (Object.keys(matchable).length != 0) {                
                 // If in production, check to make sure that the same user isn't connecting with themselves
                 if(process.env.PRODUCTION) {
                     if(matchable.email_1 != socket.handshake.query.email) {
@@ -98,7 +92,6 @@ export class ChatServer {
                 } else {
                     this.io.to(`${matchable.socket_id_1}`).emit('friend-check');
                 }
-                console.log(matchable);
             })
 
             socket.on('friend-confirmed', async (mode) => {

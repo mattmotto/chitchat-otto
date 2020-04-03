@@ -4,6 +4,7 @@ import {NotificationManager} from 'react-notifications';
 import Cookies from 'js-cookie';
 
 import VonageWrapper from "./wrappers/VonageWrapper"
+import MakePOST from "./wrappers/RequestWrapper"
 
 import MatchesView from "./MatchesView"
 
@@ -41,14 +42,18 @@ export default class ChatInterface extends Component {
     }
 
     componentWillMount() {
-        let new_site = Cookies.get("CC_NT");
-        if(!new_site) {
-            this.setState({
-                needsTour: true
-            }, () => {
-                Cookies.set("CC_NT", "CC_NT");
-            })
-        }
+        let that = this;
+        this.updateUserCounts(() => {
+            let new_site = Cookies.get("CC_NT");
+            if(!new_site) {
+                that.setState({
+                    needsTour: true
+                }, () => {
+                    Cookies.set("CC_NT", "CC_NT");
+                }, () => {
+                })
+            }
+        })
     }
     
     isConnectedHandler = (clientData, onComplete) => {
@@ -58,6 +63,8 @@ export default class ChatInterface extends Component {
             friendRequest: false,
             sentFriendRequest: false,
             areFriends: false,
+            allCount: 0,
+            universityCount: 0,
             clientData
         }, () => {
             const that = this;
@@ -128,17 +135,34 @@ export default class ChatInterface extends Component {
             isLoading: false,
             clientData: {}
         }, () => {
-            if(onComplete) {
-                onComplete();
-            }
+            this.updateUserCounts(() => {
+                if(onComplete) {
+                    onComplete();
+                }
+            });
         })
     }
 
     switchRegionMode = (event) => {
         let oldCollegeMode  = this.state.collegeMode;
-        console.log()
         this.setState({
             collegeMode: !oldCollegeMode
+        })
+    }
+
+    updateUserCounts = (onCompletion) => {
+        const auto_id = Cookies.get('user_id');
+        console.log("Updating user counts...");
+        MakePOST("countactiveusers", {auto_id}, (response) => {
+            let {university, all} = response
+            this.setState({
+                allCount: all,
+                universityCount: university
+            }, () => {
+                if(onCompletion) {
+                    onCompletion();
+                }
+            })
         })
     }
 
@@ -185,8 +209,8 @@ export default class ChatInterface extends Component {
                             </div>
 
                             <div className="connectedDetails">
-                                <p className="connectedText">Total Online: 12345</p>
-                                <p className="connectedText">Your School: 12345</p>
+                                <p className="connectedText">Total Online: {this.state.allCount}</p>
+                                <p className="connectedText">Your School: {this.state.universityCount}</p>
                             </div>
                         </>
 
@@ -240,8 +264,8 @@ export default class ChatInterface extends Component {
                             </div>
 
                             <div className="connectedDetails">
-                                <p className="connectedText">Total Online: 12345</p>
-                                <p className="connectedText">Your School: 12345</p>
+                                <p className="connectedText">Total Online: {this.state.allCount}</p>
+                                <p className="connectedText">Your School: {this.state.universityCount}</p>
                             </div>
                         </>
                     )

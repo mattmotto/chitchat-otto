@@ -1,6 +1,5 @@
 export default function MakePOST (route, payload, onComplete) {
     const targetRoute = "/"+route;
-    console.log("Requesting to: "+targetRoute)
     fetch(targetRoute, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},

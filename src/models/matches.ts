@@ -9,7 +9,6 @@ export class Matches{
 			if (err) throw err;
 			this.sqlClient.query("INSERT INTO MATCHES (user_1, user_2) VALUES(" + user_2 + ", " + user_1 + ");", (err, results, fields) => {
 				if (err) throw err;
-				console.log("Inserted both matches!");
 			});
 		});
 	}
@@ -37,7 +36,6 @@ export class Matches{
 			if (err) throw err;
 			this.sqlClient.query("DELETE FROM MATCHES WHERE user_1=" + user_2 + " and user_2=" + user_1 + ";", (err, results, fields) => {
 				if (err) throw err;
-				console.log("deleted both pairs!");
 			});
 		});
 	}

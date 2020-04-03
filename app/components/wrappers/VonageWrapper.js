@@ -16,13 +16,11 @@ export default class VonageWrapper {
     const that = this;
 
     this.socket.on('start-session', function (data) {
-      console.log("Connection from: "+data.client);
       document.clientSocket = data.client;
       document.clientDataStore = data.clientData;
       that.apiKey = data.sessionData.apiKey;
       that.sessionId = data.sessionData.sessionId;
       that.token = data.sessionData.token;
-      console.log("Initialising Session...");
       that.initializeSession();
     })
 
@@ -39,7 +37,6 @@ export default class VonageWrapper {
     })
 
     this.socket.on('abrupt-remove', function (data) {
-      console.log("connectionDestroyed has been called as well, terminating session...");
     })
 
     this.socket.on('terminate-session', function () {
@@ -92,7 +89,6 @@ export default class VonageWrapper {
   }
 
   sendFriendMessage(mode) {
-    console.log("Sending friend request...");
     this.socket.emit('friend-requested', mode);
   }
 

@@ -233,7 +233,6 @@ export class Routes {
         this.app.post('/deleteusermatch', (request, response) => {
             let {user_1, user_2} = request.body;
             new Matches().deleteMatch(user_1, user_2);
-            console.log("deleted user match for users " + user_1 + " and " + user_2);
             response.json({"status":0});
         });
 
@@ -277,7 +276,6 @@ export class Routes {
         this.app.post('/banuser', (request, response) => {
             let {user} = request.body
             new Users().banUser(user);
-            console.log("banned user " + user);
             response.json({'status':0});
         });
 
@@ -299,7 +297,6 @@ export class Routes {
         this.app.post('/reportuser', (request, response) => {
             let {user, reported_by, report_description} = request.body;
             new Reports().reportUser(user, reported_by, report_description);
-            console.log("User " + reported_by + " reported user " + user + " for " + report_description);
             response.json({'status':0});
         });
 
@@ -442,8 +439,13 @@ export class Routes {
             }
        */
        this.app.post('/countactiveusers', async (request, response) => {
-           let ans = await new Pairs().getAllActive();
-           response.json({"status":0, "num":ans["numUsers"]});
+           let { auto_id } = request.body;
+           let { university, all } = await new Pairs().getAllActive(auto_id);
+           response.json({
+               status: 0,
+               university,
+               all
+           });
        });
 
         /*

@@ -19,7 +19,7 @@ export default class MatchesView extends Component {
         this.state = {
             friendPage: 0,
             matches: [],
-            hasNextPage: false
+            hasNextPage: false,
         }
     }
 
@@ -49,7 +49,6 @@ export default class MatchesView extends Component {
     }
 
     render() {
-        console.log(this.state.hasNextPage)
         if(this.state.matches.length != 0) {
             return (
                 <div className="matchesTableWrapper" id="friendTitle">

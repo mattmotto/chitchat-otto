@@ -14,7 +14,6 @@ export default class UploadProfile extends Component {
     }
     
     onDrop = (picture) => {
-        console.log(picture);
         var reader = new FileReader();
         const that = this;
         reader.onload = function(event) {

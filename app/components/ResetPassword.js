@@ -27,7 +27,6 @@ export default class MatchDetailPopup extends Component {
 			</Form.Group>
             <br />
             <Button className="homeButton" style={{marginRight: "1vw", width: "5vw", marginTop: "3vh"}} onClick={() => {
-                console.log(this.state.email);
                 MakePOST("lostpassword", {
                     email: this.state.email
                 }, (data) => {

@@ -1,6 +1,7 @@
 import * as sql from "./db"
 import { resolve } from "dns";
 import {Users} from "./users";
+import * as e from "express";
 
 export class Pairs {
 
@@ -94,7 +95,6 @@ export class Pairs {
 	getUserData(socket_id): Promise<Object> {
 		return new Promise( async (resolve, reject) => {
 			const auto_id = await this.getUserFromSocket(socket_id);
-			console.log("FOUND ID: "+JSON.stringify(auto_id))
 			const result = await new Users().getUser(auto_id);
 			resolve(result);
 		})
@@ -116,16 +116,21 @@ export class Pairs {
 		})
 	}
 
-	getAllActive(): Promise<Object>{
+	getAllActive(auto_id): Promise<any>{
 		return new Promise((resolve, reject) => {
-			this.sqlClient.query("SELECT COUNT(auto_id) AS total_paired FROM CURRENT_PAIRS WHERE socket_id_2 is not null;", (err, results, fields) => {
+			this.sqlClient.query("SELECT COUNT(auto_id) AS total_paired FROM CURRENT_PAIRS", async (err, results, fields) => {
 				if (err) throw err;
-				this.sqlClient.query("SELECT COUNT(auto_id) AS total_lone FROM CURRENT_PAIRS WHERE socket_id_2 is null;", (err2, results2, fields2) => {
-					if (err2) throw err2;
-					let total = results2[0]['total_lone'] + (2 * results[0]['total_paired']);
-					resolve({'numUsers': total});
-				});
-			});
+				let all = results[0]["total_paired"]
+				let target_school = await new Users().getUser(auto_id)
+				const university = target_school["university"]
+				this.sqlClient.query("SELECT COUNT(c.auto_id) AS total_school FROM CURRENT_PAIRS as c JOIN USERS as u ON c.email_1=u.email WHERE u.university=\""+university+"\";", (err, results, fields) => {
+					const university = results[0]["total_school"]
+					resolve({
+						all,
+						university
+					})
+				})
+			})
 		});
 	}
 }

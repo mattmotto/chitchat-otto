@@ -32,7 +32,6 @@ export default class Header extends Component {
 
     fetchUserInformation = () => {
         const auto_id = Cookies.get('user_id');
-        console.log("Checking: "+auto_id)
         if(auto_id) {
             MakePOST("getuserinfo", {auto_id}, (data) => {
                 if(data.status == 0) {
@@ -113,7 +112,6 @@ export default class Header extends Component {
     }
 
     refreshData = () => {
-        console.log("Calling...");
         this.fetchUserInformation();
     }
 
