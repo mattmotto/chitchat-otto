@@ -145,7 +145,6 @@ if __name__ == '__main__':
 		cursor.execute("DROP TABLE IF EXISTS USERS;")
 		cursor.execute("DROP TABLE IF EXISTS UNIVERSITIES;")
 
-
 		print("Creating tables...")
 		cursor.execute(universities_db)
 		print("Reading and writing college data...")

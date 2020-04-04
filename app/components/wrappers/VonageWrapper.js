@@ -2,12 +2,13 @@ var session = null;
 
 export default class VonageWrapper {
   
-  constructor(socket, onConnect, onDisconnect, friendStateHandler, confirmFriendHandler) {
+  constructor(socket, onConnect, onDisconnect, friendStateHandler, confirmFriendHandler, hadStreamError) {
     this.socket = socket
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
     this.friendStateHandler = friendStateHandler;
     this.confirmFriendHandler = confirmFriendHandler;
+    this.hadStreamError = hadStreamError;
     document.myActiveConnection = this;
   }
 
@@ -59,7 +60,12 @@ export default class VonageWrapper {
         insertMode: 'append',
         width: '100%',
         height: '100%'
-      }, handleError);
+      }, function(err) {
+        if(err) {
+          console.log("STREAM ERROR");
+          handleError(err);
+        }
+      });
     });
 
     session.on('connectionDestroyed', function(event) {
@@ -80,8 +86,19 @@ export default class VonageWrapper {
             insertMode: 'append',
             width: '100%',
             height: '100%'
-          }, handleError);
-          session.publish(publisher, handleError);
+          }, function(err) {
+            if(err) {
+              console.log("INIT PUBLISH ERROR");
+              handleError(err);
+            } else {
+              session.publish(publisher, function (error) {
+                if(error) {
+                  console.log("PUBLISH ERROR");
+                  handleError(error);
+                }
+              });
+            }
+          });
         })
         // that.onConnect();
       }
@@ -110,7 +127,26 @@ export default class VonageWrapper {
 
 // Handling all of our errors here by alerting them
 function handleError(error) {
-  if (error) {
-    alert(error.message);
+  console.log(error);
+  if (error.name === 'OT_USER_MEDIA_ACCESS_DENIED' || error.name=== 'OT_HARDWARE_UNAVAILABLE') {
+    document.myActiveConnection.onDisconnect(()=> {
+      document.myActiveConnection.socket.disconnect();
+      document.clientSocket = null;
+      if(session != null) {
+        session.disconnect();
+        session = null; 
+      }
+      document.myActiveConnection.hadStreamError("Oops! It looks like we can't access your microphone/webcam. Please check your permissions settings for your web browser");
+    })
+  } else {
+    document.myActiveConnection.onDisconnect(() => {
+      document.myActiveConnection.socket.disconnect();
+      document.clientSocket = null;
+      if(session != null) {
+        session.disconnect();
+        session = null; 
+      }
+      document.myActiveConnection.hadStreamError("Oops! An unexpected error occured. Please try refreshing your browser window, or trying again later");
+    });
   }
 }

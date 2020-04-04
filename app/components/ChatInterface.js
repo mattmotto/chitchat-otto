@@ -142,6 +142,10 @@ export default class ChatInterface extends Component {
             });
         })
     }
+    
+    hadStreamError = (message) => {
+        NotificationManager.error(message, "ChitChat Error", 5000);
+    }
 
     switchRegionMode = (event) => {
         let oldCollegeMode  = this.state.collegeMode;
@@ -176,7 +180,7 @@ export default class ChatInterface extends Component {
                 reconnectionAttempts: Infinity,
                 query:`email=${this.props.userData.email}&mode=${mode}`
             });
-            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler);
+            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler, this.hadStreamError);
             this.setState({
                 isLoading: true,
                 socket: vonageWrapper

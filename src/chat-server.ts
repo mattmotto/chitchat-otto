@@ -108,7 +108,7 @@ export class ChatServer {
             })
 
             socket.on('disconnect', async () => {
-
+                console.log("Disconnected - ensure removal from the pairs client");
                 //Here, remove the socket ID from the table/whatever we're using to track those users that are waiting for a connection.
                 this.socketsArray.splice(this.socketsArray.indexOf(socket.id), 1);
                 const target = await this.pairClient.removeEntry(socket.id);
