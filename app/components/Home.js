@@ -52,7 +52,18 @@ export default class Home extends Component {
 	checkEmailRegex = () => {
 		let suffix = this.state.selected[0].email;
 		let email = this.state.email;
-		return (validateEmail(email) && email.endsWith(suffix))
+		if(suffix.includes("&&&&")) {
+			let multiple = suffix.split("&&&&");
+			for(let i = 0; i < multiple.length; i++) {
+				let specificSuffix = multiple[i]
+				if(validateEmail(email) && email.endsWith(specificSuffix)) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return (validateEmail(email) && email.endsWith(suffix))
+		}
 	}
 
 	sendRegisterRequest = () => {
@@ -153,7 +164,7 @@ export default class Home extends Component {
 						  selected={this.state.selected}
 						/>
 						<Form.Text className="text-muted">
-						  To match you to awesome people
+						  <a href="https://forms.gle/yt6JKJRLmFWT87X98" target="_blank">Can't find your school?</a>
 						</Form.Text>
 					  </Form.Group>
 					</Form.Row>

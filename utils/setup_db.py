@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	# Create our target tables
 
 	# PRODUCTION
-	# connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
+	connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
 
 	# STAGING
 	# connectionInstance = pymysql.connect(host=staging_host, user=staging_username, password=staging_password ,cursorclass=pymysql.cursors.DictCursor, database=staging_db)
@@ -92,9 +92,9 @@ if __name__ == '__main__':
 
 		universities_db = '''CREATE TABLE UNIVERSITIES (
 			auto_id INT NOT NULL AUTO_INCREMENT,
-			name VARCHAR(100) NOT NULL,
-			email VARCHAR(100) NOT NULL,
-			country VARCHAR(100) NOT NULL,
+			name VARCHAR(200) NOT NULL,
+			email VARCHAR(200) NOT NULL,
+			country VARCHAR(200) NOT NULL,
 			PRIMARY KEY(auto_id, name),
 			INDEX `indec` (`name` ASC)
 			);
