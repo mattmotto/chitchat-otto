@@ -119,7 +119,7 @@ export default class Home extends Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{height: "92vh", overflowY:"auto"}}>
 			<div className="left">
 			  <img
 				src={
