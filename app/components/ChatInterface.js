@@ -172,20 +172,24 @@ export default class ChatInterface extends Component {
 
     findMatch = () => {
         if(this.props.userData.email) {
-            let mode = this.state.collegeMode ? "C" : "G"
-            const socket = io.connect('/', {
-                reconnection: true,
-                reconnectionDelay: 1000,
-                reconnectionDelayMax : 5000,
-                reconnectionAttempts: Infinity,
-                query:`email=${this.props.userData.email}&mode=${mode}`
-            });
-            const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler, this.hadStreamError);
-            this.setState({
-                isLoading: true,
-                socket: vonageWrapper
-            }, () => {
-                vonageWrapper.startSession();
+            navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(()=> {
+                let mode = this.state.collegeMode ? "C" : "G"
+                const socket = io.connect('/', {
+                    reconnection: true,
+                    reconnectionDelay: 1000,
+                    reconnectionDelayMax : 5000,
+                    reconnectionAttempts: Infinity,
+                    query:`email=${this.props.userData.email}&mode=${mode}`
+                });
+                const vonageWrapper = new VonageWrapper(socket, this.isConnectedHandler, this.isDisconnectedHandler, this.friendStateHandler, this.confirmFriendHandler, this.hadStreamError);
+                this.setState({
+                    isLoading: true,
+                    socket: vonageWrapper
+                }, () => {
+                    vonageWrapper.startSession();
+                })
+            }).catch(()=> {
+                NotificationManager.error("Oops, we were unable to access your webcam and audio! Please enable webcam and microphone access for your browser", "Connection Error", 5000);
             })
         } else {
             NotificationManager.error("An unknown connection error occured. Please try logging out, and logging into ChitChat again.", "Connection Error", 5000);

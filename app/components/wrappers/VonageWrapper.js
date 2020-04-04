@@ -62,7 +62,6 @@ export default class VonageWrapper {
         height: '100%'
       }, function(err) {
         if(err) {
-          console.log("STREAM ERROR");
           handleError(err);
         }
       });
@@ -88,12 +87,10 @@ export default class VonageWrapper {
             height: '100%'
           }, function(err) {
             if(err) {
-              console.log("INIT PUBLISH ERROR");
               handleError(err);
             } else {
               session.publish(publisher, function (error) {
                 if(error) {
-                  console.log("PUBLISH ERROR");
                   handleError(error);
                 }
               });
