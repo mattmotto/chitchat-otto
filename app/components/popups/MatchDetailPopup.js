@@ -14,9 +14,8 @@ export default function MatchDetailPopup(props) {
                 <span style={{marginRight: "1vw"}}>Snapchat: {props.data.snapchat_id ? props.data.snapchat_id : "N/A"}</span>
             </div>
             <Button className="homeButton" style={{marginRight: "2vh", width: "5vw"}} onClick={() => {
-                const auto_id = Cookies.get('user_id');
                 MakePOST("deleteusermatch", {
-                    user_1: auto_id,
+                    user_1: props.auto_id,
                     user_2: props.data.auto_id
                 }, (data) => {
                     if(data.status == 0) {

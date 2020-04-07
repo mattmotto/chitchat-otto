@@ -35,9 +35,8 @@ export default class MatchesView extends Component {
       }
 
     updateFriendList = () => {
-        const auto_id = Cookies.get('user_id');
         MakePOST("getusermatches", {
-            user: auto_id,
+            user: this.props.user_id,
             pageNumber: this.state.friendPage,
             pageLength: PAGE_SIZE
         }, (data) => {
@@ -87,7 +86,7 @@ export default class MatchesView extends Component {
                                     </Row>
                                     } modal closeOnDocumentClick position="top center">
                                         {close => (
-                                            <MatchDetailPopup data={match} close={close} handleDelete={this.updateFriendList}/>
+                                            <MatchDetailPopup auto_id={this.props.user_id} data={match} close={close} handleDelete={this.updateFriendList}/>
                                         )}
                                     </Popup>
                                 <hr className="cellLine"/>

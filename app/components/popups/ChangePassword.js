@@ -52,7 +52,7 @@ export default class ChangePassword extends Component {
             <Button className="homeButton" style={{marginRight: "1vw", width: "5vw", marginTop: "3vh"}} onClick={() => {
                 if(this.state.changedPass1 == this.state.changedPass2) {
                     MakePOST("changepassword", {
-                        user: Cookies.get("user_id"),
+                        user: this.props.auto_id,
                         password: this.state.password,
                         newPass: this.state.changedPass1
                     }, (data) => {

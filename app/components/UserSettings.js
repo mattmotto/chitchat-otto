@@ -38,7 +38,7 @@ export default class UserSettings extends React.Component {
                                  <Button className="homeButton" style={{width: "16vw"}}>Reset Password</Button>
                                 } modal closeOnDocumentClick position="top center">
                                     {close => (
-                                        <ChangePassword close={close} />
+                                        <ChangePassword close={close} auto_id={this.props.userData.auto_id} />
                                     )}
                                 </Popup>
                 <div className="footer">

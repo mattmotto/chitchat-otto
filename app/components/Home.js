@@ -130,7 +130,7 @@ export default class Home extends Component {
 			</div>
 			<div className="right">
 			  <div className="centerContent">
-				<h2>Social isolation doesn't mean isolation</h2>
+				<h2>Social distancing doesn't mean isolation</h2>
 				<br />
 				<h4>Meet other college kids. By college kids, for college kids</h4>
 				<br />

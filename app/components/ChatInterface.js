@@ -36,7 +36,6 @@ export default class ChatInterface extends Component {
             friendRequest: false,
             refreshFriends: false,
             collegeMode: true,
-            userData: {},
             clientData: {}
         }
     }
@@ -155,10 +154,11 @@ export default class ChatInterface extends Component {
     }
 
     updateUserCounts = (onCompletion) => {
-        const auto_id = Cookies.get('user_id');
-        console.log("Updating user counts...");
+        const auto_id = this.props.userData.auto_id;
+        console.log("Counting active users for: "+auto_id)
         MakePOST("countactiveusers", {auto_id}, (response) => {
             let {university, all} = response
+            console.log(response);
             this.setState({
                 allCount: all,
                 universityCount: university
@@ -293,7 +293,7 @@ export default class ChatInterface extends Component {
                 }
             </div>
             <div className="right" style={{width: "25%", paddingLeft: 0, paddingRight: 0, paddingTop: 0}}>
-                <MatchesView user_id={0} refresh={this.state.refreshFriends}/>
+                <MatchesView user_id={this.props.userData.auto_id} refresh={this.state.refreshFriends}/>
             </div>
 		</div>
         <Tour steps={STEPS} isOpen={this.state.needsTour} onRequestClose={() => this.setState({needsTour:false})}/>

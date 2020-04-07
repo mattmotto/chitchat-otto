@@ -15,6 +15,15 @@ import ResetPassword from "./ResetPassword"
 
 const CCLogo = "https://chitchat-us-bucket.s3.us-east-2.amazonaws.com/public_assets/cc_logo.png";
 
+function checkCookie(){
+    var cookieEnabled = navigator.cookieEnabled;
+    if (!cookieEnabled){ 
+        document.cookie = "testcookie";
+        cookieEnabled = document.cookie.indexOf("testcookie")!=-1;
+    }
+    return cookieEnabled;
+}
+
 export default class Header extends Component {
     constructor(props) {
         super(props);
@@ -34,13 +43,12 @@ export default class Header extends Component {
         const auto_id = Cookies.get('user_id');
         if(auto_id) {
             MakePOST("getuserinfo", {auto_id}, (data) => {
-                if(data.status == 0) {
-                    this.setState({
-                        loggedIn: true,
-                        firstLogin: data.data.first_login,
-                        userData: data.data
-                    });
-                }
+                console.log(data);
+                this.setState({
+                    loggedIn: true,
+                    firstLogin: false,
+                    userData: data.data
+                })
             })
         }
     }
@@ -61,10 +69,10 @@ export default class Header extends Component {
         return (
             <React.Fragment>
                 <Route path="/chat">
-                    {Cookies.get('user_id') ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
+                    {this.state.loggedIn ? <ChatInterface userData={this.state.userData} /> : <Redirect to="/" />}
                 </Route>
                 <Route path="/me">
-                    {Cookies.get('user_id') ? (<UserSettings userData={this.state.userData} refreshData={this.refreshData}/>) : <Redirect to="/" />}
+                    {this.state.loggedIn ? (<UserSettings userData={this.state.userData} refreshData={this.refreshData}/>) : <Redirect to="/" />}
                 </Route>
                 <Route exact path="/termsconditions">
                     <DocumentView isTC={true} />
@@ -73,24 +81,31 @@ export default class Header extends Component {
                     <DocumentView isTC={false} />
                 </Route>
                 <Route exact path="/">
-                    {Cookies.get('user_id') ? <Redirect to="/chat" /> : <Home />}
+                    {this.state.loggedIn ? <Redirect to="/chat" /> : <Home />}
                 </Route>
             </React.Fragment>
         );
       }
 
     checkUser = () => {
+        if(checkCookie() == false) {
+            NotificationManager.warning("ChitChat requires cookies to function properly. Please enable cookies for an optimal experience.", "Cookie Error", 5000);
+        }
         if(this.state.email && this.state.password) {
             MakePOST("loginuser", {"email": this.state.email, "password": this.state.password}, (response) => {
                 if(response.status == 0) {
                     Cookies.set('user_id', response.auto_id);
-                    this.setState({
-                        email: "",
-                        password: "",
-                        loggedIn: true,
-                        firstLogin: response.first_login,
-                    }, () => {
-                        this.fetchUserInformation();
+                    MakePOST("getuserinfo", {auto_id: response.auto_id}, (data) => {
+                        console.log(data);
+                        this.setState({
+                            email: "",
+                            password: "",
+                            loggedIn: true,
+                            firstLogin: response.first_login,
+                            userData: data.data
+                        }, () => {
+                            this.fetchUserInformation();
+                        })
                     })
                 } else {
                     NotificationManager.error("Invalid username/password! Please try again", "Authentication Error", 5000);
@@ -116,7 +131,6 @@ export default class Header extends Component {
     }
 
     render() {
-        const login_cookie = Cookies.get('user_id');
         return (
             <div>
                 <Router>
@@ -127,7 +141,7 @@ export default class Header extends Component {
                     <Nav className="mr-auto">
                     </Nav>
                     {
-                        login_cookie ? (
+                        this.state.loggedIn ? (
                             <NavDropdown title={<img src={this.state.userData["photo_url"]} style={{height: "5vh", width: "5vh", borderRadius: "50%"}} />} style={{marginRight: "4vw"}} id="basic-nav-dropdown">
                                 <NavDropdown.Item href="/me">Account Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
