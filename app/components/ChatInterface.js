@@ -83,6 +83,9 @@ export default class ChatInterface extends Component {
     }
 
     friendStateHandler = (friendRequest) => {
+        if(friendRequest) {
+            NotificationManager.success('Hey! It looks like your ChitChat buddy is trying to add you as a friend. Hit the friend button to accept!', 'Friend Request', 7000);
+        }
         this.setState({
             friendRequest
         })

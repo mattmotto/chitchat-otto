@@ -20,13 +20,13 @@ if __name__ == '__main__':
 	# Create our target tables
 
 	# PRODUCTION
-	connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
+	# connectionInstance = pymysql.connect(host=remote_host, user=remote_username, password=remote_password ,cursorclass=pymysql.cursors.DictCursor, database=remote_db)
 
 	# STAGING
 	# connectionInstance = pymysql.connect(host=staging_host, user=staging_username, password=staging_password ,cursorclass=pymysql.cursors.DictCursor, database=staging_db)
 
 	# LOCAL
-	# connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
+	connectionInstance = pymysql.connect(host="127.0.0.1", user="dbuser", password="dbuserdbuser", charset="utf8mb4",cursorclass=pymysql.cursors.DictCursor, database="window_db")
 
 	try:
 		cursor = connectionInstance.cursor()
