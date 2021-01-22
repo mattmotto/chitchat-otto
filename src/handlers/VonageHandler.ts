@@ -1,7 +1,7 @@
 import * as OpenTok from 'opentok';
 
-const APIKEY="46617272"
-const SECRET="e06ab8a3c425f2c11d79cb7e77f38b22cad3780d"
+const APIKEY="REDACTED"
+const SECRET="REDACTED"
 const opentok = new OpenTok(APIKEY, SECRET);
 
 const generateSession = () : Promise<Object> => {
