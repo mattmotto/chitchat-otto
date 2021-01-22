@@ -22,8 +22,8 @@ const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
 const PASS = "GULATI6969";
 
-const ID = 'AKIAVMQORFX44NI34NPT';
-const SECRET = 'iQl3hvpzA7o8qjRhP9HmECc2XgpRgo+P6duihj50';
+const ID = 'REDACTED';
+const SECRET = 'REDACTED';
 const BUCKET = "chitchat-us-bucket";
 
 let s3 = new AWS.S3({
